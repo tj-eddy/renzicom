@@ -1,19 +1,18 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Liste des utilisateurs{% endblock %}
+{% block title %}{{ 'user.list.title'|trans }}{% endblock %}
 
 {% block page_title %}
     <div class="page-title">
         <div class="row">
             <div class="col-12 col-md-6 order-md-1 order-last">
-                <h3>Gestion des utilisateurs</h3>
-{#                <p class="text-subtitle text-muted">Liste complète des utilisateurs</p>#}
+                <h3>{{ 'user.list.title'|trans }}</h3>
             </div>
             <div class="col-12 col-md-6 order-md-2 order-first">
                 <nav aria-label="breadcrumb" class="breadcrumb-header float-start float-lg-end">
                     <ol class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="{{ path('app_dashboard') }}">Dashboard</a></li>
-                        <li class="breadcrumb-item active" aria-current="page">Utilisateurs</li>
+                        <li class="breadcrumb-item"><a href="{{ path('app_dashboard') }}">{{ 'breadcrumb.home'|trans }}</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">{{ 'breadcrumb.users'|trans }}</li>
                     </ol>
                 </nav>
             </div>
@@ -29,20 +28,20 @@
     <section class="section">
         <div class="card">
             <div class="card-header d-flex justify-content-between align-items-center">
-                <h4 class="mb-0">Liste des utilisateurs</h4>
+                <h4 class="mb-0">{{ 'user.list.title'|trans }}</h4>
                 <a href="{{ path('app_user_new') }}" class="btn btn-primary">
-                    <i class="bi bi-plus-circle"></i> Nouvel utilisateur
+                    <i class="bi bi-plus-circle"></i> {{ 'user.actions.new'|trans }}
                 </a>
             </div>
             <div class="card-body">
                 <table class="table table-striped" id="table1">
                     <thead>
                     <tr>
-                        <th>ID</th>
-                        <th>Nom</th>
-                        <th>Email</th>
-                        <th>Role</th>
-                        <th>Actions</th>
+                        <th>{{ 'user.table.id'|trans }}</th>
+                        <th>{{ 'user.table.name'|trans }}</th>
+                        <th>{{ 'user.table.email'|trans }}</th>
+                        <th>{{ 'user.table.role'|trans }}</th>
+                        <th>{{ 'user.table.actions'|trans }}</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -51,25 +50,24 @@
                             <td>{{ user.id }}</td>
                             <td>{{ user.name }}</td>
                             <td>{{ user.email }}</td>
-                            <td>{{ user.role }}</td>
+                            <td>
+                                {% if user.role == 'ROLE_ADMIN' %}
+                                    <span class="badge bg-primary">{{ 'role.admin'|trans }}</span>
+                                {% elseif user.role == 'ROLE_DRIVER' %}
+                                    <span class="badge bg-success">{{ 'role.driver'|trans }}</span>
+                                {% elseif user.role == 'ROLE_STATISTICS' %}
+                                    <span class="badge bg-info">{{ 'role.statistics'|trans }}</span>
+                                {% else %}
+                                    <span class="badge bg-secondary">{{ user.role }}</span>
+                                {% endif %}
+                            </td>
                             <td>
                                 <div class="btn-group" role="group">
-{#                                    <a href="{{ path('app_user_show', {'id': user.id}) }}"#}
-{#                                       class="btn btn-sm btn-info"#}
-{#                                       title="Voir">#}
-{#                                        <i class="bi bi-eye"></i>#}
-{#                                    </a>#}
                                     <a href="{{ path('app_user_edit', {'id': user.id}) }}"
                                        class="btn btn-sm btn-warning"
-                                       title="Modifier">
+                                       title="{{ 'user.actions.edit'|trans }}">
                                         <i class="bi bi-pencil"></i>
                                     </a>
-{#                                    <button type="button"#}
-{#                                            class="btn btn-sm btn-danger"#}
-{#                                            onclick="confirmDelete({{ user.id }})"#}
-{#                                            title="Supprimer">#}
-{#                                        <i class="bi bi-trash"></i>#}
-{#                                    </button>#}
                                 </div>
 
                                 {# Formulaire de suppression caché #}
@@ -83,7 +81,7 @@
                         </tr>
                     {% else %}
                         <tr>
-                            <td colspan="4" class="text-center">Aucun utilisateur trouvé</td>
+                            <td colspan="5" class="text-center">{{ 'user.list.no_users'|trans }}</td>
                         </tr>
                     {% endfor %}
                     </tbody>
@@ -96,23 +94,20 @@
 {% block javascripts %}
     <script src="{{ asset('assets/vendors/simple-datatables/simple-datatables.js') }}"></script>
     <script>
-        // Initialiser le DataTable
         let table1 = document.querySelector('#table1');
         let dataTable = new simpleDatatables.DataTable(table1, {
             searchable: true,
             fixedHeight: false,
             perPage: 10,
             labels: {
-                placeholder: "Rechercher...",
-                // perPage: "{select} entrées par page",
-                noRows: "Aucune donnée disponible",
-                info: "Affichage de {start} à {end} sur {rows} entrées"
+                placeholder: "{{ 'datatable.search'|trans }}",
+                noRows: "{{ 'datatable.no_data'|trans }}",
+                info: "{{ 'datatable.info'|trans }}"
             }
         });
 
-        // Fonction de confirmation de suppression
         function confirmDelete(userId) {
-            if (confirm('Êtes-vous sûr de vouloir supprimer cet utilisateur ?')) {
+            if (confirm("{{ 'user.confirm_delete'|trans }}")) {
                 document.getElementById('delete-form-' + userId).submit();
             }
         }

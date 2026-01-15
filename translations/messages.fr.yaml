@@ -168,3 +168,29 @@ footer.powered_by: 'Propulsé par'
 
 distribution.y_axis: 'Nombre de magazines'
 distribution.unit: 'magazines'
+
+# Liste utilisateurs
+user.list.title: 'Gestion des utilisateurs'
+user.list.no_users: 'Aucun utilisateur trouvé'
+
+# Table utilisateurs
+user.table.id: 'ID'
+user.table.name: 'Nom'
+user.table.email: 'Email'
+user.table.role: 'Rôle'
+user.table.actions: 'Actions'
+
+# Actions utilisateurs
+user.actions.new: 'Nouvel utilisateur'
+user.actions.edit: 'Modifier'
+user.actions.delete: 'Supprimer'
+user.actions.view: 'Voir'
+
+# Confirmation
+user.confirm_delete: 'Êtes-vous sûr de vouloir supprimer cet utilisateur ?'
+
+# DataTable
+datatable.search: 'Rechercher...'
+datatable.no_data: 'Aucune donnée disponible'
+datatable.info: 'Affichage de {start} à {end} sur {rows} entrées'
+datatable.per_page: '{select} entrées par page'

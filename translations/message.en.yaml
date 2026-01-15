@@ -138,4 +138,30 @@ footer.powered_by: 'Powered by'
 distribution.y_axis: 'Number of magazines'
 distribution.unit: 'magazines'
 
+# User list
+user.list.title: 'User Management'
+user.list.no_users: 'No users found'
+
+# User table
+user.table.id: 'ID'
+user.table.name: 'Name'
+user.table.email: 'Email'
+user.table.role: 'Role'
+user.table.actions: 'Actions'
+
+# User actions
+user.actions.new: 'New User'
+user.actions.edit: 'Edit'
+user.actions.delete: 'Delete'
+user.actions.view: 'View'
+
+# Confirmation
+user.confirm_delete: 'Are you sure you want to delete this user?'
+
+# DataTable
+datatable.search: 'Search...'
+datatable.no_data: 'No data available'
+datatable.info: 'Showing {start} to {end} of {rows} entries'
+datatable.per_page: '{select} entries per page'
+
 
