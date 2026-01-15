@@ -194,3 +194,7 @@ datatable.search: 'Rechercher...'
 datatable.no_data: 'Aucune donnée disponible'
 datatable.info: 'Affichage de {start} à {end} sur {rows} entrées'
 datatable.per_page: '{select} entrées par page'
+
+# Login page
+# Page de login
+login.page_title: 'Connexion'

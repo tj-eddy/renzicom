@@ -164,4 +164,7 @@ datatable.no_data: 'No data available'
 datatable.info: 'Showing {start} to {end} of {rows} entries'
 datatable.per_page: '{select} entries per page'
 
+# Login page
+login.page_title: 'Login'
+
 

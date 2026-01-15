@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="{{ app.request.locale }}">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Connexion - Renzicom</title>
+    <title>{{ 'login.page_title'|trans }} - Renzicom</title>
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('assets/css/bootstrap.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/vendors/bootstrap-icons/bootstrap-icons.css') }}">
@@ -20,8 +20,8 @@
                 <div class="auth-logo">
                     <a href="{{ path('app_dashboard') }}"><img src="{{ asset('assets/images/logo/logo.png') }}" alt="Logo"></a>
                 </div>
-                <h1 class="auth-title">Connexion</h1>
-                <p class="auth-subtitle mb-5">Connectez-vous avec vos identifiants.</p>
+                <h1 class="auth-title">{{ 'login.title'|trans }}</h1>
+                <p class="auth-subtitle mb-5">{{ 'login.subtitle'|trans }}</p>
 
                 {% if error %}
                     <div class="alert alert-danger alert-dismissible fade show" role="alert">
@@ -44,7 +44,7 @@
                     <div class="form-group position-relative has-icon-left mb-4">
                         <input type="email"
                                class="form-control form-control-xl"
-                               placeholder="Email"
+                               placeholder="{{ 'login.email.placeholder'|trans }}"
                                name="_username"
                                id="inputEmail"
                                value="{{ last_username }}"
@@ -58,7 +58,7 @@
                     <div class="form-group position-relative has-icon-left mb-4">
                         <input type="password"
                                class="form-control form-control-xl"
-                               placeholder="Mot de passe"
+                               placeholder="{{ 'login.password.placeholder'|trans }}"
                                name="_password"
                                id="inputPassword"
                                autocomplete="current-password"
@@ -70,7 +70,9 @@
 
                     <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
 
-                    <button type="submit" class="btn btn-primary btn-block btn-lg shadow-lg mt-5">Se connecter</button>
+                    <button type="submit" class="btn btn-primary btn-block btn-lg shadow-lg mt-5">
+                        {{ 'login.submit'|trans }}
+                    </button>
                 </form>
             </div>
         </div>
