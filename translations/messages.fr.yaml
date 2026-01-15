@@ -50,7 +50,7 @@ stats.title: 'Statistiques'
 stats.role.admin: 'Administrateur'
 stats.role.driver: 'Conductrice'
 stats.role.other: 'Autres'
-stats.role.accounts: '%count% comptes'
+stats.role.accounts: '{0} aucun compte|{1} 1 compte|]1,Inf] %count% comptes'
 
 # Distribution mensuelle
 distribution.title: 'Distribution Mensuelle'
@@ -198,3 +198,19 @@ datatable.per_page: '{select} entrées par page'
 # Login page
 # Page de login
 login.page_title: 'Connexion'
+
+# Formulaire - placeholders
+form.name.placeholder: 'Nom complet'
+form.email.placeholder: 'exemple@email.com'
+form.password.placeholder: 'Mot de passe'
+form.password.placeholder_edit: 'Laissez vide pour conserver'
+form.password.help_edit: 'Laissez vide pour conserver le mot de passe actuel'
+
+# Formulaire - boutons
+form.button.create: 'Créer'
+form.button.update: 'Mettre à jour'
+form.button.save: 'Enregistrer'
+form.button.cancel: 'Annuler'
+form.button.delete: 'Supprimer'
+
+stats.role.statistics: 'Statistique'

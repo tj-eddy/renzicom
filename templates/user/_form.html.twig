@@ -8,7 +8,7 @@
         <div class="col-md-8">
             <div class="form-group has-icon-left">
                 <div class="position-relative">
-                    {{ form_widget(form.name, {'attr': {'class': 'form-control', 'placeholder': 'Nom complet'}}) }}
+                    {{ form_widget(form.name, {'attr': {'class': 'form-control', 'placeholder': 'form.name.placeholder'|trans}}) }}
                     <div class="form-control-icon">
                         <i class="bi bi-person"></i>
                     </div>
@@ -24,7 +24,7 @@
         <div class="col-md-8">
             <div class="form-group has-icon-left">
                 <div class="position-relative">
-                    {{ form_widget(form.email, {'attr': {'class': 'form-control', 'placeholder': 'exemple@email.com'}}) }}
+                    {{ form_widget(form.email, {'attr': {'class': 'form-control', 'placeholder': 'form.email.placeholder'|trans}}) }}
                     <div class="form-control-icon">
                         <i class="bi bi-envelope"></i>
                     </div>
@@ -34,20 +34,22 @@
         </div>
 
         {# Rôle #}
-        <div class="col-md-4">
-            <label for="{{ form.role.vars.id }}">{{ form_label(form.role) }}</label>
-        </div>
-        <div class="col-md-8">
-            <div class="form-group has-icon-left">
-                <div class="position-relative">
-                    {{ form_widget(form.role, {'attr': {'class': 'form-select'}}) }}
-                    <div class="form-control-icon">
-                        <i class="bi bi-shield-check"></i>
-                    </div>
-                </div>
-                {{ form_errors(form.role) }}
+        {% if form.role is defined %}
+            <div class="col-md-4">
+                <label for="{{ form.role.vars.id }}">{{ form_label(form.role) }}</label>
             </div>
-        </div>
+            <div class="col-md-8">
+                <div class="form-group has-icon-left">
+                    <div class="position-relative">
+                        {{ form_widget(form.role, {'attr': {'class': 'form-select'}}) }}
+{#                        <div class="form-control-icon">#}
+{#                            <i class="bi bi-shield-check"></i>#}
+{#                        </div>#}
+                    </div>
+                    {{ form_errors(form.role) }}
+                </div>
+            </div>
+        {% endif %}
 
         {# Mot de passe #}
         <div class="col-md-4">
@@ -56,13 +58,13 @@
         <div class="col-md-8">
             <div class="form-group has-icon-left">
                 <div class="position-relative">
-                    {{ form_widget(form.password, {'attr': {'class': 'form-control', 'placeholder': button_label|default('Créer') == 'Update' ? 'Laissez vide pour conserver' : 'Mot de passe'}}) }}
+                    {{ form_widget(form.password, {'attr': {'class': 'form-control', 'placeholder': button_label|default('create') == 'update' ? 'form.password.placeholder_edit'|trans : 'form.password.placeholder'|trans}}) }}
                     <div class="form-control-icon">
                         <i class="bi bi-lock"></i>
                     </div>
                 </div>
-                {% if button_label|default('') == 'Update' %}
-                    <small class="text-muted">Laissez vide pour conserver le mot de passe actuel</small>
+                {% if button_label|default('') == 'update' %}
+                    <small class="text-muted">{{ 'form.password.help_edit'|trans }}</small>
                 {% endif %}
                 {{ form_errors(form.password) }}
             </div>
@@ -71,10 +73,10 @@
         {# Boutons #}
         <div class="col-12 d-flex justify-content-end">
             <a href="{{ path('app_user_index') }}" class="btn btn-light-secondary me-1 mb-1">
-                <i class="bi bi-x-circle"></i> Annuler
+                <i class="bi bi-x-circle"></i> {{ 'form.button.cancel'|trans }}
             </a>
             <button type="submit" class="btn btn-primary me-1 mb-1">
-                <i class="bi bi-check-circle"></i> {{ button_label|default('Enregistrer') }}
+                <i class="bi bi-check-circle"></i> {{ button_label|default('create') == 'update' ? 'form.button.update'|trans : 'form.button.create'|trans }}
             </button>
         </div>
     </div>

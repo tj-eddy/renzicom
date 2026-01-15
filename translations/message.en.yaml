@@ -17,7 +17,7 @@ stats.title: 'Statistics'
 stats.role.admin: 'Administrator'
 stats.role.driver: 'Driver'
 stats.role.other: 'Others'
-stats.role.accounts: '%count% accounts'
+stats.role.accounts: '{0} no accounts|{1} 1 account|]1,Inf] %count% accounts'
 
 # Monthly distribution
 distribution.title: 'Monthly Distribution'
@@ -166,5 +166,21 @@ datatable.per_page: '{select} entries per page'
 
 # Login page
 login.page_title: 'Login'
+
+# Form - placeholders
+form.name.placeholder: 'Full name'
+form.email.placeholder: 'example@email.com'
+form.password.placeholder: 'Password'
+form.password.placeholder_edit: 'Leave blank to keep current'
+form.password.help_edit: 'Leave blank to keep the current password'
+
+# Form - buttons
+form.button.create: 'Create'
+form.button.update: 'Update'
+form.button.save: 'Save'
+form.button.cancel: 'Cancel'
+form.button.delete: 'Delete'
+
+stats.role.statistics: 'Statistic'
 
 
