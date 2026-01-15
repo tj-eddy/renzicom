@@ -1,0 +1,43 @@
+<?php
+
+namespace App\Security;
+
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\RouterInterface;
+use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
+use Symfony\Component\Security\Http\Authentication\AuthenticationSuccessHandlerInterface;
+use Symfony\Component\Security\Http\SecurityRequestAttributes;
+
+class LoginSuccessHandler implements AuthenticationSuccessHandlerInterface
+{
+    public function __construct(
+        private RouterInterface $router
+    ) {}
+
+    public function onAuthenticationSuccess(Request $request, TokenInterface $token): RedirectResponse
+    {
+        $user = $token->getUser();
+
+        // Vérifier si l'utilisateur a le rôle ADMIN
+        if (!in_array('ROLE_ADMIN', $user->getRoles())) {
+            // Ajouter un message flash d'erreur
+            $request->getSession()->getFlashBag()->add(
+                'error',
+                'Accès refusé. Seuls les administrateurs peuvent se connecter.'
+            );
+
+            // Marquer l'authentification comme échouée
+            $request->getSession()->set(SecurityRequestAttributes::LAST_USERNAME, $user->getUserIdentifier());
+
+            // Invalider la session (déconnecter)
+            $request->getSession()->invalidate();
+
+            // Rediriger vers la page de login
+            return new RedirectResponse($this->router->generate('app_login'));
+        }
+
+        // Si c'est un admin, rediriger vers le dashboard
+        return new RedirectResponse($this->router->generate('app_dashboard'));
+    }
+}

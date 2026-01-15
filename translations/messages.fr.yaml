@@ -1,0 +1,53 @@
+# Messages d'erreur
+'access.denied.create': 'Accès refusé. Seuls les administrateurs peuvent créer des utilisateurs.'
+'access.denied.edit': 'Accès refusé. Seuls les administrateurs peuvent modifier des utilisateurs.'
+'access.denied.delete': 'Accès refusé. Seuls les administrateurs peuvent supprimer des utilisateurs.'
+
+# Messages de succès
+'user.created': 'Utilisateur créé avec succès.'
+'user.updated': 'Utilisateur modifié avec succès.'
+'user.deleted': 'Utilisateur supprimé avec succès.'
+
+# Formulaire
+'Name': 'Nom'
+'Email': 'Email'
+'Password': 'Mot de passe'
+'Role': 'Rôle'
+
+# Rôles
+'Administrator': 'Administrateur'
+'Driver': 'Conductrice'
+'Statistics': 'Statistiques'
+
+# Labels de formulaire
+'form.name': 'Nom'
+'form.email': 'Email'
+'form.password': 'Mot de passe'
+'form.role': 'Rôle'
+
+# Boutons
+'btn.save': 'Enregistrer'
+'btn.create': 'Créer'
+'btn.cancel': 'Annuler'
+'btn.delete': 'Supprimer'
+'btn.edit': 'Modifier'
+'btn.view': 'Voir'
+
+# Navigation
+'nav.dashboard': 'Tableau de bord'
+'nav.users': 'Utilisateurs'
+'nav.logout': 'Déconnexion'
+
+# Page de login
+'login.title': 'Connexion'
+'login.subtitle': 'Connectez-vous avec vos identifiants.'
+'login.email.placeholder': 'Email'
+'login.password.placeholder': 'Mot de passe'
+'login.remember_me': 'Se souvenir de moi'
+'login.submit': 'Se connecter'
+'login.forgot_password': 'Mot de passe oublié ?'
+
+# Erreurs
+'error.403.title': 'Accès Refusé'
+'error.403.message': 'Vous n''êtes pas autorisé à voir cette page.'
+'error.403.button': 'Retour au Dashboard'

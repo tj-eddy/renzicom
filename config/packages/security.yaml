@@ -23,6 +23,7 @@ security:
                 login_path: app_login
                 check_path: app_login
                 enable_csrf: true
+#                success_handler: App\Security\LoginSuccessHandler
                 default_target_path: /dashboard
                 always_use_default_target_path: true
             logout:
@@ -40,9 +41,8 @@ security:
     access_control:
         # Pages publiques (login, register, assets)
         - { path: ^/login$, roles: PUBLIC_ACCESS }
-        - { path: ^/register, roles: PUBLIC_ACCESS }
         # Bloquer TOUT le reste - nécessite d'être connecté
-        - { path: ^/, roles: ROLE_USER }
+        - { path: ^/, roles: [ROLE_ADMIN,ROLE_DRIVER,ROLE_STATISTICS] }
 
 when@test:
     security:
