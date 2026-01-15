@@ -26,14 +26,14 @@ $accessDecisionManager = new AccessDecisionManager([
     new AuthenticatedVoter(new AuthenticationTrustResolver()),
     new RoleVoter(),
     new RoleHierarchyVoter(new RoleHierarchy([
-        'ROLE_ADMIN' => ['ROLE_USER'],
+        'ROLE_USER' => ['ROLE_USER'],
     ]))
 ]);
 
 $user = new \App\Entity\User(...);
 $token = new UsernamePasswordToken($user, 'main', $user->getRoles());
 
-if (!$accessDecisionManager->decide($token, ['ROLE_ADMIN'])) {
+if (!$accessDecisionManager->decide($token, ['ROLE_USER'])) {
     throw new AccessDeniedException();
 }
 ```

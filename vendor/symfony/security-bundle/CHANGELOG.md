@@ -350,7 +350,7 @@ CHANGELOG
             my_memory_provider:
                 users:
                     toto: { password: foobar, roles: [ROLE_USER] }
-                    foo: { password: bar, roles: [ROLE_USER, ROLE_ADMIN] }
+                    foo: { password: bar, roles: [ROLE_USER, ROLE_USER] }
     ```
 
     After:
@@ -365,7 +365,7 @@ CHANGELOG
                 memory:
                     users:
                         toto: { password: foobar, roles: [ROLE_USER] }
-                        foo: { password: bar, roles: [ROLE_USER, ROLE_ADMIN] }
+                        foo: { password: bar, roles: [ROLE_USER, ROLE_USER] }
     ```
 
  * [BC BREAK] Method `equals` was removed from `UserInterface` to its own new

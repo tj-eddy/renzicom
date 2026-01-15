@@ -36,8 +36,8 @@ class CreateAdminCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $user = new User();
-        $user->setName('Admin');
-        $user->setEmail('admin@renzicom.com');
+        $user->setName('mca');
+        $user->setEmail('mca@renzicom.com');
 
         $hashedPassword = $this->passwordHasher->hashPassword(
             $user,
@@ -49,7 +49,7 @@ class CreateAdminCommand extends Command
         $this->entityManager->flush();
 
         $output->writeln('✅ Utilisateur admin créé avec succès !');
-        $output->writeln('Email: admin@renzicom.com');
+        $output->writeln('Email: mca@renzicom.com');
         $output->writeln('Mot de passe: admin123');
 
         return Command::SUCCESS;

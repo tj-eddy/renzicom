@@ -359,7 +359,7 @@ class MainConfiguration implements ConfigurationInterface
                             'memory' => [
                                 'users' => [
                                     'foo' => ['password' => 'foo', 'roles' => 'ROLE_USER'],
-                                    'bar' => ['password' => 'bar', 'roles' => '[ROLE_USER, ROLE_ADMIN]'],
+                                    'bar' => ['password' => 'bar', 'roles' => '[ROLE_USER, ROLE_USER]'],
                                 ],
                             ],
                         ],
