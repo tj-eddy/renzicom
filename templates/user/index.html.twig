@@ -62,12 +62,12 @@
                                        title="Modifier">
                                         <i class="bi bi-pencil"></i>
                                     </a>
-                                    <button type="button"
-                                            class="btn btn-sm btn-danger"
-                                            onclick="confirmDelete({{ user.id }})"
-                                            title="Supprimer">
-                                        <i class="bi bi-trash"></i>
-                                    </button>
+{#                                    <button type="button"#}
+{#                                            class="btn btn-sm btn-danger"#}
+{#                                            onclick="confirmDelete({{ user.id }})"#}
+{#                                            title="Supprimer">#}
+{#                                        <i class="bi bi-trash"></i>#}
+{#                                    </button>#}
                                 </div>
 
                                 {# Formulaire de suppression caché #}
@@ -102,7 +102,7 @@
             perPage: 10,
             labels: {
                 placeholder: "Rechercher...",
-                perPage: "{select} entrées par page",
+                // perPage: "{select} entrées par page",
                 noRows: "Aucune donnée disponible",
                 info: "Affichage de {start} à {end} sur {rows} entrées"
             }
