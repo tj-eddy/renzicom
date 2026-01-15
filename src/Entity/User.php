@@ -19,11 +19,50 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 180)]
     private ?string $email = null;
 
-    /**
-     * @var list<string> The user roles
-     */
     #[ORM\Column]
     private array $roles = [];
+
+    #[ORM\Column(length: 50, nullable: true)]
+    private ?string $role = null;
+
+    public function getRoles(): array
+    {
+        $roles = $this->roles;
+
+        // Ajouter le rôle principal
+        if ($this->role) {
+            $roles[] = $this->role;
+        }
+
+        // Garantir que ROLE_USER est toujours présent
+        $roles[] = 'ROLE_USER';
+
+        return array_unique($roles);
+    }
+
+    public function setRoles(array $roles): static
+    {
+        // Si on reçoit un tableau avec un seul élément, on le met dans role
+        if (count($roles) === 1) {
+            $this->role = $roles[0];
+            $this->roles = [];
+        } else {
+            $this->roles = $roles;
+        }
+
+        return $this;
+    }
+
+    public function getRole(): ?string
+    {
+        return $this->role;
+    }
+
+    public function setRole(?string $role): static
+    {
+        $this->role = $role;
+        return $this;
+    }
 
     /**
      * @var string The hashed password
@@ -61,27 +100,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return (string) $this->email;
     }
 
-    /**
-     * @see UserInterface
-     */
-    public function getRoles(): array
-    {
-        $roles = $this->roles;
-        // guarantee every user at least has ROLE_USER
-        $roles[] = 'ROLE_USER';
 
-        return array_unique($roles);
-    }
 
-    /**
-     * @param list<string> $roles
-     */
-    public function setRoles(array $roles): static
-    {
-        $this->roles = $roles;
-
-        return $this;
-    }
 
     /**
      * @see PasswordAuthenticatedUserInterface
