@@ -1,13 +1,13 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Dashboard{% endblock %}
+{% block title %}{{ 'dashboard.title'|trans }}{% endblock %}
 
 {% block page_title %}
     <div class="page-title">
         <div class="row">
             <div class="col-12 col-md-6 order-md-1 order-last">
-                <h3>Dashboard</h3>
-                <p class="text-subtitle text-muted">{{ 'now'|date('m/d/Y') }}</p>
+                <h3>{{ 'dashboard.title'|trans }}</h3>
+                <p class="text-subtitle text-muted">{{ 'now'|date('d/m/Y') }}</p>
             </div>
         </div>
     </div>
@@ -28,10 +28,10 @@
                                     </div>
                                 </div>
                                 <div class="col-md-8 col-lg-12 col-xl-12 col-xxl-7">
-                                    <h6 class="text-muted font-semibold">Total des Magazines en Stock</h6>
+                                    <h6 class="text-muted font-semibold">{{ 'stats.magazines_stock'|trans }}</h6>
                                     <h6 class="font-extrabold mb-0">731</h6>
                                     <small class="text-success">
-                                        <i class="bi bi-arrow-up-short"></i> +100% par rapport au mois dernier
+                                        <i class="bi bi-arrow-up-short"></i> {{ 'stats.magazines_stock_change'|trans }}
                                     </small>
                                 </div>
                             </div>
@@ -50,10 +50,10 @@
                                     </div>
                                 </div>
                                 <div class="col-md-8 col-lg-12 col-xl-12 col-xxl-7">
-                                    <h6 class="text-muted font-semibold">Total des Presentoirs</h6>
+                                    <h6 class="text-muted font-semibold">{{ 'stats.presentoirs'|trans }}</h6>
                                     <h6 class="font-extrabold mb-0">6</h6>
                                     <small class="text-muted">
-                                        <i class="bi bi-dash"></i> +0% nouveaux ce mois-ci
+                                        <i class="bi bi-dash"></i> {{ 'stats.presentoirs_change'|trans }}
                                     </small>
                                 </div>
                             </div>
@@ -72,10 +72,10 @@
                                     </div>
                                 </div>
                                 <div class="col-md-8 col-lg-12 col-xl-12 col-xxl-7">
-                                    <h6 class="text-muted font-semibold">Magazines Distribués</h6>
+                                    <h6 class="text-muted font-semibold">{{ 'stats.magazines_distributed'|trans }}</h6>
                                     <h6 class="font-extrabold mb-0">0</h6>
                                     <small class="text-muted">
-                                        <i class="bi bi-dash"></i> +0% par rapport au mois dernier
+                                        <i class="bi bi-dash"></i> {{ 'stats.magazines_distributed_change'|trans }}
                                     </small>
                                 </div>
                             </div>
@@ -94,7 +94,7 @@
                                     </div>
                                 </div>
                                 <div class="col-md-8 col-lg-12 col-xl-12 col-xxl-7">
-                                    <h6 class="text-muted font-semibold">Comptes Utilisateurs</h6>
+                                    <h6 class="text-muted font-semibold">{{ 'stats.user_accounts'|trans }}</h6>
                                     <h6 class="font-extrabold mb-0">{{ total_users|default(0) }}</h6>
                                 </div>
                             </div>
@@ -108,7 +108,7 @@
                 <div class="col-12">
                     <div class="card">
                         <div class="card-header">
-                            <h4>Statistiques</h4>
+                            <h4>{{ 'stats.title'|trans }}</h4>
                         </div>
                         <div class="card-body">
                             <div class="row">
@@ -118,8 +118,8 @@
                                             <i class="bi bi-shield-check text-white"></i>
                                         </div>
                                         <div>
-                                            <h5 class="mb-0">Administrateur</h5>
-                                            <h6 class="text-muted mb-0">8 comptes</h6>
+                                            <h5 class="mb-0">{{ 'stats.role.admin'|trans }}</h5>
+                                            <h6 class="text-muted mb-0">{{ 'stats.role.accounts'|trans({'%count%': 8}) }}</h6>
                                         </div>
                                     </div>
                                 </div>
@@ -129,8 +129,8 @@
                                             <i class="bi bi-person-check text-white"></i>
                                         </div>
                                         <div>
-                                            <h5 class="mb-0">Conductrice</h5>
-                                            <h6 class="text-muted mb-0">5 comptes</h6>
+                                            <h5 class="mb-0">{{ 'stats.role.driver'|trans }}</h5>
+                                            <h6 class="text-muted mb-0">{{ 'stats.role.accounts'|trans({'%count%': 5}) }}</h6>
                                         </div>
                                     </div>
                                 </div>
@@ -140,8 +140,8 @@
                                             <i class="bi bi-people text-white"></i>
                                         </div>
                                         <div>
-                                            <h5 class="mb-0">Autres</h5>
-                                            <h6 class="text-muted mb-0">3 comptes</h6>
+                                            <h5 class="mb-0">{{ 'stats.role.other'|trans }}</h5>
+                                            <h6 class="text-muted mb-0">{{ 'stats.role.accounts'|trans({'%count%': 3}) }}</h6>
                                         </div>
                                     </div>
                                 </div>
@@ -156,8 +156,8 @@
                 <div class="col-12">
                     <div class="card">
                         <div class="card-header">
-                            <h4>Distribution Mensuelle</h4>
-                            <p class="text-subtitle text-muted">Nombre de magazines distribués par mois</p>
+                            <h4>{{ 'distribution.title'|trans }}</h4>
+                            <p class="text-subtitle text-muted">{{ 'distribution.subtitle'|trans }}</p>
                         </div>
                         <div class="card-body">
                             <div id="chart-distribution"></div>
@@ -171,37 +171,37 @@
                 <div class="col-12">
                     <div class="card">
                         <div class="card-header">
-                            <h4>Activités Récentes</h4>
+                            <h4>{{ 'activities.title'|trans }}</h4>
                         </div>
                         <div class="card-body">
                             <div class="table-responsive">
                                 <table class="table table-hover">
                                     <thead>
                                     <tr>
-                                        <th>Action</th>
-                                        <th>Utilisateur</th>
-                                        <th>Date</th>
-                                        <th>Statut</th>
+                                        <th>{{ 'activities.action'|trans }}</th>
+                                        <th>{{ 'activities.user'|trans }}</th>
+                                        <th>{{ 'activities.date'|trans }}</th>
+                                        <th>{{ 'activities.status'|trans }}</th>
                                     </tr>
                                     </thead>
                                     <tbody>
                                     <tr>
-                                        <td><i class="bi bi-box-seam text-primary"></i> Distribution magazine</td>
-                                        <td>Admin</td>
+                                        <td><i class="bi bi-box-seam text-primary"></i> {{ 'activities.distribution'|trans }}</td>
+                                        <td>{{ 'activities.user.admin'|trans }}</td>
                                         <td>{{ 'now'|date('d/m/Y H:i') }}</td>
-                                        <td><span class="badge bg-success">Complété</span></td>
+                                        <td><span class="badge bg-success">{{ 'activities.status.completed'|trans }}</span></td>
                                     </tr>
                                     <tr>
-                                        <td><i class="bi bi-person-plus text-info"></i> Nouvel utilisateur</td>
-                                        <td>Système</td>
+                                        <td><i class="bi bi-person-plus text-info"></i> {{ 'activities.new_user'|trans }}</td>
+                                        <td>{{ 'activities.user.system'|trans }}</td>
                                         <td>{{ 'now'|date('d/m/Y H:i') }}</td>
-                                        <td><span class="badge bg-info">Info</span></td>
+                                        <td><span class="badge bg-info">{{ 'activities.status.info'|trans }}</span></td>
                                     </tr>
                                     <tr>
-                                        <td><i class="bi bi-truck text-warning"></i> Livraison en cours</td>
-                                        <td>Conductrice</td>
+                                        <td><i class="bi bi-truck text-warning"></i> {{ 'activities.delivery'|trans }}</td>
+                                        <td>{{ 'activities.user.driver'|trans }}</td>
                                         <td>{{ 'now'|date('d/m/Y H:i') }}</td>
-                                        <td><span class="badge bg-warning">En cours</span></td>
+                                        <td><span class="badge bg-warning">{{ 'activities.status.in_progress'|trans }}</span></td>
                                     </tr>
                                     </tbody>
                                 </table>
@@ -230,21 +230,21 @@
 
             <div class="card">
                 <div class="card-header">
-                    <h4>Accès Rapide</h4>
+                    <h4>{{ 'quick_access.title'|trans }}</h4>
                 </div>
                 <div class="card-content pb-4">
                     <div class="px-4 py-3">
                         <a href="{{ path('app_user_index') }}" class="btn btn-primary btn-block mb-2">
-                            <i class="bi bi-people"></i> Gestion Utilisateurs
+                            <i class="bi bi-people"></i> {{ 'quick_access.users'|trans }}
                         </a>
                         <a href="#" class="btn btn-success btn-block mb-2">
-                            <i class="bi bi-box-seam"></i> Gestion Magazines
+                            <i class="bi bi-box-seam"></i> {{ 'quick_access.magazines'|trans }}
                         </a>
                         <a href="#" class="btn btn-info btn-block mb-2">
-                            <i class="bi bi-truck"></i> Distributions
+                            <i class="bi bi-truck"></i> {{ 'quick_access.distributions'|trans }}
                         </a>
                         <a href="#" class="btn btn-warning btn-block">
-                            <i class="bi bi-bookmark"></i> Presentoirs
+                            <i class="bi bi-bookmark"></i> {{ 'quick_access.presentoirs'|trans }}
                         </a>
                     </div>
                 </div>
@@ -252,11 +252,11 @@
 
             <div class="card">
                 <div class="card-header">
-                    <h4>Statistiques Rapides</h4>
+                    <h4>{{ 'quick_stats.title'|trans }}</h4>
                 </div>
                 <div class="card-body">
                     <div class="d-flex justify-content-between mb-3">
-                        <span>Stock disponible</span>
+                        <span>{{ 'quick_stats.stock_available'|trans }}</span>
                         <span class="font-bold">97%</span>
                     </div>
                     <div class="progress mb-3" style="height: 10px;">
@@ -264,7 +264,7 @@
                     </div>
 
                     <div class="d-flex justify-content-between mb-3">
-                        <span>Distributions</span>
+                        <span>{{ 'quick_stats.distributions'|trans }}</span>
                         <span class="font-bold">0%</span>
                     </div>
                     <div class="progress mb-3" style="height: 10px;">
@@ -272,7 +272,7 @@
                     </div>
 
                     <div class="d-flex justify-content-between mb-3">
-                        <span>Présentoirs actifs</span>
+                        <span>{{ 'quick_stats.presentoirs_active'|trans }}</span>
                         <span class="font-bold">100%</span>
                     </div>
                     <div class="progress" style="height: 10px;">
@@ -287,18 +287,15 @@
 {% block javascripts %}
     <script src="{{ asset('assets/vendors/apexcharts/apexcharts.js') }}"></script>
     <script>
-        // Graphique de distribution mensuelle
         var optionsDistribution = {
             series: [{
-                name: 'Magazines distribués',
+                name: "{{ 'distribution.magazines'|trans }}",
                 data: [45, 52, 38, 65, 70, 58, 85, 92, 75, 88, 95, 105]
             }],
             chart: {
                 type: 'bar',
                 height: 350,
-                toolbar: {
-                    show: false
-                }
+                toolbar: { show: false }
             },
             plotOptions: {
                 bar: {
@@ -306,21 +303,30 @@
                     columnWidth: '50%',
                 }
             },
-            dataLabels: {
-                enabled: false
-            },
+            dataLabels: { enabled: false },
             stroke: {
                 show: true,
                 width: 2,
                 colors: ['transparent']
             },
             xaxis: {
-                categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+                categories: [
+                    "{{ 'month.jan'|trans }}",
+                    "{{ 'month.feb'|trans }}",
+                    "{{ 'month.mar'|trans }}",
+                    "{{ 'month.apr'|trans }}",
+                    "{{ 'month.may'|trans }}",
+                    "{{ 'month.jun'|trans }}",
+                    "{{ 'month.jul'|trans }}",
+                    "{{ 'month.aug'|trans }}",
+                    "{{ 'month.sep'|trans }}",
+                    "{{ 'month.oct'|trans }}",
+                    "{{ 'month.nov'|trans }}",
+                    "{{ 'month.dec'|trans }}"
+                ],
             },
             yaxis: {
-                title: {
-                    text: 'Nombre de magazines'
-                }
+                title: { text: "{{ 'distribution.y_axis'|trans }}" }
             },
             fill: {
                 opacity: 1,
@@ -329,7 +335,7 @@
             tooltip: {
                 y: {
                     formatter: function (val) {
-                        return val + " magazines"
+                        return val + " {{ 'distribution.unit'|trans }}"
                     }
                 }
             },

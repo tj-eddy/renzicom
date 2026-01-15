@@ -1,0 +1,141 @@
+
+# Dashboard
+dashboard.title: 'Dashboard'
+dashboard.date: '%date%'
+
+# Main statistics
+stats.magazines_stock: 'Total Magazines in Stock'
+stats.magazines_stock_change: '+100% compared to last month'
+stats.presentoirs: 'Total Display Stands'
+stats.presentoirs_change: '+0% new this month'
+stats.magazines_distributed: 'Magazines Distributed'
+stats.magazines_distributed_change: '+0% compared to last month'
+stats.user_accounts: 'User Accounts'
+
+# Role statistics
+stats.title: 'Statistics'
+stats.role.admin: 'Administrator'
+stats.role.driver: 'Driver'
+stats.role.other: 'Others'
+stats.role.accounts: '%count% accounts'
+
+# Monthly distribution
+distribution.title: 'Monthly Distribution'
+distribution.subtitle: 'Number of magazines distributed per month'
+distribution.magazines: 'Magazines distributed'
+distribution.count: '%count% magazines'
+
+# Months
+month.jan: 'Jan'
+month.feb: 'Feb'
+month.mar: 'Mar'
+month.apr: 'Apr'
+month.may: 'May'
+month.jun: 'Jun'
+month.jul: 'Jul'
+month.aug: 'Aug'
+month.sep: 'Sep'
+month.oct: 'Oct'
+month.nov: 'Nov'
+month.dec: 'Dec'
+
+# Recent activities
+activities.title: 'Recent Activities'
+activities.action: 'Action'
+activities.user: 'User'
+activities.date: 'Date'
+activities.status: 'Status'
+activities.distribution: 'Magazine distribution'
+activities.new_user: 'New user'
+activities.delivery: 'Delivery in progress'
+activities.status.completed: 'Completed'
+activities.status.info: 'Info'
+activities.status.in_progress: 'In Progress'
+activities.user.admin: 'Admin'
+activities.user.system: 'System'
+activities.user.driver: 'Driver'
+
+# Quick access
+quick_access.title: 'Quick Access'
+quick_access.users: 'User Management'
+quick_access.magazines: 'Magazine Management'
+quick_access.distributions: 'Distributions'
+quick_access.presentoirs: 'Display Stands'
+
+# Quick statistics
+quick_stats.title: 'Quick Statistics'
+quick_stats.stock_available: 'Stock available'
+quick_stats.distributions: 'Distributions'
+quick_stats.presentoirs_active: 'Active display stands'
+
+# Navigation
+nav.dashboard: 'Dashboard'
+nav.users: 'Users'
+nav.logout: 'Logout'
+
+# Users
+user.list: 'User list'
+user.new: 'New user'
+user.edit: 'Edit user'
+user.show: 'User details'
+user.delete: 'Delete'
+user.actions: 'Actions'
+
+# Form
+form.name: 'Name'
+form.email: 'Email'
+form.password: 'Password'
+form.role: 'Role'
+form.save: 'Save'
+form.create: 'Create'
+form.cancel: 'Cancel'
+form.update: 'Update'
+
+# Roles
+role.admin: 'Administrator'
+role.driver: 'Driver'
+role.statistics: 'Statistics'
+
+# Messages
+message.user_created: 'User created successfully.'
+message.user_updated: 'User updated successfully.'
+message.user_deleted: 'User deleted successfully.'
+message.access_denied_create: 'Access denied. Only administrators can create users.'
+message.access_denied_edit: 'Access denied. Only administrators can edit users.'
+message.access_denied_delete: 'Access denied. Only administrators can delete users.'
+
+# Login
+login.title: 'Login'
+login.subtitle: 'Log in with your credentials.'
+login.email.placeholder: 'Email'
+login.password.placeholder: 'Password'
+login.remember_me: 'Remember me'
+login.submit: 'Login'
+login.forgot_password: 'Forgot password?'
+login.no_account: 'No account? Contact the administrator.'
+
+# Errors
+error.403.title: 'Access Denied'
+error.403.message: 'You are not authorized to view this page.'
+error.403.button: 'Go to Dashboard'
+error.404.title: 'Page Not Found'
+error.404.message: 'The page you are looking for does not exist.'
+
+# Breadcrumb
+breadcrumb.home: 'Dashboard'
+breadcrumb.users: 'Users'
+breadcrumb.new: 'New'
+breadcrumb.edit: 'Edit'
+
+# Additional navigation
+nav.menu: 'Menu'
+nav.account: 'Account'
+
+# Footer
+footer.powered_by: 'Powered by'
+
+# Chart - additions
+distribution.y_axis: 'Number of magazines'
+distribution.unit: 'magazines'
+
+

@@ -19,12 +19,6 @@
 'Driver': 'Conductrice'
 'Statistics': 'Statistiques'
 
-# Labels de formulaire
-'form.name': 'Nom'
-'form.email': 'Email'
-'form.password': 'Mot de passe'
-'form.role': 'Rôle'
-
 # Boutons
 'btn.save': 'Enregistrer'
 'btn.create': 'Créer'
@@ -38,16 +32,139 @@
 'nav.users': 'Utilisateurs'
 'nav.logout': 'Déconnexion'
 
-# Page de login
-'login.title': 'Connexion'
-'login.subtitle': 'Connectez-vous avec vos identifiants.'
-'login.email.placeholder': 'Email'
-'login.password.placeholder': 'Mot de passe'
-'login.remember_me': 'Se souvenir de moi'
-'login.submit': 'Se connecter'
-'login.forgot_password': 'Mot de passe oublié ?'
+# Dashboard
+dashboard.title: 'Tableau de bord'
+dashboard.date: '%date%'
+
+# Statistiques principales
+stats.magazines_stock: 'Total des Magazines en Stock'
+stats.magazines_stock_change: '+100% par rapport au mois dernier'
+stats.presentoirs: 'Total des Présentoirs'
+stats.presentoirs_change: '+0% nouveaux ce mois-ci'
+stats.magazines_distributed: 'Magazines Distribués'
+stats.magazines_distributed_change: '+0% par rapport au mois dernier'
+stats.user_accounts: 'Comptes Utilisateurs'
+
+# Statistiques des rôles
+stats.title: 'Statistiques'
+stats.role.admin: 'Administrateur'
+stats.role.driver: 'Conductrice'
+stats.role.other: 'Autres'
+stats.role.accounts: '%count% comptes'
+
+# Distribution mensuelle
+distribution.title: 'Distribution Mensuelle'
+distribution.subtitle: 'Nombre de magazines distribués par mois'
+distribution.magazines: 'Magazines distribués'
+distribution.count: '%count% magazines'
+
+# Mois
+month.jan: 'Jan'
+month.feb: 'Fév'
+month.mar: 'Mar'
+month.apr: 'Avr'
+month.may: 'Mai'
+month.jun: 'Juin'
+month.jul: 'Juil'
+month.aug: 'Août'
+month.sep: 'Sep'
+month.oct: 'Oct'
+month.nov: 'Nov'
+month.dec: 'Déc'
+
+# Activités récentes
+activities.title: 'Activités Récentes'
+activities.action: 'Action'
+activities.user: 'Utilisateur'
+activities.date: 'Date'
+activities.status: 'Statut'
+activities.distribution: 'Distribution magazine'
+activities.new_user: 'Nouvel utilisateur'
+activities.delivery: 'Livraison en cours'
+activities.status.completed: 'Complété'
+activities.status.info: 'Info'
+activities.status.in_progress: 'En cours'
+activities.user.admin: 'Admin'
+activities.user.system: 'Système'
+activities.user.driver: 'Conductrice'
+
+# Accès rapide
+quick_access.title: 'Accès Rapide'
+quick_access.users: 'Gestion Utilisateurs'
+quick_access.magazines: 'Gestion Magazines'
+quick_access.distributions: 'Distributions'
+quick_access.presentoirs: 'Présentoirs'
+
+# Statistiques rapides
+quick_stats.title: 'Statistiques Rapides'
+quick_stats.stock_available: 'Stock disponible'
+quick_stats.distributions: 'Distributions'
+quick_stats.presentoirs_active: 'Présentoirs actifs'
+
+
+# Utilisateurs
+user.list: 'Liste des utilisateurs'
+user.new: 'Nouvel utilisateur'
+user.edit: 'Modifier l''utilisateur'
+user.show: 'Détails de l''utilisateur'
+user.delete: 'Supprimer'
+user.actions: 'Actions'
+
+# Formulaire
+form.name: 'Nom'
+form.email: 'Email'
+form.password: 'Mot de passe'
+form.role: 'Rôle'
+form.save: 'Enregistrer'
+form.create: 'Créer'
+form.cancel: 'Annuler'
+form.update: 'Mettre à jour'
+
+# Rôles
+role.admin: 'Administrateur'
+role.driver: 'Conductrice'
+role.statistics: 'Statistiques'
+
+# Messages
+message.user_created: 'Utilisateur créé avec succès.'
+message.user_updated: 'Utilisateur modifié avec succès.'
+message.user_deleted: 'Utilisateur supprimé avec succès.'
+message.access_denied_create: 'Accès refusé. Seuls les administrateurs peuvent créer des utilisateurs.'
+message.access_denied_edit: 'Accès refusé. Seuls les administrateurs peuvent modifier des utilisateurs.'
+message.access_denied_delete: 'Accès refusé. Seuls les administrateurs peuvent supprimer des utilisateurs.'
+
+# Login
+login.title: 'Connexion'
+login.subtitle: 'Connectez-vous avec vos identifiants.'
+login.email.placeholder: 'Email'
+login.password.placeholder: 'Mot de passe'
+login.remember_me: 'Se souvenir de moi'
+login.submit: 'Se connecter'
+login.forgot_password: 'Mot de passe oublié ?'
+login.no_account: 'Pas de compte ? Contactez l''administrateur.'
 
 # Erreurs
-'error.403.title': 'Accès Refusé'
-'error.403.message': 'Vous n''êtes pas autorisé à voir cette page.'
-'error.403.button': 'Retour au Dashboard'
+error.403.title: 'Accès Refusé'
+error.403.message: 'Vous n''êtes pas autorisé à voir cette page.'
+error.403.button: 'Retour au Dashboard'
+error.404.title: 'Page Non Trouvée'
+error.404.message: 'La page que vous recherchez n''existe pas.'
+
+# Breadcrumb
+breadcrumb.home: 'Dashboard'
+breadcrumb.users: 'Utilisateurs'
+breadcrumb.new: 'Nouveau'
+breadcrumb.edit: 'Modifier'
+
+
+
+
+# Navigation supplémentaire
+nav.menu: 'Menu'
+nav.account: 'Compte'
+
+# Footer
+footer.powered_by: 'Propulsé par'
+
+distribution.y_axis: 'Nombre de magazines'
+distribution.unit: 'magazines'

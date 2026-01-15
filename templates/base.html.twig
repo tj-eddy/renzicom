@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="{{ app.request.locale }}">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}Dashboard{% endblock %} - Renzicom</title>
+    <title>{% block title %}{{ 'dashboard.title'|trans }}{% endblock %} - Renzicom</title>
 
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700;800&display=swap" rel="stylesheet">
@@ -20,6 +20,7 @@
 
 <body>
 <div id="app">
+
     {# Sidebar #}
     <div id="sidebar" class="active">
         <div class="sidebar-wrapper active">
@@ -51,32 +52,47 @@
 
             <div class="sidebar-menu">
                 <ul class="menu">
-                    <li class="sidebar-title">Menu</li>
+                    <li class="sidebar-title">{{ 'nav.menu'|trans }}</li>
 
                     <li class="sidebar-item {% if app.request.get('_route') == 'app_dashboard' %}active{% endif %}">
                         <a href="{{ path('app_dashboard') }}" class='sidebar-link'>
                             <i class="bi bi-grid-fill"></i>
-                            <span>Dashboard</span>
+                            <span>{{ 'nav.dashboard'|trans }}</span>
                         </a>
                     </li>
 
                     <li class="sidebar-item {% if app.request.get('_route') starts with 'app_user' %}active{% endif %}">
                         <a href="{{ path('app_user_index') }}" class='sidebar-link'>
                             <i class="bi bi-people-fill"></i>
-                            <span>Utilisateurs</span>
+                            <span>{{ 'nav.users'|trans }}</span>
                         </a>
                     </li>
 
                     {% block sidebar_menu %}{% endblock %}
 
-                    <li class="sidebar-title">Compte</li>
+                    <li class="sidebar-title">{{ 'nav.account'|trans }}</li>
 
                     <li class="sidebar-item">
                         <a href="{{ path('app_logout') }}" class='sidebar-link'>
                             <i class="bi bi-box-arrow-right"></i>
-                            <span>Déconnexion</span>
+                            <span>{{ 'nav.logout'|trans }}</span>
                         </a>
                     </li>
+{#                    <li class="sidebar-item">#}
+{#                        <div class="px-3 py-2">#}
+{#                            <div class="d-flex gap-2">#}
+{#                                {% set current_params = app.request.query.all %}#}
+{#                                {% set current_route = app.request.attributes.get('_route') %}#}
+
+{#                                <a href="?_locale=fr" class="btn btn-sm {{ app.request.locale == 'fr' ? 'btn-primary' : 'btn-outline-primary' }} flex-fill">#}
+{#                                    🇫🇷 FR#}
+{#                                </a>#}
+{#                                <a href="?_locale=en" class="btn btn-sm {{ app.request.locale == 'en' ? 'btn-primary' : 'btn-outline-primary' }} flex-fill">#}
+{#                                    🇬🇧 EN#}
+{#                                </a>#}
+{#                            </div>#}
+{#                        </div>#}
+{#                    </li>#}
                 </ul>
             </div>
             <button class="sidebar-toggler btn x"><i data-feather="x"></i></button>
@@ -92,12 +108,15 @@
         </header>
 
         <div class="page-heading">
-            <h3>{% block page_title %}Dashboard{% endblock %}</h3>
+            {% block page_title %}
+                <h3>{{ 'dashboard.title'|trans }}</h3>
+            {% endblock %}
         </div>
 
         <div class="page-content">
             {% for message in app.flashes('success') %}
                 <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    <i class="bi bi-check-circle-fill"></i>
                     {{ message }}
                     <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
                 </div>
@@ -105,6 +124,7 @@
 
             {% for message in app.flashes('error') %}
                 <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <i class="bi bi-exclamation-triangle-fill"></i>
                     {{ message }}
                     <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
                 </div>
@@ -118,6 +138,9 @@
                 <div class="float-start">
                     <p>{{ 'now'|date('Y') }} &copy; Renzicom</p>
                 </div>
+{#                <div class="float-end">#}
+{#                    <p>{{ 'footer.powered_by'|trans }} <span class="text-primary">Symfony</span></p>#}
+{#                </div>#}
             </div>
         </footer>
     </div>
