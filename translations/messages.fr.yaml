@@ -280,4 +280,11 @@ rack.actions.delete: Supprimer
 # Rack - Messages
 rack.list.no_products: Aucun rack trouvé
 rack.confirm_delete: Êtes-vous sûr de vouloir supprimer ce rack ?
+# Rack - Form
+# Rack - Formulaire
+rack.form.name.placeholder: Nom du rack
+rack.form.address.placeholder: Adresse du rack
+rack.form.add_images: Ajouter des images
+rack.form.images_help: 'Formats acceptés : JPG, PNG. Taille max : 5Mo'
 
+nav.rack: Étagère

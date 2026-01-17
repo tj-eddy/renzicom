@@ -42,9 +42,9 @@
                 <div class="form-group has-icon-left">
                     <div class="position-relative">
                         {{ form_widget(form.warehouse, {'attr': {'class': 'form-select'}}) }}
-                        <div class="form-control-icon">
-                            <i class="bi bi-building"></i>
-                        </div>
+{#                        <div class="form-control-icon">#}
+{#                            <i class="bi bi-building"></i>#}
+{#                        </div>#}
                     </div>
                     {{ form_errors(form.warehouse) }}
                 </div>
@@ -52,24 +52,24 @@
         {% endif %}
 
         {# Upload d'images avec FilePond (optionnel) #}
-        {% if form.image is defined %}
-            <div class="col-md-4">
-                <label for="{{ form.image.vars.id }}">
-                    {% if rack is defined and rack.id is not null %}
-                        {{ 'rack.form.add_images'|trans }}
-                    {% else %}
-                        {{ form_label(form.image) }}
-                    {% endif %}
-                </label>
-            </div>
-            <div class="col-md-8">
-                <div class="form-group">
-                    {{ form_widget(form.image, {'attr': {'class': 'rack-images-filepond'}}) }}
-                    <small class="text-muted">{{ 'rack.form.images_help'|trans }}</small>
-                    {{ form_errors(form.image) }}
-                </div>
-            </div>
-        {% endif %}
+{#        {% if form.image is defined %}#}
+{#            <div class="col-md-4">#}
+{#                <label for="{{ form.image.vars.id }}">#}
+{#                    {% if rack is defined and rack.id is not null %}#}
+{#                        {{ 'rack.form.add_images'|trans }}#}
+{#                    {% else %}#}
+{#                        {{ form_label(form.image) }}#}
+{#                    {% endif %}#}
+{#                </label>#}
+{#            </div>#}
+{#            <div class="col-md-8">#}
+{#                <div class="form-group">#}
+{#                    {{ form_widget(form.image, {'attr': {'class': 'rack-images-filepond'}}) }}#}
+{#                    <small class="text-muted">{{ 'rack.form.images_help'|trans }}</small>#}
+{#                    {{ form_errors(form.image) }}#}
+{#                </div>#}
+{#            </div>#}
+{#        {% endif %}#}
 
         {# Boutons #}
         <div class="col-12 d-flex justify-content-end">

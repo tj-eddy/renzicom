@@ -282,3 +282,11 @@ rack.actions.delete: Delete
 # Rack - Messages
 rack.list.no_products: No racks found
 rack.confirm_delete: Are you sure you want to delete this rack?
+
+# Rack - Form
+rack.form.name.placeholder: Rack name
+rack.form.address.placeholder: Rack address
+rack.form.add_images: Add images
+rack.form.images_help: 'Accepted formats: JPG, PNG. Max size: 5MB'
+
+nav.rack: Rack
