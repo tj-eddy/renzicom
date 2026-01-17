@@ -27,12 +27,12 @@ class UserType extends AbstractType
             ->add('role', ChoiceType::class, [
                 'label' => 'Rôle',
                 'choices' => [
-                    'Administrateur' => 'ROLE_ADMIN',
-                    'Conductrice' => 'ROLE_DRIVER',
-                    'Statistiques' => 'ROLE_STATISTICS',
+                    'role.admin' => 'ROLE_ADMIN',
+                    'role.driver' => 'ROLE_DRIVER',
+                    'role.statistics' => 'ROLE_STATISTICS',
                 ],
                 'attr' => ['class' => 'form-select'],
-                'placeholder' => 'Sélectionnez un rôle',
+                'placeholder' => 'form.role.placeholder',
                 'required' => true,
             ])
             ->add('password', PasswordType::class, [
