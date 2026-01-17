@@ -207,7 +207,7 @@ warehouse.form.filepond.max_total_size: La taille totale maximale est de {filesi
 # ... (traductions warehouse précédentes)
 
 # Product
-product.list.title: Liste des produits
+product.list.title: Gérez votre catalogue de magazines
 product.new.title: Nouveau produit
 product.edit.title: Modifier le produit
 product.show.title: Détails du produit
@@ -263,3 +263,5 @@ product.form.filepond.max_size_exceeded: Fichier trop volumineux
 product.form.filepond.max_size: La taille maximale est de {filesize}
 
 breadcrumb.products: Produits
+nav.products: Produits
+

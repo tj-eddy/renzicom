@@ -11,7 +11,8 @@
             <div class="col-12 col-md-6 order-md-2 order-first">
                 <nav aria-label="breadcrumb" class="breadcrumb-header float-start float-lg-end">
                     <ol class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="{{ path('app_dashboard') }}">{{ 'breadcrumb.home'|trans }}</a></li>
+                        <li class="breadcrumb-item"><a
+                                    href="{{ path('app_dashboard') }}">{{ 'breadcrumb.home'|trans }}</a></li>
                         <li class="breadcrumb-item active" aria-current="page">{{ 'breadcrumb.warehouses'|trans }}</li>
                     </ol>
                 </nav>
@@ -26,7 +27,7 @@
 
 {% block body %}
     <section class="section">
-        <div class="card">
+        <div class="">
             <div class="card-header d-flex justify-content-between align-items-center">
                 <h4 class="mb-0">{{ 'warehouse.list.title'|trans }}</h4>
                 <a href="{{ path('app_warehouse_new', {'_locale': app.request.locale}) }}" class="btn btn-primary">
@@ -34,94 +35,40 @@
                 </a>
             </div>
             <div class="card-body">
-                <table class="table table-striped" id="table1">
-                    <thead>
-                    <tr>
-                        <th>{{ 'warehouse.table.id'|trans }}</th>
-                        <th>{{ 'warehouse.table.name'|trans }}</th>
-                        <th>{{ 'warehouse.table.address'|trans }}</th>
-{#                        <th>{{ 'warehouse.table.images'|trans }}</th>#}
-                        <th>{{ 'warehouse.table.created_at'|trans }}</th>
-                        <th>{{ 'warehouse.table.actions'|trans }}</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    {% for warehouse in warehouses %}
-                        <tr>
-                            <td>{{ warehouse.id }}</td>
-                            <td>{{ warehouse.name }}</td>
-                            <td>{{ warehouse.address|default('-') }}</td>
-{#                            <td>#}
-{#                                <span class="badge bg-info">#}
-{#                                    {{ warehouse.images|length }}#}
-{#                                    {% if warehouse.images|length > 1 %}#}
-{#                                        {{ 'warehouse.table.images_count'|trans }}#}
-{#                                    {% else %}#}
-{#                                        {{ 'warehouse.table.image_count'|trans }}#}
-{#                                    {% endif %}#}
-{#                                </span>#}
-{#                            </td>#}
-                            <td>{{ warehouse.createdAt|date('d/m/Y H:i') }}</td>
-                            <td>
-                                <div class="btn-group" role="group">
-                                    <a href="{{ path('app_warehouse_show', {'id': warehouse.id, '_locale': app.request.locale}) }}"
-                                       class="btn btn-sm btn-info"
-                                       title="{{ 'warehouse.actions.show'|trans }}">
-                                        <i class="bi bi-eye"></i>
-                                    </a>
-                                    <a href="{{ path('app_warehouse_edit', {'id': warehouse.id, '_locale': app.request.locale}) }}"
-                                       class="btn btn-sm btn-warning"
-                                       title="{{ 'warehouse.actions.edit'|trans }}">
-                                        <i class="bi bi-pencil"></i>
-                                    </a>
-                                    <button type="button"
-                                            class="btn btn-sm btn-danger"
-                                            onclick="confirmDelete({{ warehouse.id }})"
-                                            title="{{ 'warehouse.actions.delete'|trans }}">
-                                        <i class="bi bi-trash"></i>
-                                    </button>
-                                </div>
+                <section id="content-types">
+                    <div class="row">
+                        {% for warehouse in warehouses %}
 
-                                {# Formulaire de suppression caché #}
-                                <form id="delete-form-{{ warehouse.id }}"
-                                      action="{{ path('app_warehouse_delete', {'id': warehouse.id, '_locale': app.request.locale}) }}"
-                                      method="post"
-                                      style="display: none;">
-                                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ warehouse.id) }}">
-                                </form>
-                            </td>
-                        </tr>
-                    {% else %}
-                        <tr>
-                            <td colspan="6" class="text-center">{{ 'warehouse.list.no_warehouses'|trans }}</td>
-                        </tr>
-                    {% endfor %}
-                    </tbody>
-                </table>
+                            <div class="col-xl-4 col-md-6 col-sm-12">
+                                <a href="{{ path('app_warehouse_edit', {'id': warehouse.id, '_locale': app.request.locale}) }}">
+                                    <div class="card">
+                                        <div class="card-content">
+                                            <div class="card-body">
+                                                <h4 class="card-title">{{ warehouse.name }}</h4>
+                                                <h6 class="card-subtitle">{{ warehouse.address }}</h6>
+                                            </div>
+                                            <div id="carouselExampleSlidesOnly" class="carousel slide"
+                                                 data-bs-ride="carousel">
+                                                <div class="carousel-inner">
+                                                    {% for image in warehouse.images %}
+                                                        <div class="carousel-item active" id="image-{{ image.id }}">
+                                                            <img src="{{ asset('uploads/warehouses/' ~ image.imageName) }}"
+                                                                 class="d-block w-100"
+                                                                 alt="{{ warehouse.name }}">
+                                                        </div>
+                                                    {% endfor %}
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </a>
+                            </div>
+                        {% endfor %}
+
+                    </div>
+                </section>
             </div>
         </div>
     </section>
-{% endblock %}
-
-{% block javascripts %}
-    <script src="{{ asset('assets/vendors/simple-datatables/simple-datatables.js') }}"></script>
-    <script>
-        let table1 = document.querySelector('#table1');
-        let dataTable = new simpleDatatables.DataTable(table1, {
-            searchable: true,
-            fixedHeight: false,
-            perPage: 10,
-            labels: {
-                placeholder: "{{ 'datatable.search'|trans }}",
-                noRows: "{{ 'datatable.no_data'|trans }}",
-                info: "{{ 'datatable.info'|trans }}"
-            }
-        });
-
-        function confirmDelete(warehouseId) {
-            if (confirm("{{ 'warehouse.confirm_delete'|trans }}")) {
-                document.getElementById('delete-form-' + warehouseId).submit();
-            }
-        }
-    </script>
 {% endblock %}

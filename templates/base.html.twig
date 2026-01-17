@@ -72,6 +72,12 @@
                             <span>{{ 'nav.warehouses'|trans }}</span>
                         </a>
                     </li>
+                    <li class="sidebar-item {% if app.request.get('_route') starts with 'app_product' %}active{% endif %}">
+                        <a href="{{ path('app_product_index') }}" class='sidebar-link'>
+                            <i class="bi bi-list"></i>
+                            <span>{{ 'nav.products'|trans }}</span>
+                        </a>
+                    </li>
 
                     {% block sidebar_menu %}{% endblock %}
 
