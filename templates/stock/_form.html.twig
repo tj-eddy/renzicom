@@ -1,0 +1,107 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Ajouter un stock{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <style>
+        .stock-info {
+            margin-top: 10px;
+            padding: 10px;
+            background-color: #f8f9fa;
+            border-left: 4px solid #28a745;
+            display: none;
+        }
+        .stock-info.warning {
+            border-left-color: #ffc107;
+            background-color: #fff3cd;
+        }
+        .stock-info.exists {
+            border-left-color: #17a2b8;
+            background-color: #d1ecf1;
+        }
+    </style>
+{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <h1>Ajouter un stock</h1>
+
+        {{ form_start(form) }}
+        {{ form_row(form.rack) }}
+
+        <div class="product-wrapper">
+            {{ form_row(form.product) }}
+            <div class="stock-info" id="stock-info">
+                <strong>Stock actuel :</strong> <span id="current-stock">-</span> unité(s)
+                <br>
+                <small id="stock-message"></small>
+            </div>
+        </div>
+
+        {{ form_row(form.quantity) }}
+        {{ form_row(form.note) }}
+
+        <button type="submit" class="btn btn-success">{{ button_label|default('Enregistrer') }}</button>
+        <a href="{{ path('app_stock_index') }}" class="btn btn-secondary">Retour</a>
+        {{ form_end(form) }}
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+    <script>
+        $(document).ready(function() {
+            // Initialiser Select2
+            $('.select2-rack, .select2-product').select2({
+                theme: 'default',
+                width: '100%'
+            });
+
+            // Fonction pour vérifier le stock
+            function checkStock() {
+                const productId = $('#stock_product').val();
+                const rackId = $('#stock_rack').val();
+
+                if (!productId || !rackId) {
+                    $('#stock-info').hide();
+                    return;
+                }
+
+                // Appel AJAX pour vérifier le stock
+                $.ajax({
+                    url: '{{ path('app_stock_check') }}',
+                    method: 'GET',
+                    data: {
+                        product_id: productId,
+                        rack_id: rackId
+                    },
+                    success: function(response) {
+                        $('#stock-info').show();
+                        $('#current-stock').text(response.quantity);
+
+                        if (response.exists) {
+                            $('#stock-info').removeClass('warning').addClass('exists');
+                            $('#stock-message').text('Ce produit existe déjà dans ce rack. La quantité sera ajoutée au stock existant.');
+                        } else {
+                            $('#stock-info').removeClass('exists').addClass('warning');
+                            $('#stock-message').text('Nouveau stock qui sera créé.');
+                        }
+                    },
+                    error: function() {
+                        $('#stock-info').hide();
+                    }
+                });
+            }
+
+            // Déclencher la vérification lors du changement de produit ou rack
+            $('#stock_product, #stock_rack').on('change', function() {
+                checkStock();
+            });
+        });
+    </script>
+{% endblock %}
