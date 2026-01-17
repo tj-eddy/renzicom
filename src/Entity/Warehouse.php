@@ -53,11 +53,18 @@ class Warehouse
     #[ORM\Column]
     private ?\DateTimeImmutable $updatedAt = null;
 
+    /**
+     * @var Collection<int, Rack>
+     */
+    #[ORM\OneToMany(targetEntity: Rack::class, mappedBy: 'warehouse_id')]
+    private Collection $racks;
+
     public function __construct()
     {
         $this->images = new ArrayCollection();
         $this->createdAt = new \DateTimeImmutable();
         $this->updatedAt = new \DateTimeImmutable();
+        $this->racks = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -142,5 +149,35 @@ class Warehouse
     public function preUpdate(): void
     {
         $this->updatedAt = new \DateTimeImmutable();
+    }
+
+    /**
+     * @return Collection<int, Rack>
+     */
+    public function getRacks(): Collection
+    {
+        return $this->racks;
+    }
+
+    public function addRack(Rack $rack): static
+    {
+        if (!$this->racks->contains($rack)) {
+            $this->racks->add($rack);
+            $rack->setWarehouseId($this);
+        }
+
+        return $this;
+    }
+
+    public function removeRack(Rack $rack): static
+    {
+        if ($this->racks->removeElement($rack)) {
+            // set the owning side to null (unless already changed)
+            if ($rack->getWarehouseId() === $this) {
+                $rack->setWarehouseId(null);
+            }
+        }
+
+        return $this;
     }
 }

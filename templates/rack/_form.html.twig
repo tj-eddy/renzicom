@@ -1,0 +1,85 @@
+{{ form_start(form, {'attr': {'class': 'form form-horizontal'}}) }}
+<div class="form-body">
+    <div class="row">
+        {# Nom #}
+        <div class="col-md-4">
+            <label for="{{ form.name.vars.id }}">{{ form_label(form.name) }}</label>
+        </div>
+        <div class="col-md-8">
+            <div class="form-group has-icon-left">
+                <div class="position-relative">
+                    {{ form_widget(form.name, {'attr': {'class': 'form-control', 'placeholder': 'rack.form.name.placeholder'|trans}}) }}
+                    <div class="form-control-icon">
+                        <i class="bi bi-box-seam"></i>
+                    </div>
+                </div>
+                {{ form_errors(form.name) }}
+            </div>
+        </div>
+
+        {# Adresse #}
+        <div class="col-md-4">
+            <label for="{{ form.address.vars.id }}">{{ form_label(form.address) }}</label>
+        </div>
+        <div class="col-md-8">
+            <div class="form-group has-icon-left">
+                <div class="position-relative">
+                    {{ form_widget(form.address, {'attr': {'class': 'form-control', 'placeholder': 'rack.form.address.placeholder'|trans}}) }}
+                    <div class="form-control-icon">
+                        <i class="bi bi-geo-alt"></i>
+                    </div>
+                </div>
+                {{ form_errors(form.address) }}
+            </div>
+        </div>
+
+        {# Warehouse (si le rack appartient à un entrepôt) #}
+        {% if form.warehouse is defined %}
+            <div class="col-md-4">
+                <label for="{{ form.warehouse.vars.id }}">{{ form_label(form.warehouse) }}</label>
+            </div>
+            <div class="col-md-8">
+                <div class="form-group has-icon-left">
+                    <div class="position-relative">
+                        {{ form_widget(form.warehouse, {'attr': {'class': 'form-select'}}) }}
+                        <div class="form-control-icon">
+                            <i class="bi bi-building"></i>
+                        </div>
+                    </div>
+                    {{ form_errors(form.warehouse) }}
+                </div>
+            </div>
+        {% endif %}
+
+        {# Upload d'images avec FilePond (optionnel) #}
+        {% if form.image is defined %}
+            <div class="col-md-4">
+                <label for="{{ form.image.vars.id }}">
+                    {% if rack is defined and rack.id is not null %}
+                        {{ 'rack.form.add_images'|trans }}
+                    {% else %}
+                        {{ form_label(form.image) }}
+                    {% endif %}
+                </label>
+            </div>
+            <div class="col-md-8">
+                <div class="form-group">
+                    {{ form_widget(form.image, {'attr': {'class': 'rack-images-filepond'}}) }}
+                    <small class="text-muted">{{ 'rack.form.images_help'|trans }}</small>
+                    {{ form_errors(form.image) }}
+                </div>
+            </div>
+        {% endif %}
+
+        {# Boutons #}
+        <div class="col-12 d-flex justify-content-end">
+            <a href="{{ path('app_rack_index', {'_locale': app.request.locale}) }}" class="btn btn-light-secondary me-1 mb-1">
+                <i class="bi bi-x-circle"></i> {{ 'form.button.cancel'|trans }}
+            </a>
+            <button type="submit" class="btn btn-primary me-1 mb-1">
+                <i class="bi bi-check-circle"></i> {{ button_label|default('create') == 'update' ? 'form.button.update'|trans : 'form.button.create'|trans }}
+            </button>
+        </div>
+    </div>
+</div>
+{{ form_end(form) }}

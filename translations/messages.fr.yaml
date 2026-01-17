@@ -265,3 +265,19 @@ product.form.filepond.max_size: La taille maximale est de {filesize}
 breadcrumb.products: Produits
 nav.products: Produits
 
+# Rack - Titres
+rack.list.title: Liste des racks
+rack.new.title: Nouveau rack
+rack.edit.title: Modifier le rack
+rack.show.title: Détails du rack
+
+# Rack - Actions
+rack.actions.new: Nouveau rack
+rack.actions.show: Voir
+rack.actions.edit: Modifier
+rack.actions.delete: Supprimer
+
+# Rack - Messages
+rack.list.no_products: Aucun rack trouvé
+rack.confirm_delete: Êtes-vous sûr de vouloir supprimer ce rack ?
+

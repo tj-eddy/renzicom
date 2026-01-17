@@ -1,0 +1,113 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ 'rack.list.title'|trans }}{% endblock %}
+
+{% block page_title %}
+    <div class="page-title">
+        <div class="row">
+            <div class="col-12 col-md-6 order-md-1 order-last">
+                <h3>{{ 'rack.list.title'|trans }}</h3>
+            </div>
+            <div class="col-12 col-md-6 order-md-2 order-first">
+                <nav aria-label="breadcrumb" class="breadcrumb-header float-start float-lg-end">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a
+                                href="{{ path('app_dashboard') }}">{{ 'breadcrumb.home'|trans }}</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">{{ 'breadcrumb.products'|trans }}</li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('assets/vendors/simple-datatables/style.css') }}">
+{% endblock %}
+
+{% block body %}
+    <section class="section">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h4 class="mb-0">{{ 'rack.list.title'|trans }}</h4>
+                <a href="{{ path('app_rack_new', {'_locale': app.request.locale}) }}" class="btn btn-primary">
+                    <i class="bi bi-plus-circle"></i> {{ 'rack.actions.new'|trans }}
+                </a>
+            </div>
+            <div class="card-body">
+                <table class="table table-striped" id="table1">
+                    <thead>
+                    <tr>
+                        <th>Id</th>
+                        <th>Name</th>
+                        <th>Address</th>
+                        <th>actions</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for rack in racks %}
+                        <tr>
+                            <td>{{ rack.id }}</td>
+                            <td>{{ rack.name }}</td>
+                            <td>{{ rack.address }}</td>
+                            <td>
+                                <div class="btn-group" role="group">
+                                    <a href="{{ path('app_rack_show', {'id': rack.id, '_locale': app.request.locale}) }}"
+                                       class="btn btn-sm btn-info"
+                                       title="{{ 'rack.actions.show'|trans }}">
+                                        <i class="bi bi-eye"></i>
+                                    </a>
+                                    <a href="{{ path('app_rack_edit', {'id': rack.id, '_locale': app.request.locale}) }}"
+                                       class="btn btn-sm btn-warning"
+                                       title="{{ 'rack.actions.edit'|trans }}">
+                                        <i class="bi bi-pencil"></i>
+                                    </a>
+                                    <button type="button"
+                                            class="btn btn-sm btn-danger"
+                                            onclick="confirmDelete({{ rack.id }})"
+                                            title="{{ 'rack.actions.delete'|trans }}">
+                                        <i class="bi bi-trash"></i>
+                                    </button>
+                                </div>
+                                <form id="delete-form-{{ rack.id }}"
+                                      action="{{ path('app_rack_delete', {'id': rack.id, '_locale': app.request.locale}) }}"
+                                      method="post"
+                                      style="display: none;">
+                                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ rack.id) }}">
+                                </form>
+                            </td>
+                        </tr>
+                    {% else %}
+                        <tr>
+                            <td colspan="8" class="text-center">{{ 'rack.list.no_products'|trans }}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+{% endblock %}
+
+{% block javascripts %}
+    <script src="{{ asset('assets/vendors/simple-datatables/simple-datatables.js') }}"></script>
+    <script>
+        let table1 = document.querySelector('#table1');
+        let dataTable = new simpleDatatables.DataTable(table1, {
+            searchable: true,
+            fixedHeight: false,
+            perPage: 10,
+            labels: {
+                placeholder: "{{ 'datatable.search'|trans }}",
+                noRows: "{{ 'datatable.no_data'|trans }}",
+                info: "{{ 'datatable.info'|trans }}"
+            }
+        });
+
+        function confirmDelete(productId) {
+            if (confirm("{{ 'rack.confirm_delete'|trans }}")) {
+                document.getElementById('delete-form-' + productId).submit();
+            }
+        }
+    </script>
+{% endblock %}

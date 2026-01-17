@@ -1,0 +1,16 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit Rack{% endblock %}
+
+{% block body %}
+    <div class="card">
+        <div class="card-header">
+            <h4 class="card-title">Edit Rack</h4>
+        </div>
+        <div class="card-content">
+            <div class="card-body">
+                {{ include('rack/_form.html.twig', {'button_label': 'Create'}) }}
+            </div>
+        </div>
+    </div>
+{% endblock %}
