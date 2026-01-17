@@ -302,3 +302,30 @@ rack.table.actions: Actions
 breadcrumb.racks: 'Rack'
 
 rack.title.subtitle: Display stands
+
+stock.list.title: 'Stock Inventory'
+stock.list.no_stocks: 'No stocks found'
+stock.table.id: 'ID'
+stock.table.quantity: 'Quantity'
+stock.table.create_at: 'Created At'
+stock.table.note: 'Note'
+stock.table.actions: 'Actions'
+stock.actions.new: 'New Stock'
+stock.actions.show: 'Show'
+stock.actions.edit: 'Edit'
+stock.actions.delete: 'Delete'
+stock.confirm_delete: 'Are you sure you want to delete this stock?'
+breadcrumb.stocks: 'Stocks'
+
+stock.form.title_new: 'Add Stock'
+stock.form.title_edit: 'Edit Stock'
+stock.form.current_stock: 'Current stock'
+stock.form.units: 'unit(s)'
+stock.form.quantity.placeholder: 'Enter quantity'
+stock.form.note.placeholder: 'Add a note (optional)'
+stock.form.message.exists: 'This product already exists in this rack. The quantity will be added to existing stock.'
+stock.form.message.new: 'New stock will be created.'
+
+nav.stocks: 'Stocks'
+stock.title.subtitle: View and manage your current magazine inventory
+

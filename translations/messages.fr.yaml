@@ -301,3 +301,29 @@ breadcrumb.racks: 'Étagère'
 
 rack.title.subtitle: Présentoirs
 
+stock.list.title: 'Inventaire de stock'
+stock.list.no_stocks: 'Aucun stock trouvé'
+stock.table.id: 'ID'
+stock.table.quantity: 'Quantité'
+stock.table.create_at: 'Date de création'
+stock.table.note: 'Note'
+stock.table.actions: 'Actions'
+stock.actions.new: 'Nouveau stock'
+stock.actions.show: 'Voir'
+stock.actions.edit: 'Modifier'
+stock.actions.delete: 'Supprimer'
+stock.confirm_delete: 'Êtes-vous sûr de vouloir supprimer ce stock ?'
+breadcrumb.stocks: 'Stocks'
+
+stock.form.title_new: 'Ajouter un stock'
+stock.form.title_edit: 'Modifier le stock'
+stock.form.current_stock: 'Stock actuel'
+stock.form.units: 'unité(s)'
+stock.form.quantity.placeholder: 'Entrez la quantité'
+stock.form.note.placeholder: 'Ajouter une note (optionnel)'
+stock.form.message.exists: 'Ce produit existe déjà dans ce rack. La quantité sera ajoutée au stock existant.'
+stock.form.message.new: 'Nouveau stock qui sera créé.'
+
+nav.stocks: 'Stocks'
+
+stock.title.subtitle: Consulter et gérer votre stock actuel de magazines

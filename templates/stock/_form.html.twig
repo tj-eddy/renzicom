@@ -1,10 +1,5 @@
-{% extends 'base.html.twig' %}
-
-{% block title %}Ajouter un stock{% endblock %}
-
 {% block stylesheets %}
-    {{ parent() }}
-    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet"/>
     <style>
         .stock-info {
             margin-top: 10px;
@@ -13,10 +8,12 @@
             border-left: 4px solid #28a745;
             display: none;
         }
+
         .stock-info.warning {
             border-left-color: #ffc107;
             background-color: #fff3cd;
         }
+
         .stock-info.exists {
             border-left-color: #17a2b8;
             background-color: #d1ecf1;
@@ -24,84 +21,140 @@
     </style>
 {% endblock %}
 
-{% block body %}
-    <div class="container">
-        <h1>Ajouter un stock</h1>
-
-        {{ form_start(form) }}
-        {{ form_row(form.rack) }}
-
-        <div class="product-wrapper">
-            {{ form_row(form.product) }}
-            <div class="stock-info" id="stock-info">
-                <strong>Stock actuel :</strong> <span id="current-stock">-</span> unité(s)
-                <br>
-                <small id="stock-message"></small>
+{{ form_start(form, {'attr': {'class': 'form form-horizontal'}}) }}
+<div class="form-body">
+    <div class="row">
+        {# Rack #}
+        <div class="col-md-4">
+            <label for="{{ form.rack.vars.id }}">{{ form_label(form.rack) }}</label>
+        </div>
+        <div class="col-md-8">
+            <div class="form-group has-icon-left">
+                <div class="position-relative">
+                    {{ form_widget(form.rack, {'attr': {'class': 'form-select select2-rack'}}) }}
+                </div>
+                {{ form_errors(form.rack) }}
             </div>
         </div>
 
-        {{ form_row(form.quantity) }}
-        {{ form_row(form.note) }}
+        {# Produit #}
+        <div class="col-md-4">
+            <label for="{{ form.product.vars.id }}">{{ form_label(form.product) }}</label>
+        </div>
+        <div class="col-md-8">
+            <div class="form-group has-icon-left">
+                <div class="position-relative">
+                    {{ form_widget(form.product, {'attr': {'class': 'form-select select2-product'}}) }}
+                </div>
+                {{ form_errors(form.product) }}
 
-        <button type="submit" class="btn btn-success">{{ button_label|default('Enregistrer') }}</button>
-        <a href="{{ path('app_stock_index') }}" class="btn btn-secondary">Retour</a>
-        {{ form_end(form) }}
+                {# Info stock actuel #}
+                <div class="stock-info" id="stock-info">
+                    <strong>{{ 'stock.form.current_stock'|trans }} :</strong> <span
+                        id="current-stock">-</span> {{ 'stock.form.units'|trans }}
+                    <br>
+                    <small id="stock-message"></small>
+                </div>
+            </div>
+        </div>
+
+        {# Quantité #}
+        <div class="col-md-4">
+            <label for="{{ form.quantity.vars.id }}">{{ form_label(form.quantity) }}</label>
+        </div>
+        <div class="col-md-8">
+            <div class="form-group has-icon-left">
+                <div class="position-relative">
+                    {{ form_widget(form.quantity, {'attr': {'class': 'form-control', 'placeholder': 'stock.form.quantity.placeholder'|trans}}) }}
+                    <div class="form-control-icon">
+                        <i class="bi bi-hash"></i>
+                    </div>
+                </div>
+                {{ form_errors(form.quantity) }}
+            </div>
+        </div>
+
+        {# Note #}
+        <div class="col-md-4">
+            <label for="{{ form.note.vars.id }}">{{ form_label(form.note) }}</label>
+        </div>
+        <div class="col-md-8">
+            <div class="form-group has-icon-left">
+                <div class="position-relative">
+                    {{ form_widget(form.note, {'attr': {'class': 'form-control', 'placeholder': 'stock.form.note.placeholder'|trans, 'rows': 3}}) }}
+                    <div class="form-control-icon">
+                        <i class="bi bi-journal-text"></i>
+                    </div>
+                </div>
+                {{ form_errors(form.note) }}
+            </div>
+        </div>
+
+        {# Boutons #}
+        <div class="col-12 d-flex justify-content-end">
+            <a href="{{ path('app_stock_index') }}" class="btn btn-light-secondary me-1 mb-1">
+                <i class="bi bi-x-circle"></i> {{ 'form.button.cancel'|trans }}
+            </a>
+            <button type="submit" class="btn btn-primary me-1 mb-1">
+                <i class="bi bi-check-circle"></i> {{ button_label|default('create') == 'update' ? 'form.button.update'|trans : 'form.button.create'|trans }}
+            </button>
+        </div>
     </div>
-{% endblock %}
+</div>
+{{ form_end(form) }}
 
-{% block javascripts %}
-    {{ parent() }}
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
-    <script>
-        $(document).ready(function() {
-            // Initialiser Select2
-            $('.select2-rack, .select2-product').select2({
-                theme: 'default',
-                width: '100%'
-            });
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
-            // Fonction pour vérifier le stock
-            function checkStock() {
-                const productId = $('#stock_product').val();
-                const rackId = $('#stock_rack').val();
+<script>
+    $(document).ready(function () {
+        // Initialiser Select2
+        $('.select2-rack, .select2-product').select2({
+            theme: 'default',
+            width: '100%'
+        });
 
-                if (!productId || !rackId) {
-                    $('#stock-info').hide();
-                    return;
-                }
+        // Fonction pour vérifier le stock
+        function checkStock() {
+            const productId = $('#stock_product').val();
+            const rackId = $('#stock_rack').val();
 
-                // Appel AJAX pour vérifier le stock
-                $.ajax({
-                    url: '{{ path('app_stock_check') }}',
-                    method: 'GET',
-                    data: {
-                        product_id: productId,
-                        rack_id: rackId
-                    },
-                    success: function(response) {
-                        $('#stock-info').show();
-                        $('#current-stock').text(response.quantity);
-
-                        if (response.exists) {
-                            $('#stock-info').removeClass('warning').addClass('exists');
-                            $('#stock-message').text('Ce produit existe déjà dans ce rack. La quantité sera ajoutée au stock existant.');
-                        } else {
-                            $('#stock-info').removeClass('exists').addClass('warning');
-                            $('#stock-message').text('Nouveau stock qui sera créé.');
-                        }
-                    },
-                    error: function() {
-                        $('#stock-info').hide();
-                    }
-                });
+            if (!productId || !rackId) {
+                $('#stock-info').hide();
+                return;
             }
 
-            // Déclencher la vérification lors du changement de produit ou rack
-            $('#stock_product, #stock_rack').on('change', function() {
-                checkStock();
+            // Appel AJAX pour vérifier le stock
+            $.ajax({
+                url: '{{ path('app_stock_check') }}',
+                method: 'GET',
+                data: {
+                    product_id: productId,
+                    rack_id: rackId
+                },
+                success: function (response) {
+                    $('#stock-info').show();
+                    $('#current-stock').text(response.quantity);
+
+                    if (response.exists) {
+                        $('#stock-info').removeClass('warning').addClass('exists');
+                        $('#stock-message').text("{{ 'stock.form.message.exists'|trans }}");
+                    } else {
+                        $('#stock-info').removeClass('exists').addClass('warning');
+                        $('#stock-message').text("{{ 'stock.form.message.new'|trans }}");
+                    }
+                },
+                error: function () {
+                    $('#stock-info').hide();
+                }
             });
+        }
+
+        // Déclencher la vérification lors du changement de produit ou rack
+        $('#stock_product, #stock_rack').on('change', function () {
+            checkStock();
         });
-    </script>
-{% endblock %}
+    });
+</script>
+
