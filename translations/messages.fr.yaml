@@ -31,6 +31,7 @@
 'nav.dashboard': 'Tableau de bord'
 'nav.users': 'Utilisateurs'
 'nav.logout': 'Déconnexion'
+'nav.my.profile': 'Mon profil'
 
 # Dashboard
 dashboard.title: 'Tableau de bord'
@@ -214,3 +215,4 @@ form.button.cancel: 'Annuler'
 form.button.delete: 'Supprimer'
 
 stats.role.statistics: 'Statistique'
+nav.logout.confirm: 'Voulez-vous vraiment vous déconnecter ?'
