@@ -21,7 +21,7 @@ class UserType extends AbstractType
                 'attr' => ['class' => 'form-control']
             ])
             ->add('email', EmailType::class, [
-                'label' => 'Email',
+                'label' => 'form.email',
                 'attr' => ['class' => 'form-control']
             ])
             ->add('role', ChoiceType::class, [
