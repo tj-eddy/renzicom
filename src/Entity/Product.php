@@ -63,12 +63,19 @@ class Product
     #[ORM\OneToMany(targetEntity: Stock::class, mappedBy: 'product')]
     private Collection $stocks;
 
+    /**
+     * @var Collection<int, Distribution>
+     */
+    #[ORM\OneToMany(targetEntity: Distribution::class, mappedBy: 'product')]
+    private Collection $distributions;
+
     public function __construct()
     {
         $this->images = new ArrayCollection();
         $this->createdAt = new \DateTimeImmutable();
         $this->updatedAt = new \DateTimeImmutable();
         $this->stocks = new ArrayCollection();
+        $this->distributions = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -207,6 +214,36 @@ class Product
             // set the owning side to null (unless already changed)
             if ($stock->getProduct() === $this) {
                 $stock->setProduct(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Distribution>
+     */
+    public function getDistributions(): Collection
+    {
+        return $this->distributions;
+    }
+
+    public function addDistribution(Distribution $distribution): static
+    {
+        if (!$this->distributions->contains($distribution)) {
+            $this->distributions->add($distribution);
+            $distribution->setProduct($this);
+        }
+
+        return $this;
+    }
+
+    public function removeDistribution(Distribution $distribution): static
+    {
+        if ($this->distributions->removeElement($distribution)) {
+            // set the owning side to null (unless already changed)
+            if ($distribution->getProduct() === $this) {
+                $distribution->setProduct(null);
             }
         }
 

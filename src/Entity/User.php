@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -72,6 +74,17 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Column(length: 255)]
     private ?string $name = null;
+
+    /**
+     * @var Collection<int, Distribution>
+     */
+    #[ORM\OneToMany(targetEntity: Distribution::class, mappedBy: 'user')]
+    private Collection $distributions;
+
+    public function __construct()
+    {
+        $this->distributions = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -143,6 +156,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setName(string $name): static
     {
         $this->name = $name;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Distribution>
+     */
+    public function getDistributions(): Collection
+    {
+        return $this->distributions;
+    }
+
+    public function addDistribution(Distribution $distribution): static
+    {
+        if (!$this->distributions->contains($distribution)) {
+            $this->distributions->add($distribution);
+            $distribution->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeDistribution(Distribution $distribution): static
+    {
+        if ($this->distributions->removeElement($distribution)) {
+            // set the owning side to null (unless already changed)
+            if ($distribution->getUser() === $this) {
+                $distribution->setUser(null);
+            }
+        }
 
         return $this;
     }

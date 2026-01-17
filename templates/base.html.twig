@@ -58,7 +58,12 @@
                             <span>{{ 'nav.dashboard'|trans }}</span>
                         </a>
                     </li>
-
+                    <li class="sidebar-item {% if app.request.get('_route') starts with 'app_distribution' %}active{% endif %}">
+                        <a href="{{ path('app_distribution_index') }}" class='sidebar-link'>
+                            <i class="bi bi-truck"></i>
+                            <span>{{ 'nav.distributions'|trans }}</span>
+                        </a>
+                    </li>
                     <li class="sidebar-item {% if app.request.get('_route') starts with 'app_user' %}active{% endif %}">
                         <a href="{{ path('app_user_index') }}" class='sidebar-link'>
                             <i class="bi bi-people-fill"></i>

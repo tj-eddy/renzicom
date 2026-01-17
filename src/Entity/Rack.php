@@ -33,9 +33,16 @@ class Rack
     #[ORM\OneToMany(targetEntity: Stock::class, mappedBy: 'rack')]
     private Collection $stocks;
 
+    /**
+     * @var Collection<int, Distribution>
+     */
+    #[ORM\OneToMany(targetEntity: Distribution::class, mappedBy: 'rack')]
+    private Collection $distributions;
+
     public function __construct()
     {
         $this->stocks = new ArrayCollection();
+        $this->distributions = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -115,6 +122,36 @@ class Rack
             // set the owning side to null (unless already changed)
             if ($stock->getRack() === $this) {
                 $stock->setRack(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Distribution>
+     */
+    public function getDistributions(): Collection
+    {
+        return $this->distributions;
+    }
+
+    public function addDistribution(Distribution $distribution): static
+    {
+        if (!$this->distributions->contains($distribution)) {
+            $this->distributions->add($distribution);
+            $distribution->setRack($this);
+        }
+
+        return $this;
+    }
+
+    public function removeDistribution(Distribution $distribution): static
+    {
+        if ($this->distributions->removeElement($distribution)) {
+            // set the owning side to null (unless already changed)
+            if ($distribution->getRack() === $this) {
+                $distribution->setRack(null);
             }
         }
 

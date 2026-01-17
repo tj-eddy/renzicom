@@ -1,0 +1,311 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ 'distribution.form.title_new'|trans }}{% endblock %}
+
+{% block page_title %}
+    <div class="page-title">
+        <div class="row">
+            <div class="col-12 col-md-6 order-md-1 order-last">
+                <h3>{{ 'distribution.form.title_new'|trans }}</h3>
+            </div>
+            <div class="col-12 col-md-6 order-md-2 order-first">
+                <nav aria-label="breadcrumb" class="breadcrumb-header float-start float-lg-end">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="{{ path('app_dashboard') }}">{{ 'breadcrumb.home'|trans }}</a></li>
+                        <li class="breadcrumb-item"><a href="{{ path('app_distribution_index') }}">{{ 'breadcrumb.distributions'|trans }}</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">{{ 'breadcrumb.new'|trans }}</li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <style>
+        .product-item {
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 15px;
+            margin-bottom: 10px;
+            background-color: #f8f9fa;
+        }
+        .product-item:hover {
+            background-color: #e9ecef;
+        }
+        .stock-badge {
+            font-size: 0.9em;
+        }
+        .select2-container {
+            width: 100% !important;
+        }
+    </style>
+{% endblock %}
+
+{% block body %}
+    <section class="section">
+        <div class="card">
+            <div class="card-header">
+                <h4 class="card-title">{{ 'distribution.form.title_new'|trans }}</h4>
+            </div>
+            <div class="card-body">
+                {{ form_start(form, {'attr': {'class': 'form form-horizontal', 'id': 'distribution-form'}}) }}
+                <div class="form-body">
+                    <div class="row">
+                        {# Sélection Entrepôt #}
+                        <div class="col-md-4">
+                            <label for="warehouse-select">{{ 'distribution.form.warehouse'|trans }}</label>
+                        </div>
+                        <div class="col-md-8">
+                            <div class="form-group has-icon-left">
+                                <div class="position-relative">
+                                    <select id="warehouse-select" class="form-select select2-warehouse">
+                                        <option value="">{{ 'distribution.form.select_warehouse'|trans }}</option>
+                                        {% for warehouse in warehouses %}
+                                            <option value="{{ warehouse.id }}">{{ warehouse.name }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        {# Sélection Rack #}
+                        <div class="col-md-4">
+                            <label for="rack-select">{{ 'distribution.form.rack'|trans }}</label>
+                        </div>
+                        <div class="col-md-8">
+                            <div class="form-group has-icon-left">
+                                <div class="position-relative">
+                                    <select id="rack-select" class="form-select select2-rack" disabled>
+                                        <option value="">{{ 'distribution.form.select_rack'|trans }}</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        {# Liste des produits disponibles #}
+                        <div class="col-12">
+                            <hr>
+                            <h5>{{ 'distribution.form.available_products'|trans }}</h5>
+                            <div id="products-list" class="mt-3">
+                                <p class="text-muted">{{ 'distribution.form.select_rack_first'|trans }}</p>
+                            </div>
+                        </div>
+
+                        <hr>
+
+                        {# Utilisateur #}
+                        <div class="col-md-4">
+                            <label for="{{ form.user.vars.id }}">{{ form_label(form.user) }}</label>
+                        </div>
+                        <div class="col-md-8">
+                            <div class="form-group has-icon-left">
+                                <div class="position-relative">
+                                    {{ form_widget(form.user, {'attr': {'class': 'form-select'}}) }}
+                                </div>
+                                {{ form_errors(form.user) }}
+                            </div>
+                        </div>
+
+                        {# Destination #}
+                        <div class="col-md-4">
+                            <label for="{{ form.destination.vars.id }}">{{ form_label(form.destination) }}</label>
+                        </div>
+                        <div class="col-md-8">
+                            <div class="form-group has-icon-left">
+                                <div class="position-relative">
+                                    {{ form_widget(form.destination, {'attr': {'class': 'form-control', 'placeholder': 'distribution.form.destination.placeholder'|trans}}) }}
+                                    <div class="form-control-icon">
+                                        <i class="bi bi-geo-alt"></i>
+                                    </div>
+                                </div>
+                                {{ form_errors(form.destination) }}
+                            </div>
+                        </div>
+
+                        {# Champ caché pour les données des produits #}
+                        <input type="hidden" name="products_data" id="products-data">
+
+                        {# Boutons #}
+                        <div class="col-12 d-flex justify-content-end">
+                            <a href="{{ path('app_distribution_index') }}" class="btn btn-light-secondary me-1 mb-1">
+                                <i class="bi bi-x-circle"></i> {{ 'form.button.cancel'|trans }}
+                            </a>
+                            <button type="submit" class="btn btn-primary me-1 mb-1">
+                                <i class="bi bi-check-circle"></i> {{ 'form.button.create'|trans }}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                {{ form_end(form) }}
+            </div>
+        </div>
+    </section>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+    <script>
+        $(document).ready(function() {
+            // Initialiser Select2
+            $('.select2-warehouse, .select2-rack').select2({
+                theme: 'default',
+                width: '100%'
+            });
+
+            let selectedProducts = [];
+
+            // Changement d'entrepôt
+            $('#warehouse-select').on('change', function() {
+                const warehouseId = $(this).val();
+                $('#rack-select').prop('disabled', true).html('<option value="">{{ 'distribution.form.loading'|trans }}</option>');
+                $('#products-list').html('<p class="text-muted">{{ 'distribution.form.select_rack_first'|trans }}</p>');
+                selectedProducts = [];
+
+                if (!warehouseId) return;
+
+                // Charger les racks de cet entrepôt
+                $.ajax({
+                    url: '{{ path('app_distribution_ajax_racks', {'warehouseId': '__ID__'}) }}'.replace('__ID__', warehouseId),
+                    method: 'GET',
+                    success: function(racks) {
+                        let options = '<option value="">{{ 'distribution.form.select_rack'|trans }}</option>';
+                        racks.forEach(function(rack) {
+                            options += `<option value="${rack.id}">${rack.name}</option>`;
+                        });
+                        $('#rack-select').html(options).prop('disabled', false);
+                    },
+                    error: function() {
+                        alert('{{ 'distribution.form.error_loading_racks'|trans }}');
+                    }
+                });
+            });
+
+            // Changement de rack
+            $('#rack-select').on('change', function() {
+                const rackId = $(this).val();
+                $('#products-list').html('<p class="text-muted">{{ 'distribution.form.loading'|trans }}</p>');
+                selectedProducts = [];
+
+                if (!rackId) {
+                    $('#products-list').html('<p class="text-muted">{{ 'distribution.form.select_rack_first'|trans }}</p>');
+                    return;
+                }
+
+                // Charger les produits avec stock de ce rack
+                $.ajax({
+                    url: '{{ path('app_distribution_ajax_stocks', {'rackId': '__ID__'}) }}'.replace('__ID__', rackId),
+                    method: 'GET',
+                    success: function(stocks) {
+                        if (stocks.length === 0) {
+                            $('#products-list').html('<div class="alert alert-warning">{{ 'distribution.form.no_products'|trans }}</div>');
+                            return;
+                        }
+
+                        let html = '';
+                        stocks.forEach(function(stock) {
+                            html += `
+                                <div class="product-item">
+                                    <div class="row align-items-center">
+                                        <div class="col-md-6">
+                                            <h6>${stock.product_name}</h6>
+                                            <small class="text-muted">
+                                                ${stock.product_year ? stock.product_year : ''}
+                                                ${stock.product_language ? '- ' + stock.product_language : ''}
+                                            </small>
+                                            <br>
+                                            <span class="badge bg-success stock-badge">
+                                                {{ 'distribution.form.available'|trans }}: ${stock.available_quantity}
+                                            </span>
+                                            ${stock.note ? `<br><small class="text-info">${stock.note}</small>` : ''}
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label class="form-label">{{ 'distribution.form.quantity'|trans }}</label>
+                                            <input type="number"
+                                                   class="form-control quantity-input"
+                                                   data-stock-id="${stock.stock_id}"
+                                                   data-product-id="${stock.product_id}"
+                                                   data-max="${stock.available_quantity}"
+                                                   min="0"
+                                                   max="${stock.available_quantity}"
+                                                   value="0"
+                                                   placeholder="0">
+                                        </div>
+                                        <div class="col-md-2">
+                                            <button type="button"
+                                                    class="btn btn-sm btn-primary add-product-btn"
+                                                    data-stock-id="${stock.stock_id}"
+                                                    data-product-id="${stock.product_id}">
+                                                <i class="bi bi-plus-circle"></i> {{ 'distribution.form.add'|trans }}
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            `;
+                        });
+                        $('#products-list').html(html);
+
+                        // Événement pour ajouter un produit
+                        $('.add-product-btn').on('click', function() {
+                            const stockId = $(this).data('stock-id');
+                            const productId = $(this).data('product-id');
+                            const input = $(`.quantity-input[data-stock-id="${stockId}"]`);
+                            const quantity = parseInt(input.val());
+                            const max = parseInt(input.data('max'));
+
+                            if (quantity <= 0) {
+                                alert('{{ 'distribution.form.error_quantity_zero'|trans }}');
+                                return;
+                            }
+
+                            if (quantity > max) {
+                                alert('{{ 'distribution.form.error_quantity_exceeded'|trans }}'.replace('%max%', max));
+                                return;
+                            }
+
+                            // Ajouter ou mettre à jour le produit sélectionné
+                            const existingIndex = selectedProducts.findIndex(p => p.stock_id === stockId);
+                            if (existingIndex > -1) {
+                                selectedProducts[existingIndex].quantity = quantity;
+                            } else {
+                                selectedProducts.push({
+                                    stock_id: stockId,
+                                    product_id: productId,
+                                    quantity: quantity
+                                });
+                            }
+
+                            $(this).html('<i class="bi bi-check-circle"></i> {{ 'distribution.form.added'|trans }}')
+                                .removeClass('btn-primary')
+                                .addClass('btn-success');
+
+                            updateProductsData();
+                        });
+                    },
+                    error: function() {
+                        alert('{{ 'distribution.form.error_loading_products'|trans }}');
+                    }
+                });
+            });
+
+            // Mettre à jour le champ caché avec les données des produits
+            function updateProductsData() {
+                $('#products-data').val(JSON.stringify(selectedProducts));
+            }
+
+            // Validation avant soumission
+            $('#distribution-form').on('submit', function(e) {
+                if (selectedProducts.length === 0) {
+                    e.preventDefault();
+                    alert('{{ 'distribution.form.error_no_products_selected'|trans }}');
+                    return false;
+                }
+            });
+        });
+    </script>
+{% endblock %}
