@@ -100,3 +100,107 @@ datatable.info: 'Showing {start} to {end} of {rows} entries'
 footer.powered_by: 'Powered by'
 access.denied.edit: "You do not have permission to edit"
 access.denied.create: "You do not have permission to create"
+
+
+nav.warehouses: Warehouses
+nav.logout.confirm: Are you sure you want to logout?
+
+warehouse.title: Warehouse Management
+warehouse.list: Warehouse List
+warehouse.new: New Warehouse
+warehouse.edit: Edit Warehouse
+warehouse.show: Warehouse Details
+warehouse.delete: Delete Warehouse
+warehouse.delete.confirm: Are you sure you want to delete this warehouse?
+warehouse.name: Name
+warehouse.address: Address
+warehouse.images: Images
+warehouse.created_at: Created at
+warehouse.updated_at: Updated at
+warehouse.actions: Actions
+warehouse.no_results: No warehouses found
+warehouse.save: Save
+warehouse.back_to_list: Back to list
+warehouse.upload_images: Upload Images
+warehouse.image_delete: Delete Image
+warehouse.image_delete.confirm: Are you sure you want to delete this image?
+warehouse.created_successfully: Warehouse created successfully
+warehouse.updated_successfully: Warehouse updated successfully
+warehouse.deleted_successfully: Warehouse deleted successfully
+warehouse.image_deleted_successfully: Image deleted successfully
+
+# ... (previous translations)
+
+warehouse.list.title: Warehouse List
+warehouse.new.title: New Warehouse
+warehouse.edit.title: Edit Warehouse
+warehouse.show.title: Warehouse Details
+warehouse.list.no_warehouses: No warehouses found
+
+warehouse.table.id: ID
+warehouse.table.name: Name
+warehouse.table.address: Address
+warehouse.table.images: Images
+warehouse.table.image_count: image
+warehouse.table.images_count: images
+warehouse.table.created_at: Created at
+warehouse.table.updated_at: Updated at
+warehouse.table.actions: Actions
+
+warehouse.form.name: Warehouse Name
+warehouse.form.address: Address
+warehouse.form.images: Images
+warehouse.form.add_images: Add Images
+warehouse.form.existing_images: Existing Images
+warehouse.form.images_help: Accepted formats JPEG, PNG, WebP, GIF. Max size 5MB per image
+
+warehouse.actions.new: New Warehouse
+warehouse.actions.edit: Edit
+warehouse.actions.show: View
+warehouse.actions.delete: Delete
+warehouse.actions.delete_image: Delete Image
+warehouse.actions.save: Save
+warehouse.actions.back: Back to list
+
+warehouse.show.images: Warehouse Images
+warehouse.show.no_images: No images available
+
+warehouse.confirm_delete: Are you sure you want to delete this warehouse?
+warehouse.confirm_delete_image: Are you sure you want to delete this image?
+
+breadcrumb.warehouses: Warehouses
+breadcrumb.new: New
+breadcrumb.edit: Edit
+breadcrumb.show: Details
+
+# ... (previous translations)
+
+# Additional Messages
+warehouse.error_deleting_image: Error deleting image
+# FilePond Labels
+warehouse.form.filepond.label_idle: Drag & Drop your images or <span class="filepond--label-action">Browse</span>
+warehouse.form.filepond.invalid_field: Field contains invalid files
+warehouse.form.filepond.waiting_size: Waiting for size
+warehouse.form.filepond.size_not_available: Size not available
+warehouse.form.filepond.loading: Loading...
+warehouse.form.filepond.load_error: Error during load
+warehouse.form.filepond.processing: Processing...
+warehouse.form.filepond.processing_complete: Processing complete
+warehouse.form.filepond.processing_aborted: Processing aborted
+warehouse.form.filepond.processing_error: Error during processing
+warehouse.form.filepond.revert_error: Error during revert
+warehouse.form.filepond.remove_error: Error during remove
+warehouse.form.filepond.tap_to_cancel: Tap to cancel
+warehouse.form.filepond.tap_to_retry: Tap to retry
+warehouse.form.filepond.tap_to_undo: Tap to undo
+warehouse.form.filepond.remove_item: Remove
+warehouse.form.filepond.abort_load: Abort
+warehouse.form.filepond.retry_load: Retry
+warehouse.form.filepond.abort_processing: Cancel processing
+warehouse.form.filepond.undo_processing: Undo
+warehouse.form.filepond.retry_processing: Retry
+warehouse.form.filepond.process_item: Process
+warehouse.form.filepond.max_size_exceeded: File is too large
+warehouse.form.filepond.max_size: Maximum file size is {filesize}
+warehouse.form.filepond.max_total_size_exceeded: Maximum total size exceeded
+warehouse.form.filepond.max_total_size: Maximum total file size is {filesize}

@@ -1,11 +1,14 @@
-{% extends 'base.html.twig' %}
-
 {% block title %}New Warehouse{% endblock %}
 
 {% block body %}
-    <h1>Create new Warehouse</h1>
-
-    {{ include('warehouse/_form.html.twig') }}
-
-    <a href="{{ path('app_warehouse_index') }}">back to list</a>
+    <div class="card">
+        <div class="card-header">
+            <h4 class="card-title">Edit Warehouse</h4>
+        </div>
+        <div class="card-content">
+            <div class="card-body">
+                {{ include('warehouse/_form.html.twig', {'button_label': 'Create'}) }}
+            </div>
+        </div>
+    </div>
 {% endblock %}

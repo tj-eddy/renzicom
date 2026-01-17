@@ -1,4 +1,155 @@
-{{ form_start(form) }}
-    {{ form_widget(form) }}
-    <button class="btn">{{ button_label|default('Save') }}</button>
+{{ form_start(form, {'attr': {'class': 'form form-horizontal', 'enctype': 'multipart/form-data'}}) }}
+<div class="form-body">
+    <div class="row">
+        {# Nom de l'entrepôt #}
+        <div class="col-md-4">
+            <label for="{{ form.name.vars.id }}">{{ form_label(form.name) }}</label>
+        </div>
+        <div class="col-md-8">
+            <div class="form-group has-icon-left">
+                <div class="position-relative">
+                    {{ form_widget(form.name, {'attr': {'class': 'form-control', 'placeholder': 'warehouse.form.name.placeholder'|trans}}) }}
+                    <div class="form-control-icon">
+                        <i class="bi bi-building"></i>
+                    </div>
+                </div>
+                {{ form_errors(form.name) }}
+            </div>
+        </div>
+
+        {# Adresse #}
+        <div class="col-md-4">
+            <label for="{{ form.address.vars.id }}">{{ form_label(form.address) }}</label>
+        </div>
+        <div class="col-md-8">
+            <div class="form-group has-icon-left">
+                <div class="position-relative">
+                    {{ form_widget(form.address, {'attr': {'class': 'form-control', 'rows': 3, 'placeholder': 'warehouse.form.address.placeholder'|trans}}) }}
+                    <div class="form-control-icon">
+                        <i class="bi bi-geo-alt"></i>
+                    </div>
+                </div>
+                {{ form_errors(form.address) }}
+            </div>
+        </div>
+
+        {# Images existantes (seulement en mode édition) #}
+        {% if warehouse is defined and warehouse.id is not null and warehouse.images|length > 0 %}
+            <div class="col-md-4">
+                <label>{{ 'warehouse.form.existing_images'|trans }}</label>
+            </div>
+            <div class="col-md-8">
+                <div class="form-group mb-4">
+                    <div class="row" id="existing-images">
+                        {% for image in warehouse.images %}
+                            <div class="col-md-4 col-sm-6 mb-3" id="image-{{ image.id }}">
+                                <div class="card">
+                                    <img src="{{ asset('uploads/warehouses/' ~ image.imageName) }}"
+                                         class="card-img-top"
+                                         alt="{{ warehouse.name }}"
+                                         style="height: 150px; object-fit: cover;">
+                                    <div class="card-body p-2 text-center">
+                                        <button type="button"
+                                                class="btn btn-danger btn-sm w-100"
+                                                onclick="deleteImage({{ image.id }}, '{{ csrf_token('delete' ~ image.id) }}')">
+                                            <i class="bi bi-trash"></i> {{ 'warehouse.actions.delete_image'|trans }}
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+
+        {# Upload d'images avec FilePond #}
+        <div class="col-md-4">
+            <label for="{{ form.images.vars.id }}">
+                {% if warehouse is defined and warehouse.id is not null %}
+                    {{ 'warehouse.form.add_images'|trans }}
+                {% else %}
+                    {{ form_label(form.images) }}
+                {% endif %}
+            </label>
+        </div>
+        <div class="col-md-8">
+            <div class="form-group">
+                {{ form_widget(form.images, {'attr': {'class': 'warehouse-images-filepond'}}) }}
+                <small class="text-muted">{{ 'warehouse.form.images_help'|trans }}</small>
+                {{ form_errors(form.images) }}
+            </div>
+        </div>
+
+        {# Boutons #}
+        <div class="col-12 d-flex justify-content-end">
+            <a href="{{ path('app_warehouse_index', {'_locale': app.request.locale}) }}" class="btn btn-light-secondary me-1 mb-1">
+                <i class="bi bi-x-circle"></i> {{ 'form.button.cancel'|trans }}
+            </a>
+            <button type="submit" class="btn btn-primary me-1 mb-1">
+                <i class="bi bi-check-circle"></i> {{ button_label|default('create') == 'update' ? 'form.button.update'|trans : 'form.button.create'|trans }}
+            </button>
+        </div>
+    </div>
+</div>
 {{ form_end(form) }}
+
+<script>
+    // Fonction pour supprimer une image existante via AJAX
+    function deleteImage(imageId, csrfToken) {
+        if (!confirm('{{ 'warehouse.confirm_delete_image'|trans }}')) {
+            return;
+        }
+
+        const formData = new FormData();
+        formData.append('_token', csrfToken);
+
+        fetch('{{ path('app_warehouse_image_delete', {'id': '__IMAGE_ID__', '_locale': app.request.locale}) }}'.replace('__IMAGE_ID__', imageId), {
+            method: 'POST',
+            body: formData
+        })
+            .then(response => {
+                if (response.ok) {
+                    // Supprimer l'élément du DOM
+                    document.getElementById('image-' + imageId).remove();
+
+                    // Afficher un message de succès
+                    Toastify({
+                        text: "{{ 'warehouse.image_deleted_successfully'|trans }}",
+                        duration: 3000,
+                        close: true,
+                        gravity: "top",
+                        position: "right",
+                        backgroundColor: "#4fbe87",
+                    }).showToast();
+
+                    // Vérifier s'il reste des images
+                    const existingImagesContainer = document.getElementById('existing-images');
+                    if (existingImagesContainer && existingImagesContainer.children.length === 0) {
+                        existingImagesContainer.closest('.row').closest('.col-md-8').previousElementSibling.remove();
+                        existingImagesContainer.closest('.row').closest('.col-md-8').remove();
+                    }
+                } else {
+                    Toastify({
+                        text: "{{ 'warehouse.error_deleting_image'|trans }}",
+                        duration: 3000,
+                        close: true,
+                        gravity: "top",
+                        position: "right",
+                        backgroundColor: "#ff0000",
+                    }).showToast();
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                Toastify({
+                    text: "{{ 'warehouse.error_deleting_image'|trans }}",
+                    duration: 3000,
+                    close: true,
+                    gravity: "top",
+                    position: "right",
+                    backgroundColor: "#ff0000",
+                }).showToast();
+            });
+    }
+</script>

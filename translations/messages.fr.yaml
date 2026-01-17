@@ -101,4 +101,106 @@ footer.powered_by: 'Propulsé par'
 access.denied.edit: "Vous n'avez pas la permission de modifier"
 access.denied.create: "Vous n'avez pas la permission de créer"
 
+nav.warehouses: Entrepôts
+warehouse.title: Gestion des entrepôts
+warehouse.list: Liste des entrepôts
+warehouse.new: Nouvel entrepôt
+warehouse.edit: Modifier l'entrepôt
+warehouse.show: Détails de l'entrepôt
+warehouse.delete: Supprimer l'entrepôt
+warehouse.delete.confirm: Êtes-vous sûr de vouloir supprimer cet entrepôt ?
+warehouse.name: Nom
+warehouse.address: Adresse
+warehouse.images: Images
+warehouse.created_at: Créé le
+warehouse.updated_at: Modifié le
+warehouse.actions: Actions
+warehouse.no_results: Aucun entrepôt trouvé
+warehouse.save: Enregistrer
+warehouse.back_to_list: Retour à la liste
+warehouse.upload_images: Télécharger des images
+warehouse.image_delete: Supprimer l'image
+warehouse.image_delete.confirm: Êtes-vous sûr de vouloir supprimer cette image ?
+warehouse.created_successfully: Entrepôt créé avec succès
+warehouse.updated_successfully: Entrepôt modifié avec succès
+warehouse.deleted_successfully: Entrepôt supprimé avec succès
+warehouse.image_deleted_successfully: Image supprimée avec succès
+
+# ... (traductions précédentes)
+
+warehouse.list.title: Liste des entrepôts
+warehouse.new.title: Nouvel entrepôt
+warehouse.edit.title: Modifier l'entrepôt
+warehouse.show.title: Détails de l'entrepôt
+warehouse.list.no_warehouses: Aucun entrepôt trouvé
+
+warehouse.table.id: ID
+warehouse.table.name: Nom
+warehouse.table.address: Adresse
+warehouse.table.images: Images
+warehouse.table.image_count: image
+warehouse.table.images_count: images
+warehouse.table.created_at: Créé le
+warehouse.table.updated_at: Modifié le
+warehouse.table.actions: Actions
+
+warehouse.form.name: Nom de l'entrepôt
+warehouse.form.address: Adresse
+warehouse.form.images: Images
+warehouse.form.add_images: Ajouter des images
+warehouse.form.existing_images: Images existantes
+warehouse.form.images_help: Formats acceptés JPEG, PNG, WebP, GIF. Taille max 5MB par image
+
+warehouse.actions.new: Nouvel entrepôt
+warehouse.actions.edit: Modifier
+warehouse.actions.show: Voir
+warehouse.actions.delete: Supprimer
+warehouse.actions.delete_image: Supprimer l'image
+warehouse.actions.save: Enregistrer
+warehouse.actions.back: Retour à la liste
+
+warehouse.show.images: Images de l'entrepôt
+warehouse.show.no_images: Aucune image disponible
+
+warehouse.confirm_delete: Êtes-vous sûr de vouloir supprimer cet entrepôt ?
+warehouse.confirm_delete_image: Êtes-vous sûr de vouloir supprimer cette image ?
+
+breadcrumb.warehouses: Entrepôts
+breadcrumb.new: Nouveau
+breadcrumb.edit: Modifier
+breadcrumb.show: Détails
+
+# ... (traductions précédentes)
+
+# Messages supplémentaires
+warehouse.error_deleting_image: Erreur lors de la suppression de l'image
+
+# FilePond Labels
+warehouse.form.filepond.label_idle: Glissez-déposez vos images ou <span class="filepond--label-action">Parcourir</span>
+warehouse.form.filepond.invalid_field: Le champ contient des fichiers invalides
+warehouse.form.filepond.waiting_size: En attente de la taille
+warehouse.form.filepond.size_not_available: Taille non disponible
+warehouse.form.filepond.loading: Chargement...
+warehouse.form.filepond.load_error: Erreur lors du chargement
+warehouse.form.filepond.processing: Traitement...
+warehouse.form.filepond.processing_complete: Traitement terminé
+warehouse.form.filepond.processing_aborted: Traitement annulé
+warehouse.form.filepond.processing_error: Erreur lors du traitement
+warehouse.form.filepond.revert_error: Erreur lors de l'annulation
+warehouse.form.filepond.remove_error: Erreur lors de la suppression
+warehouse.form.filepond.tap_to_cancel: Cliquer pour annuler
+warehouse.form.filepond.tap_to_retry: Cliquer pour réessayer
+warehouse.form.filepond.tap_to_undo: Cliquer pour annuler
+warehouse.form.filepond.remove_item: Supprimer
+warehouse.form.filepond.abort_load: Annuler
+warehouse.form.filepond.retry_load: Réessayer
+warehouse.form.filepond.abort_processing: Annuler le traitement
+warehouse.form.filepond.undo_processing: Annuler
+warehouse.form.filepond.retry_processing: Réessayer
+warehouse.form.filepond.process_item: Traiter
+warehouse.form.filepond.max_size_exceeded: Fichier trop volumineux
+warehouse.form.filepond.max_size: La taille maximale est de {filesize}
+warehouse.form.filepond.max_total_size_exceeded: Taille totale maximale dépassée
+warehouse.form.filepond.max_total_size: La taille totale maximale est de {filesize}
+
 
