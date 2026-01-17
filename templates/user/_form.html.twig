@@ -58,12 +58,12 @@
         <div class="col-md-8">
             <div class="form-group has-icon-left">
                 <div class="position-relative">
-                    {{ form_widget(form.password, {'attr': {'class': 'form-control', 'placeholder': button_label|default('create') == 'update' ? 'form.password.placeholder_edit'|trans : 'form.password.placeholder'|trans}}) }}
+                    {{ form_widget(form.password, {'attr': {'class': 'form-control', 'placeholder': button_label == 'Update' ? 'form.password.placeholder_edit'|trans : 'form.password.placeholder'|trans}}) }}
                     <div class="form-control-icon">
                         <i class="bi bi-lock"></i>
                     </div>
                 </div>
-                {% if button_label|default('') == 'update' %}
+                 {% if button_label == 'Update' %}
                     <small class="text-muted">{{ 'form.password.help_edit'|trans }}</small>
                 {% endif %}
                 {{ form_errors(form.password) }}
