@@ -78,10 +78,8 @@
                                     <div class="card-body p-2 text-center">
                                         <button type="button"
                                                 class="btn btn-danger btn-sm w-100"
-                                                data-image-id="{{ image.id }}"
-                                                data-csrf-token="{{ csrf_token('delete' ~ image.id) }}"
-                                                data-delete-action="product-image">
-                                            <i class="bi bi-trash"></i> {{ 'product.actions.delete_image'|trans }}
+                                                onclick="deleteImage({{ image.id }}, '{{ csrf_token('delete' ~ image.id) }}')">
+                                            <i class="bi bi-trash"></i> {{ 'warehouse.actions.delete_image'|trans }}
                                         </button>
                                     </div>
                                 </div>
@@ -122,3 +120,63 @@
     </div>
 </div>
 {{ form_end(form) }}
+
+<script>
+    // Fonction pour supprimer une image existante via AJAX
+    function deleteImage(imageId, csrfToken) {
+        if (!confirm('{{ 'warehouse.confirm_delete_image'|trans }}')) {
+            return;
+        }
+
+        const formData = new FormData();
+        formData.append('_token', csrfToken);
+
+        fetch('{{ path('app_product_image_delete', {'id': '__IMAGE_ID__', '_locale': app.request.locale}) }}'.replace('__IMAGE_ID__', imageId), {
+            method: 'POST',
+            body: formData
+        })
+            .then(response => {
+                if (response.ok) {
+                    // Supprimer l'élément du DOM
+                    document.getElementById('image-' + imageId).remove();
+
+                    // Afficher un message de succès
+                    Toastify({
+                        text: "{{ 'warehouse.image_deleted_successfully'|trans }}",
+                        duration: 3000,
+                        close: true,
+                        gravity: "top",
+                        position: "right",
+                        backgroundColor: "#4fbe87",
+                    }).showToast();
+
+                    // Vérifier s'il reste des images
+                    const existingImagesContainer = document.getElementById('existing-images');
+                    if (existingImagesContainer && existingImagesContainer.children.length === 0) {
+                        existingImagesContainer.closest('.row').closest('.col-md-8').previousElementSibling.remove();
+                        existingImagesContainer.closest('.row').closest('.col-md-8').remove();
+                    }
+                } else {
+                    Toastify({
+                        text: "{{ 'warehouse.error_deleting_image'|trans }}",
+                        duration: 3000,
+                        close: true,
+                        gravity: "top",
+                        position: "right",
+                        backgroundColor: "#ff0000",
+                    }).showToast();
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                Toastify({
+                    text: "{{ 'warehouse.error_deleting_image'|trans }}",
+                    duration: 3000,
+                    close: true,
+                    gravity: "top",
+                    position: "right",
+                    backgroundColor: "#ff0000",
+                }).showToast();
+            });
+    }
+</script>
