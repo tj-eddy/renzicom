@@ -69,6 +69,7 @@ user.actions.new: 'New User'
 user.actions.edit: 'Edit'
 user.actions.delete: 'Delete'
 user.confirm_delete: 'Are you sure you want to delete this user?'
+user.updated: 'User updated'
 form.name: 'Name'
 form.email: 'Email'
 form.password: 'Password'
@@ -97,3 +98,5 @@ datatable.search: 'Search...'
 datatable.no_data: 'No data available'
 datatable.info: 'Showing {start} to {end} of {rows} entries'
 footer.powered_by: 'Powered by'
+access.denied.edit: "You do not have permission to edit"
+access.denied.create: "You do not have permission to create"

@@ -69,6 +69,7 @@ user.actions.new: 'Nouvel utilisateur'
 user.actions.edit: 'Modifier'
 user.actions.delete: 'Supprimer'
 user.confirm_delete: 'Êtes-vous sûr de vouloir supprimer cet utilisateur ?'
+user.updated: 'Utilisateur mis à jour'
 form.name: 'Nom'
 form.email: 'Email'
 form.password: 'Mot de passe'
@@ -97,4 +98,7 @@ datatable.search: 'Rechercher...'
 datatable.no_data: 'Aucune donnée disponible'
 datatable.info: 'Affichage de {start} à {end} sur {rows} entrées'
 footer.powered_by: 'Propulsé par'
+access.denied.edit: "Vous n'avez pas la permission de modifier"
+access.denied.create: "Vous n'avez pas la permission de créer"
+
 

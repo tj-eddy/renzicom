@@ -17,7 +17,7 @@ class UserType extends AbstractType
     {
         $builder
             ->add('name', TextType::class, [
-                'label' => 'Nom',
+                'label' => 'form.name',
                 'attr' => ['class' => 'form-control']
             ])
             ->add('email', EmailType::class, [
@@ -25,7 +25,7 @@ class UserType extends AbstractType
                 'attr' => ['class' => 'form-control']
             ])
             ->add('role', ChoiceType::class, [
-                'label' => 'Rôle',
+                'label' => 'form.role',
                 'choices' => [
                     'role.admin' => 'ROLE_ADMIN',
                     'role.driver' => 'ROLE_DRIVER',
@@ -36,7 +36,7 @@ class UserType extends AbstractType
                 'required' => true,
             ])
             ->add('password', PasswordType::class, [
-                'label' => 'Mot de passe',
+                'label' => 'form.password',
                 'required' => false,
                 'mapped' => false,
                 'attr' => [
