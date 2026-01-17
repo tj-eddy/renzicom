@@ -50,7 +50,7 @@ class RackType extends AbstractType
 //                'help' => 'Formats acceptés: JPEG, PNG, WebP, GIF. Taille max: 5MB par image'
 //            ])
             ->add('address', TextareaType::class, [
-                'label' => 'rack.address.title',
+                'label' => 'rack.table.address',
                 'attr' => [
                     'placeholder' => 'rack.address.placeholder',
                     'class' => 'form-control',
@@ -59,6 +59,7 @@ class RackType extends AbstractType
                 'required' => false,
             ])
             ->add('warehouse', EntityType::class, [
+                'label' => 'nav.warehouses',
                 'class' => Warehouse::class,
                 'choice_label' => 'name',
             ])

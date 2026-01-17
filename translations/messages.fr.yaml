@@ -103,6 +103,7 @@ access.denied.create: "Vous n'avez pas la permission de créer"
 
 nav.warehouses: Entrepôts
 warehouse.title: Gestion des entrepôts
+warehouse.title.subtitle: Gérer vos emplacements d’entrepôt
 warehouse.list: Liste des entrepôts
 warehouse.new: Nouvel entrepôt
 warehouse.edit: Modifier l'entrepôt
@@ -288,3 +289,15 @@ rack.form.add_images: Ajouter des images
 rack.form.images_help: 'Formats acceptés : JPG, PNG. Taille max : 5Mo'
 
 nav.rack: Étagère
+
+rack.edit.header: Modifier le rack
+rack.form.button.update: Mettre à jour
+
+rack.table.id: Id
+rack.table.name: Nom
+rack.table.address: Adresse
+rack.table.actions: Actions
+breadcrumb.racks: 'Étagère'
+
+rack.title.subtitle: Présentoirs
+

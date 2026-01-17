@@ -106,6 +106,7 @@ nav.warehouses: Warehouses
 nav.logout.confirm: Are you sure you want to logout?
 
 warehouse.title: Warehouse Management
+warehouse.title.subtitle: Manage your warehouse location
 warehouse.list: Warehouse List
 warehouse.new: New Warehouse
 warehouse.edit: Edit Warehouse
@@ -290,3 +291,14 @@ rack.form.add_images: Add images
 rack.form.images_help: 'Accepted formats: JPG, PNG. Max size: 5MB'
 
 nav.rack: Rack
+
+rack.edit.header: Edit Rack
+rack.form.button.update: Update
+
+rack.table.id: Id
+rack.table.name: Name
+rack.table.address: Address
+rack.table.actions: Actions
+breadcrumb.racks: 'Rack'
+
+rack.title.subtitle: Display stands
