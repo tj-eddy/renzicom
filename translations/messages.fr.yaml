@@ -1,43 +1,4 @@
-# Messages d'erreur
-'access.denied.create': 'Accès refusé. Seuls les administrateurs peuvent créer des utilisateurs.'
-'access.denied.edit': 'Accès refusé. Seuls les administrateurs peuvent modifier des utilisateurs.'
-'access.denied.delete': 'Accès refusé. Seuls les administrateurs peuvent supprimer des utilisateurs.'
-
-# Messages de succès
-'user.created': 'Utilisateur créé avec succès.'
-'user.updated': 'Utilisateur modifié avec succès.'
-'user.deleted': 'Utilisateur supprimé avec succès.'
-
-# Formulaire
-'Name': 'Nom'
-'Email': 'Email'
-'Password': 'Mot de passe'
-'Role': 'Rôle'
-
-# Rôles
-'Administrator': 'Administrateur'
-'Driver': 'Conductrice'
-'Statistics': 'Statistiques'
-
-# Boutons
-'btn.save': 'Enregistrer'
-'btn.create': 'Créer'
-'btn.cancel': 'Annuler'
-'btn.delete': 'Supprimer'
-'btn.edit': 'Modifier'
-'btn.view': 'Voir'
-
-# Navigation
-'nav.dashboard': 'Tableau de bord'
-'nav.users': 'Utilisateurs'
-'nav.logout': 'Déconnexion'
-'nav.my.profile': 'Mon profil'
-
-# Dashboard
 dashboard.title: 'Tableau de bord'
-dashboard.date: '%date%'
-
-# Statistiques principales
 stats.magazines_stock: 'Total des Magazines en Stock'
 stats.magazines_stock_change: '+100% par rapport au mois dernier'
 stats.presentoirs: 'Total des Présentoirs'
@@ -45,21 +6,17 @@ stats.presentoirs_change: '+0% nouveaux ce mois-ci'
 stats.magazines_distributed: 'Magazines Distribués'
 stats.magazines_distributed_change: '+0% par rapport au mois dernier'
 stats.user_accounts: 'Comptes Utilisateurs'
-
-# Statistiques des rôles
 stats.title: 'Statistiques'
 stats.role.admin: 'Administrateur'
 stats.role.driver: 'Conductrice'
+stats.role.statistics: 'Statistiques'
 stats.role.other: 'Autres'
-stats.role.accounts: '{0} aucun compte|{1} 1 compte|]1,Inf] %count% comptes'
-
-# Distribution mensuelle
+stats.role.accounts: '%count% compte|%count% comptes'
 distribution.title: 'Distribution Mensuelle'
 distribution.subtitle: 'Nombre de magazines distribués par mois'
 distribution.magazines: 'Magazines distribués'
-distribution.count: '%count% magazines'
-
-# Mois
+distribution.y_axis: 'Nombre de magazines'
+distribution.unit: 'magazines'
 month.jan: 'Jan'
 month.feb: 'Fév'
 month.mar: 'Mar'
@@ -72,8 +29,6 @@ month.sep: 'Sep'
 month.oct: 'Oct'
 month.nov: 'Nov'
 month.dec: 'Déc'
-
-# Activités récentes
 activities.title: 'Activités Récentes'
 activities.action: 'Action'
 activities.user: 'Utilisateur'
@@ -88,131 +43,58 @@ activities.status.in_progress: 'En cours'
 activities.user.admin: 'Admin'
 activities.user.system: 'Système'
 activities.user.driver: 'Conductrice'
-
-# Accès rapide
 quick_access.title: 'Accès Rapide'
 quick_access.users: 'Gestion Utilisateurs'
 quick_access.magazines: 'Gestion Magazines'
 quick_access.distributions: 'Distributions'
 quick_access.presentoirs: 'Présentoirs'
-
-# Statistiques rapides
 quick_stats.title: 'Statistiques Rapides'
 quick_stats.stock_available: 'Stock disponible'
 quick_stats.distributions: 'Distributions'
 quick_stats.presentoirs_active: 'Présentoirs actifs'
-
-
-# Utilisateurs
-user.list: 'Liste des utilisateurs'
-user.new: 'Nouvel utilisateur'
-user.edit: 'Modifier l''utilisateur'
-user.show: 'Détails de l''utilisateur'
-user.delete: 'Supprimer'
-user.actions: 'Actions'
-
-# Formulaire
-form.name: 'Nom'
-form.email: 'Email'
-form.password: 'Mot de passe'
-form.role: 'Rôle'
-form.save: 'Enregistrer'
-form.create: 'Créer'
-form.cancel: 'Annuler'
-form.update: 'Mettre à jour'
-
-# Rôles
-role.admin: 'Administrateur'
-role.driver: 'Conductrice'
-role.statistics: 'Statistiques'
-
-# Messages
-message.user_created: 'Utilisateur créé avec succès.'
-message.user_updated: 'Utilisateur modifié avec succès.'
-message.user_deleted: 'Utilisateur supprimé avec succès.'
-message.access_denied_create: 'Accès refusé. Seuls les administrateurs peuvent créer des utilisateurs.'
-message.access_denied_edit: 'Accès refusé. Seuls les administrateurs peuvent modifier des utilisateurs.'
-message.access_denied_delete: 'Accès refusé. Seuls les administrateurs peuvent supprimer des utilisateurs.'
-
-# Login
-login.title: 'Connexion'
-login.subtitle: 'Connectez-vous avec vos identifiants.'
-login.email.placeholder: 'Email'
-login.password.placeholder: 'Mot de passe'
-login.remember_me: 'Se souvenir de moi'
-login.submit: 'Se connecter'
-login.forgot_password: 'Mot de passe oublié ?'
-login.no_account: 'Pas de compte ? Contactez l''administrateur.'
-
-# Erreurs
-error.403.title: 'Accès Refusé'
-error.403.message: 'Vous n''êtes pas autorisé à voir cette page.'
-error.403.button: 'Retour au Dashboard'
-error.404.title: 'Page Non Trouvée'
-error.404.message: 'La page que vous recherchez n''existe pas.'
-
-# Breadcrumb
-breadcrumb.home: 'Dashboard'
-breadcrumb.users: 'Utilisateurs'
-breadcrumb.new: 'Nouveau'
-breadcrumb.edit: 'Modifier'
-
-
-
-
-# Navigation supplémentaire
 nav.menu: 'Menu'
+nav.dashboard: 'Tableau de bord'
+nav.users: 'Utilisateurs'
 nav.account: 'Compte'
-
-# Footer
-footer.powered_by: 'Propulsé par'
-
-distribution.y_axis: 'Nombre de magazines'
-distribution.unit: 'magazines'
-
-# Liste utilisateurs
+nav.logout: 'Déconnexion'
+nav.my.profile: "Mon profil"
 user.list.title: 'Gestion des utilisateurs'
 user.list.no_users: 'Aucun utilisateur trouvé'
-
-# Table utilisateurs
 user.table.id: 'ID'
 user.table.name: 'Nom'
 user.table.email: 'Email'
 user.table.role: 'Rôle'
 user.table.actions: 'Actions'
-
-# Actions utilisateurs
 user.actions.new: 'Nouvel utilisateur'
 user.actions.edit: 'Modifier'
 user.actions.delete: 'Supprimer'
-user.actions.view: 'Voir'
-
-# Confirmation
 user.confirm_delete: 'Êtes-vous sûr de vouloir supprimer cet utilisateur ?'
-
-# DataTable
-datatable.search: 'Rechercher...'
-datatable.no_data: 'Aucune donnée disponible'
-datatable.info: 'Affichage de {start} à {end} sur {rows} entrées'
-datatable.per_page: '{select} entrées par page'
-
-# Login page
-# Page de login
-login.page_title: 'Connexion'
-
-# Formulaire - placeholders
+form.name: 'Nom'
+form.email: 'Email'
+form.password: 'Mot de passe'
+form.role: 'Rôle'
 form.name.placeholder: 'Nom complet'
 form.email.placeholder: 'exemple@email.com'
 form.password.placeholder: 'Mot de passe'
 form.password.placeholder_edit: 'Laissez vide pour conserver'
 form.password.help_edit: 'Laissez vide pour conserver le mot de passe actuel'
-
-# Formulaire - boutons
+form.role.placeholder: 'Sélectionnez un rôle'
 form.button.create: 'Créer'
 form.button.update: 'Mettre à jour'
-form.button.save: 'Enregistrer'
 form.button.cancel: 'Annuler'
-form.button.delete: 'Supprimer'
+role.admin: 'Administrateur'
+role.driver: 'Conductrice'
+role.statistics: 'Statistiques'
+login.page_title: 'Connexion'
+login.title: 'Connexion'
+login.subtitle: 'Connectez-vous avec vos identifiants.'
+login.email.placeholder: 'Email'
+login.password.placeholder: 'Mot de passe'
+login.submit: 'Se connecter'
+breadcrumb.home: 'Tableau de bord'
+breadcrumb.users: 'Utilisateurs'
+datatable.search: 'Rechercher...'
+datatable.no_data: 'Aucune donnée disponible'
+datatable.info: 'Affichage de {start} à {end} sur {rows} entrées'
+footer.powered_by: 'Propulsé par'
 
-stats.role.statistics: 'Statistique'
-nav.logout.confirm: 'Voulez-vous vraiment vous déconnecter ?'

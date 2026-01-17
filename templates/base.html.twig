@@ -65,25 +65,29 @@
                             <span>{{ 'nav.users'|trans }}</span>
                         </a>
                     </li>
-
                     {% block sidebar_menu %}{% endblock %}
+                    <li class="sidebar-item">
+                        <div class="px-3 py-2">
+                            <select class="form-select form-select-sm"
+                                    onchange="if (this.value) window.location.href = this.value;">
+                                <option value="{{ path(
+                                    app.request.attributes.get('_route'),
+                                    app.request.attributes.get('_route_params')|merge({'_locale': 'fr'})
+                                ) }}"
+                                    {{ app.request.locale == 'fr' ? 'selected' : '' }}>
+                                    🇫🇷 Français
+                                </option>
 
-
-{#                    <li class="sidebar-item">#}
-{#                        <div class="px-3 py-2">#}
-{#                            <div class="d-flex gap-2">#}
-{#                                {% set current_params = app.request.query.all %}#}
-{#                                {% set current_route = app.request.attributes.get('_route') %}#}
-
-{#                                <a href="?_locale=fr" class="btn btn-sm {{ app.request.locale == 'fr' ? 'btn-primary' : 'btn-outline-primary' }} flex-fill">#}
-{#                                    🇫🇷 FR#}
-{#                                </a>#}
-{#                                <a href="?_locale=en" class="btn btn-sm {{ app.request.locale == 'en' ? 'btn-primary' : 'btn-outline-primary' }} flex-fill">#}
-{#                                    🇬🇧 EN#}
-{#                                </a>#}
-{#                            </div>#}
-{#                        </div>#}
-{#                    </li>#}
+                                <option value="{{ path(
+                                    app.request.attributes.get('_route'),
+                                    app.request.attributes.get('_route_params')|merge({'_locale': 'en'})
+                                ) }}"
+                                    {{ app.request.locale == 'en' ? 'selected' : '' }}>
+                                    🇬🇧 English
+                                </option>
+                            </select>
+                        </div>
+                    </li>
                 </ul>
             </div>
             <button class="sidebar-toggler btn x"><i data-feather="x"></i></button>
@@ -125,7 +129,7 @@
                                 </li>
                                 <li><a class="dropdown-item" href="#"><i class="icon-mid bi bi-person me-2"></i>
                                         {{ 'nav.my.profile'|trans }}</a></li>
-                                    <hr class="dropdown-divider">
+                                <hr class="dropdown-divider">
                                 </li>
                                 <li>
                                     <form method="post"
@@ -175,9 +179,9 @@
                 <div class="float-start">
                     <p>{{ 'now'|date('Y') }} &copy; Renzicom</p>
                 </div>
-{#                <div class="float-end">#}
-{#                    <p>{{ 'footer.powered_by'|trans }} <span class="text-primary">Symfony</span></p>#}
-{#                </div>#}
+                {#                <div class="float-end"> #}
+                {#                    <p>{{ 'footer.powered_by'|trans }} <span class="text-primary">Symfony</span></p> #}
+                {#                </div> #}
             </div>
         </footer>
     </div>

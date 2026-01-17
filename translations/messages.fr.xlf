@@ -1,0 +1,430 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
+  <file source-language="fr" target-language="fr" datatype="plaintext" original="file.ext">
+    <header>
+      <tool tool-id="symfony" tool-name="Symfony"/>
+    </header>
+    <body>
+      <trans-unit id="AckGMAp" resname="dashboard.title">
+        <source>dashboard.title</source>
+        <target>Tableau de bord</target>
+      </trans-unit>
+      <trans-unit id="GyeOer9" resname="stats.magazines_stock">
+        <source>stats.magazines_stock</source>
+        <target>Total des Magazines en Stock</target>
+      </trans-unit>
+      <trans-unit id="Y2zTptR" resname="stats.magazines_stock_change">
+        <source>stats.magazines_stock_change</source>
+        <target>+100% par rapport au mois dernier</target>
+      </trans-unit>
+      <trans-unit id="_nzBRzu" resname="stats.presentoirs">
+        <source>stats.presentoirs</source>
+        <target>Total des Présentoirs</target>
+      </trans-unit>
+      <trans-unit id="dQMK3df" resname="stats.presentoirs_change">
+        <source>stats.presentoirs_change</source>
+        <target>+0% nouveaux ce mois-ci</target>
+      </trans-unit>
+      <trans-unit id="2yuZLG7" resname="stats.magazines_distributed">
+        <source>stats.magazines_distributed</source>
+        <target>Magazines Distribués</target>
+      </trans-unit>
+      <trans-unit id="tWEpMvc" resname="stats.magazines_distributed_change">
+        <source>stats.magazines_distributed_change</source>
+        <target>+0% par rapport au mois dernier</target>
+      </trans-unit>
+      <trans-unit id="8C23ksF" resname="stats.user_accounts">
+        <source>stats.user_accounts</source>
+        <target>Comptes Utilisateurs</target>
+      </trans-unit>
+      <trans-unit id="uEkl6Xr" resname="stats.title">
+        <source>stats.title</source>
+        <target>Statistiques</target>
+      </trans-unit>
+      <trans-unit id="ADS9..6" resname="stats.role.admin">
+        <source>stats.role.admin</source>
+        <target>Administrateur</target>
+      </trans-unit>
+      <trans-unit id="DoZtJfO" resname="stats.role.driver">
+        <source>stats.role.driver</source>
+        <target>Conductrice</target>
+      </trans-unit>
+      <trans-unit id="5yajlYk" resname="stats.role.statistics">
+        <source>stats.role.statistics</source>
+        <target>Statistiques</target>
+      </trans-unit>
+      <trans-unit id="2N7SgiK" resname="stats.role.other">
+        <source>stats.role.other</source>
+        <target>Autres</target>
+      </trans-unit>
+      <trans-unit id="0K6cPUC" resname="stats.role.accounts">
+        <source>stats.role.accounts</source>
+        <target>%count% compte|%count% comptes</target>
+      </trans-unit>
+      <trans-unit id="SR8ZIbi" resname="distribution.title">
+        <source>distribution.title</source>
+        <target>Distribution Mensuelle</target>
+      </trans-unit>
+      <trans-unit id="50IDI6y" resname="distribution.subtitle">
+        <source>distribution.subtitle</source>
+        <target>Nombre de magazines distribués par mois</target>
+      </trans-unit>
+      <trans-unit id="fWo.A9w" resname="distribution.magazines">
+        <source>distribution.magazines</source>
+        <target>Magazines distribués</target>
+      </trans-unit>
+      <trans-unit id="fG3E.DI" resname="distribution.y_axis">
+        <source>distribution.y_axis</source>
+        <target>Nombre de magazines</target>
+      </trans-unit>
+      <trans-unit id="GqDykeH" resname="distribution.unit">
+        <source>distribution.unit</source>
+        <target>magazines</target>
+      </trans-unit>
+      <trans-unit id="0mQRs0l" resname="month.jan">
+        <source>month.jan</source>
+        <target>Jan</target>
+      </trans-unit>
+      <trans-unit id="OeG2xiZ" resname="month.feb">
+        <source>month.feb</source>
+        <target>Fév</target>
+      </trans-unit>
+      <trans-unit id="hK3JYRv" resname="month.mar">
+        <source>month.mar</source>
+        <target>Mar</target>
+      </trans-unit>
+      <trans-unit id="hqkF1jx" resname="month.apr">
+        <source>month.apr</source>
+        <target>Avr</target>
+      </trans-unit>
+      <trans-unit id="T3qMyzX" resname="month.may">
+        <source>month.may</source>
+        <target>Mai</target>
+      </trans-unit>
+      <trans-unit id="z_bcZZF" resname="month.jun">
+        <source>month.jun</source>
+        <target>Juin</target>
+      </trans-unit>
+      <trans-unit id="IjqyfGM" resname="month.jul">
+        <source>month.jul</source>
+        <target>Juil</target>
+      </trans-unit>
+      <trans-unit id="6v9qxQ2" resname="month.aug">
+        <source>month.aug</source>
+        <target>Août</target>
+      </trans-unit>
+      <trans-unit id="8C7PUHv" resname="month.sep">
+        <source>month.sep</source>
+        <target>Sep</target>
+      </trans-unit>
+      <trans-unit id="uK_aFRN" resname="month.oct">
+        <source>month.oct</source>
+        <target>Oct</target>
+      </trans-unit>
+      <trans-unit id="U1W3DuP" resname="month.nov">
+        <source>month.nov</source>
+        <target>Nov</target>
+      </trans-unit>
+      <trans-unit id="I.3NhPE" resname="month.dec">
+        <source>month.dec</source>
+        <target>Déc</target>
+      </trans-unit>
+      <trans-unit id="ysuxHnK" resname="activities.title">
+        <source>activities.title</source>
+        <target>Activités Récentes</target>
+      </trans-unit>
+      <trans-unit id="L00kOkq" resname="activities.action">
+        <source>activities.action</source>
+        <target>Action</target>
+      </trans-unit>
+      <trans-unit id="ei6D6ZN" resname="activities.user">
+        <source>activities.user</source>
+        <target>Utilisateur</target>
+      </trans-unit>
+      <trans-unit id="2fbNjxR" resname="activities.date">
+        <source>activities.date</source>
+        <target>Date</target>
+      </trans-unit>
+      <trans-unit id="9wamZ2f" resname="activities.status">
+        <source>activities.status</source>
+        <target>Statut</target>
+      </trans-unit>
+      <trans-unit id="sZ7GorM" resname="activities.distribution">
+        <source>activities.distribution</source>
+        <target>Distribution magazine</target>
+      </trans-unit>
+      <trans-unit id="U8a.sgg" resname="activities.new_user">
+        <source>activities.new_user</source>
+        <target>Nouvel utilisateur</target>
+      </trans-unit>
+      <trans-unit id="SG1Nmfu" resname="activities.delivery">
+        <source>activities.delivery</source>
+        <target>Livraison en cours</target>
+      </trans-unit>
+      <trans-unit id="GOOaC67" resname="activities.status.completed">
+        <source>activities.status.completed</source>
+        <target>Complété</target>
+      </trans-unit>
+      <trans-unit id="VOn5ykE" resname="activities.status.info">
+        <source>activities.status.info</source>
+        <target>Info</target>
+      </trans-unit>
+      <trans-unit id="gMHnZPl" resname="activities.status.in_progress">
+        <source>activities.status.in_progress</source>
+        <target>En cours</target>
+      </trans-unit>
+      <trans-unit id="F4daAGW" resname="activities.user.admin">
+        <source>activities.user.admin</source>
+        <target>Admin</target>
+      </trans-unit>
+      <trans-unit id="N0hlr1W" resname="activities.user.system">
+        <source>activities.user.system</source>
+        <target>Système</target>
+      </trans-unit>
+      <trans-unit id="zaeJ9Lb" resname="activities.user.driver">
+        <source>activities.user.driver</source>
+        <target>Conductrice</target>
+      </trans-unit>
+      <trans-unit id="N6x6WB8" resname="quick_access.title">
+        <source>quick_access.title</source>
+        <target>Accès Rapide</target>
+      </trans-unit>
+      <trans-unit id="NFRw7IV" resname="quick_access.users">
+        <source>quick_access.users</source>
+        <target>Gestion Utilisateurs</target>
+      </trans-unit>
+      <trans-unit id="eM0yyWS" resname="quick_access.magazines">
+        <source>quick_access.magazines</source>
+        <target>Gestion Magazines</target>
+      </trans-unit>
+      <trans-unit id="7P9Qk8Q" resname="quick_access.distributions">
+        <source>quick_access.distributions</source>
+        <target>Distributions</target>
+      </trans-unit>
+      <trans-unit id="uDvm50G" resname="quick_access.presentoirs">
+        <source>quick_access.presentoirs</source>
+        <target>Présentoirs</target>
+      </trans-unit>
+      <trans-unit id="nYim9s6" resname="quick_stats.title">
+        <source>quick_stats.title</source>
+        <target>Statistiques Rapides</target>
+      </trans-unit>
+      <trans-unit id="qmPQ3s5" resname="quick_stats.stock_available">
+        <source>quick_stats.stock_available</source>
+        <target>Stock disponible</target>
+      </trans-unit>
+      <trans-unit id=".qUFeVs" resname="quick_stats.distributions">
+        <source>quick_stats.distributions</source>
+        <target>Distributions</target>
+      </trans-unit>
+      <trans-unit id=".6m7UBc" resname="quick_stats.presentoirs_active">
+        <source>quick_stats.presentoirs_active</source>
+        <target>Présentoirs actifs</target>
+      </trans-unit>
+      <trans-unit id="fK.EETZ" resname="nav.menu">
+        <source>nav.menu</source>
+        <target>Menu</target>
+      </trans-unit>
+      <trans-unit id="eSVO.Yw" resname="nav.dashboard">
+        <source>nav.dashboard</source>
+        <target>Tableau de bord</target>
+      </trans-unit>
+      <trans-unit id="9GoKnnR" resname="nav.users">
+        <source>nav.users</source>
+        <target>Utilisateurs</target>
+      </trans-unit>
+      <trans-unit id="vZQH7In" resname="nav.account">
+        <source>nav.account</source>
+        <target>Compte</target>
+      </trans-unit>
+      <trans-unit id="8t6Cgl." resname="nav.logout">
+        <source>nav.logout</source>
+        <target>Déconnexion</target>
+      </trans-unit>
+      <trans-unit id="xDPV83V" resname="nav.my.profil">
+        <source>nav.my.profil</source>
+        <target>Mon profil</target>
+      </trans-unit>
+      <trans-unit id="BcNEHkh" resname="user.list.title">
+        <source>user.list.title</source>
+        <target>Gestion des utilisateurs</target>
+      </trans-unit>
+      <trans-unit id="7OCRidj" resname="user.list.no_users">
+        <source>user.list.no_users</source>
+        <target>Aucun utilisateur trouvé</target>
+      </trans-unit>
+      <trans-unit id="jl_9n8p" resname="user.table.id">
+        <source>user.table.id</source>
+        <target>ID</target>
+      </trans-unit>
+      <trans-unit id="sltDRub" resname="user.table.name">
+        <source>user.table.name</source>
+        <target>Nom</target>
+      </trans-unit>
+      <trans-unit id="4VSfRXq" resname="user.table.email">
+        <source>user.table.email</source>
+        <target>Email</target>
+      </trans-unit>
+      <trans-unit id="WiR_r0J" resname="user.table.role">
+        <source>user.table.role</source>
+        <target>Rôle</target>
+      </trans-unit>
+      <trans-unit id="dtzQCeI" resname="user.table.actions">
+        <source>user.table.actions</source>
+        <target>Actions</target>
+      </trans-unit>
+      <trans-unit id="t8lnH3K" resname="user.actions.new">
+        <source>user.actions.new</source>
+        <target>Nouvel utilisateur</target>
+      </trans-unit>
+      <trans-unit id="NJDVAA0" resname="user.actions.edit">
+        <source>user.actions.edit</source>
+        <target>Modifier</target>
+      </trans-unit>
+      <trans-unit id="mbxTDZ5" resname="user.actions.delete">
+        <source>user.actions.delete</source>
+        <target>Supprimer</target>
+      </trans-unit>
+      <trans-unit id="RZ_4gw_" resname="user.confirm_delete">
+        <source>user.confirm_delete</source>
+        <target>Êtes-vous sûr de vouloir supprimer cet utilisateur ?</target>
+      </trans-unit>
+      <trans-unit id="gF4WEf8" resname="form.name">
+        <source>form.name</source>
+        <target>Nom</target>
+      </trans-unit>
+      <trans-unit id="vXLetA0" resname="form.email">
+        <source>form.email</source>
+        <target>Email</target>
+      </trans-unit>
+      <trans-unit id="r2fjRrB" resname="form.password">
+        <source>form.password</source>
+        <target>Mot de passe</target>
+      </trans-unit>
+      <trans-unit id="OxPtKbt" resname="form.role">
+        <source>form.role</source>
+        <target>Rôle</target>
+      </trans-unit>
+      <trans-unit id="0HtLUqS" resname="form.name.placeholder">
+        <source>form.name.placeholder</source>
+        <target>Nom complet</target>
+      </trans-unit>
+      <trans-unit id="8PfWof2" resname="form.email.placeholder">
+        <source>form.email.placeholder</source>
+        <target>exemple@email.com</target>
+      </trans-unit>
+      <trans-unit id="VnR_.P3" resname="form.password.placeholder">
+        <source>form.password.placeholder</source>
+        <target>Mot de passe</target>
+      </trans-unit>
+      <trans-unit id="bNwdZfQ" resname="form.password.placeholder_edit">
+        <source>form.password.placeholder_edit</source>
+        <target>Laissez vide pour conserver</target>
+      </trans-unit>
+      <trans-unit id="zHheczP" resname="form.password.help_edit">
+        <source>form.password.help_edit</source>
+        <target>Laissez vide pour conserver le mot de passe actuel</target>
+      </trans-unit>
+      <trans-unit id="C.0d3MW" resname="form.role.placeholder">
+        <source>form.role.placeholder</source>
+        <target>Sélectionnez un rôle</target>
+      </trans-unit>
+      <trans-unit id="SRT493U" resname="form.button.create">
+        <source>form.button.create</source>
+        <target>Créer</target>
+      </trans-unit>
+      <trans-unit id="YIsIkaM" resname="form.button.update">
+        <source>form.button.update</source>
+        <target>Mettre à jour</target>
+      </trans-unit>
+      <trans-unit id="8cpupWn" resname="form.button.cancel">
+        <source>form.button.cancel</source>
+        <target>Annuler</target>
+      </trans-unit>
+      <trans-unit id="4_Irwhu" resname="role.admin">
+        <source>role.admin</source>
+        <target>Administrateur</target>
+      </trans-unit>
+      <trans-unit id="28KBAYh" resname="role.driver">
+        <source>role.driver</source>
+        <target>Conductrice</target>
+      </trans-unit>
+      <trans-unit id="P3mQT_7" resname="role.statistics">
+        <source>role.statistics</source>
+        <target>Statistiques</target>
+      </trans-unit>
+      <trans-unit id="ZPOz.XH" resname="login.page_title">
+        <source>login.page_title</source>
+        <target>Connexion</target>
+      </trans-unit>
+      <trans-unit id="cynL4Ju" resname="login.title">
+        <source>login.title</source>
+        <target>Connexion</target>
+      </trans-unit>
+      <trans-unit id="4AvEnhC" resname="login.subtitle">
+        <source>login.subtitle</source>
+        <target>Connectez-vous avec vos identifiants.</target>
+      </trans-unit>
+      <trans-unit id="BgUigeO" resname="login.email.placeholder">
+        <source>login.email.placeholder</source>
+        <target>Email</target>
+      </trans-unit>
+      <trans-unit id="tsGSVwC" resname="login.password.placeholder">
+        <source>login.password.placeholder</source>
+        <target>Mot de passe</target>
+      </trans-unit>
+      <trans-unit id="8jf9lcX" resname="login.submit">
+        <source>login.submit</source>
+        <target>Se connecter</target>
+      </trans-unit>
+      <trans-unit id="gMLmKTL" resname="breadcrumb.home">
+        <source>breadcrumb.home</source>
+        <target>Tableau de bord</target>
+      </trans-unit>
+      <trans-unit id="siAmxCt" resname="breadcrumb.users">
+        <source>breadcrumb.users</source>
+        <target>Utilisateurs</target>
+      </trans-unit>
+      <trans-unit id="gw6cfWu" resname="datatable.search">
+        <source>datatable.search</source>
+        <target>Rechercher...</target>
+      </trans-unit>
+      <trans-unit id="CsiAg7b" resname="datatable.no_data">
+        <source>datatable.no_data</source>
+        <target>Aucune donnée disponible</target>
+      </trans-unit>
+      <trans-unit id="W9cCPcf" resname="datatable.info">
+        <source>datatable.info</source>
+        <target>Affichage de {start} à {end} sur {rows} entrées</target>
+      </trans-unit>
+      <trans-unit id="K7bntYa" resname="footer.powered_by">
+        <source>footer.powered_by</source>
+        <target>Propulsé par</target>
+      </trans-unit>
+      <trans-unit id="gYCIm1O" resname="access.denied.create">
+        <source>access.denied.create</source>
+        <target>__access.denied.create</target>
+      </trans-unit>
+      <trans-unit id="ye4UMZb" resname="user.created">
+        <source>user.created</source>
+        <target>__user.created</target>
+      </trans-unit>
+      <trans-unit id="9wjwtoH" resname="access.denied.edit">
+        <source>access.denied.edit</source>
+        <target>__access.denied.edit</target>
+      </trans-unit>
+      <trans-unit id="1JMq5s2" resname="user.updated">
+        <source>user.updated</source>
+        <target>__user.updated</target>
+      </trans-unit>
+      <trans-unit id="6P9bMu_" resname="nav.my.profile">
+        <source>nav.my.profile</source>
+        <target>__nav.my.profile</target>
+      </trans-unit>
+      <trans-unit id="41XNKS1" resname="nav.logout.confirm">
+        <source>nav.logout.confirm</source>
+        <target>__nav.logout.confirm</target>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

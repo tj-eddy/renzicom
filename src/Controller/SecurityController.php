@@ -3,17 +3,19 @@
 namespace App\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
 class SecurityController extends AbstractController
 {
-    #[Route(path: '/login', name: 'app_login')]
-    public function login(AuthenticationUtils $authenticationUtils): Response
+    #[Route(path: '/', name: 'app_login')]
+    public function login(Request $request,AuthenticationUtils $authenticationUtils): Response
     {
         if ($this->getUser()) {
-            return $this->redirectToRoute('app_dashboard');
+            $locale = $request->getSession()->get('_locale', 'fr');
+            return $this->redirectToRoute('app_dashboard',['locale' => $locale]);
         }
         // get the login error if there is one
         $error = $authenticationUtils->getLastAuthenticationError();

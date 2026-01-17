@@ -24,12 +24,12 @@ security:
                 check_path: app_login
                 enable_csrf: true
 #                success_handler: App\Security\LoginSuccessHandler
-                default_target_path: /dashboard
+                default_target_path: /fr/dashboard
                 always_use_default_target_path: true
             logout:
                 path: app_logout
                 # where to redirect after logout
-                target: /login
+                target: /fr/
 
             # Activate different ways to authenticate:
             # https://symfony.com/doc/current/security.html#the-firewall
@@ -40,9 +40,9 @@ security:
     # Note: Only the *first* matching rule is applied
     access_control:
         # Pages publiques (login, register, assets)
-        - { path: ^/login$, roles: PUBLIC_ACCESS }
+        - { path: ^/, roles: PUBLIC_ACCESS }
         # Bloquer TOUT le reste - nécessite d'être connecté
-        - { path: ^/, roles: [ROLE_ADMIN,ROLE_DRIVER,ROLE_STATISTICS] }
+        - { path: ^/admin, roles: [ROLE_ADMIN,ROLE_DRIVER,ROLE_STATISTICS] }
 
 when@test:
     security:

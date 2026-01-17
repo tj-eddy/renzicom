@@ -1,9 +1,4 @@
-
-# Dashboard
 dashboard.title: 'Dashboard'
-dashboard.date: '%date%'
-
-# Main statistics
 stats.magazines_stock: 'Total Magazines in Stock'
 stats.magazines_stock_change: '+100% compared to last month'
 stats.presentoirs: 'Total Display Stands'
@@ -11,21 +6,17 @@ stats.presentoirs_change: '+0% new this month'
 stats.magazines_distributed: 'Magazines Distributed'
 stats.magazines_distributed_change: '+0% compared to last month'
 stats.user_accounts: 'User Accounts'
-
-# Role statistics
 stats.title: 'Statistics'
 stats.role.admin: 'Administrator'
 stats.role.driver: 'Driver'
+stats.role.statistics: 'Statistics'
 stats.role.other: 'Others'
 stats.role.accounts: '{0} no accounts|{1} 1 account|]1,Inf] %count% accounts'
-
-# Monthly distribution
 distribution.title: 'Monthly Distribution'
 distribution.subtitle: 'Number of magazines distributed per month'
 distribution.magazines: 'Magazines distributed'
-distribution.count: '%count% magazines'
-
-# Months
+distribution.y_axis: 'Number of magazines'
+distribution.unit: 'magazines'
 month.jan: 'Jan'
 month.feb: 'Feb'
 month.mar: 'Mar'
@@ -38,8 +29,6 @@ month.sep: 'Sep'
 month.oct: 'Oct'
 month.nov: 'Nov'
 month.dec: 'Dec'
-
-# Recent activities
 activities.title: 'Recent Activities'
 activities.action: 'Action'
 activities.user: 'User'
@@ -54,133 +43,57 @@ activities.status.in_progress: 'In Progress'
 activities.user.admin: 'Admin'
 activities.user.system: 'System'
 activities.user.driver: 'Driver'
-
-# Quick access
 quick_access.title: 'Quick Access'
 quick_access.users: 'User Management'
 quick_access.magazines: 'Magazine Management'
 quick_access.distributions: 'Distributions'
 quick_access.presentoirs: 'Display Stands'
-
-# Quick statistics
 quick_stats.title: 'Quick Statistics'
 quick_stats.stock_available: 'Stock available'
 quick_stats.distributions: 'Distributions'
 quick_stats.presentoirs_active: 'Active display stands'
-
-# Navigation
+nav.menu: 'Menu'
 nav.dashboard: 'Dashboard'
 nav.users: 'Users'
-nav.logout: 'Logout'
-nav.my.profile: 'My profile'
-
-# Users
-user.list: 'User list'
-user.new: 'New user'
-user.edit: 'Edit user'
-user.show: 'User details'
-user.delete: 'Delete'
-user.actions: 'Actions'
-
-# Form
-form.name: 'Name'
-form.email: 'Email'
-form.password: 'Password'
-form.role: 'Role'
-form.save: 'Save'
-form.create: 'Create'
-form.cancel: 'Cancel'
-form.update: 'Update'
-
-# Roles
-role.admin: 'Administrator'
-role.driver: 'Driver'
-role.statistics: 'Statistics'
-
-# Messages
-message.user_created: 'User created successfully.'
-message.user_updated: 'User updated successfully.'
-message.user_deleted: 'User deleted successfully.'
-message.access_denied_create: 'Access denied. Only administrators can create users.'
-message.access_denied_edit: 'Access denied. Only administrators can edit users.'
-message.access_denied_delete: 'Access denied. Only administrators can delete users.'
-
-# Login
-login.title: 'Login'
-login.subtitle: 'Log in with your credentials.'
-login.email.placeholder: 'Email'
-login.password.placeholder: 'Password'
-login.remember_me: 'Remember me'
-login.submit: 'Login'
-login.forgot_password: 'Forgot password?'
-login.no_account: 'No account? Contact the administrator.'
-
-# Errors
-error.403.title: 'Access Denied'
-error.403.message: 'You are not authorized to view this page.'
-error.403.button: 'Go to Dashboard'
-error.404.title: 'Page Not Found'
-error.404.message: 'The page you are looking for does not exist.'
-
-# Breadcrumb
-breadcrumb.home: 'Dashboard'
-breadcrumb.users: 'Users'
-breadcrumb.new: 'New'
-breadcrumb.edit: 'Edit'
-
-# Additional navigation
-nav.menu: 'Menu'
 nav.account: 'Account'
-
-# Footer
-footer.powered_by: 'Powered by'
-
-# Chart - additions
-distribution.y_axis: 'Number of magazines'
-distribution.unit: 'magazines'
-
-# User list
+nav.logout: 'Logout'
+nav.my.profile: "My profile"
 user.list.title: 'User Management'
 user.list.no_users: 'No users found'
-
-# User table
 user.table.id: 'ID'
 user.table.name: 'Name'
 user.table.email: 'Email'
 user.table.role: 'Role'
 user.table.actions: 'Actions'
-
-# User actions
 user.actions.new: 'New User'
 user.actions.edit: 'Edit'
 user.actions.delete: 'Delete'
-user.actions.view: 'View'
-
-# Confirmation
 user.confirm_delete: 'Are you sure you want to delete this user?'
-
-# DataTable
-datatable.search: 'Search...'
-datatable.no_data: 'No data available'
-datatable.info: 'Showing {start} to {end} of {rows} entries'
-datatable.per_page: '{select} entries per page'
-
-# Login page
-login.page_title: 'Login'
-
-# Form - placeholders
+form.name: 'Name'
+form.email: 'Email'
+form.password: 'Password'
+form.role: 'Role'
 form.name.placeholder: 'Full name'
 form.email.placeholder: 'example@email.com'
 form.password.placeholder: 'Password'
 form.password.placeholder_edit: 'Leave blank to keep current'
 form.password.help_edit: 'Leave blank to keep the current password'
-
-# Form - buttons
+form.role.placeholder: 'Select a role'
 form.button.create: 'Create'
 form.button.update: 'Update'
-form.button.save: 'Save'
 form.button.cancel: 'Cancel'
-form.button.delete: 'Delete'
-
-stats.role.statistics: 'Statistic'
-nav.logout.confirm: 'Do you really want to log out ?'
+role.admin: 'Administrator'
+role.driver: 'Driver'
+role.statistics: 'Statistics'
+login.page_title: 'Login'
+login.title: 'Login'
+login.subtitle: 'Log in with your credentials.'
+login.email.placeholder: 'Email'
+login.password.placeholder: 'Password'
+login.submit: 'Log in'
+breadcrumb.home: 'Dashboard'
+breadcrumb.users: 'Users'
+datatable.search: 'Search...'
+datatable.no_data: 'No data available'
+datatable.info: 'Showing {start} to {end} of {rows} entries'
+footer.powered_by: 'Powered by'
