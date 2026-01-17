@@ -40,7 +40,7 @@
                         <th>{{ 'warehouse.table.id'|trans }}</th>
                         <th>{{ 'warehouse.table.name'|trans }}</th>
                         <th>{{ 'warehouse.table.address'|trans }}</th>
-                        <th>{{ 'warehouse.table.images'|trans }}</th>
+{#                        <th>{{ 'warehouse.table.images'|trans }}</th>#}
                         <th>{{ 'warehouse.table.created_at'|trans }}</th>
                         <th>{{ 'warehouse.table.actions'|trans }}</th>
                     </tr>
@@ -51,16 +51,16 @@
                             <td>{{ warehouse.id }}</td>
                             <td>{{ warehouse.name }}</td>
                             <td>{{ warehouse.address|default('-') }}</td>
-                            <td>
-                                <span class="badge bg-info">
-                                    {{ warehouse.images|length }}
-                                    {% if warehouse.images|length > 1 %}
-                                        {{ 'warehouse.table.images_count'|trans }}
-                                    {% else %}
-                                        {{ 'warehouse.table.image_count'|trans }}
-                                    {% endif %}
-                                </span>
-                            </td>
+{#                            <td>#}
+{#                                <span class="badge bg-info">#}
+{#                                    {{ warehouse.images|length }}#}
+{#                                    {% if warehouse.images|length > 1 %}#}
+{#                                        {{ 'warehouse.table.images_count'|trans }}#}
+{#                                    {% else %}#}
+{#                                        {{ 'warehouse.table.image_count'|trans }}#}
+{#                                    {% endif %}#}
+{#                                </span>#}
+{#                            </td>#}
                             <td>{{ warehouse.createdAt|date('d/m/Y H:i') }}</td>
                             <td>
                                 <div class="btn-group" role="group">

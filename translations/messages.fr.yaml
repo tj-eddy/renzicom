@@ -204,3 +204,62 @@ warehouse.form.filepond.max_total_size_exceeded: Taille totale maximale dépass�
 warehouse.form.filepond.max_total_size: La taille totale maximale est de {filesize}
 
 
+# ... (traductions warehouse précédentes)
+
+# Product
+product.list.title: Liste des produits
+product.new.title: Nouveau produit
+product.edit.title: Modifier le produit
+product.show.title: Détails du produit
+product.list.no_products: Aucun produit trouvé
+
+product.table.id: ID
+product.table.name: Nom
+product.table.year_edition: Année
+product.table.language: Langue
+product.table.variant: Variante
+product.table.images: Images
+product.table.image_count: image
+product.table.images_count: images
+product.table.created_at: Créé le
+product.table.actions: Actions
+
+product.form.name: Nom du produit
+product.form.name.placeholder: Ex COTE Magazine - Février 2024
+product.form.year_edition: Année d'édition
+product.form.year_edition.placeholder: 2024
+product.form.language: Langue
+product.form.language.placeholder: Sélectionnez une langue
+product.form.language.french: Français
+product.form.language.german: Allemand
+product.form.language.italian: Italien
+product.form.language.english: Anglais
+product.form.variant: Variante
+product.form.variant.placeholder: Ex Édition spéciale, Collector
+product.form.images: Images
+product.form.add_images: Ajouter des images
+product.form.existing_images: Images existantes
+product.form.images_help: Formats acceptés JPEG, PNG, WebP, GIF. Taille max 5MB par image
+product.form.images.invalid_type: Veuillez uploader une image valide
+
+product.actions.new: Nouveau produit
+product.actions.edit: Modifier
+product.actions.show: Voir
+product.actions.delete: Supprimer
+product.actions.delete_image: Supprimer l'image
+
+product.confirm_delete: Êtes-vous sûr de vouloir supprimer ce produit ?
+product.confirm_delete_image: Êtes-vous sûr de vouloir supprimer cette image ?
+product.created_successfully: Produit créé avec succès
+product.updated_successfully: Produit modifié avec succès
+product.deleted_successfully: Produit supprimé avec succès
+product.image_deleted_successfully: Image supprimée avec succès
+product.error_deleting_image: Erreur lors de la suppression de l'image
+product.network_error: Erreur réseau. Veuillez réessayer.
+
+product.form.filepond.label_idle: Glissez-déposez vos images ou <span class="filepond--label-action">Parcourir</span>
+product.form.filepond.invalid_field: Le champ contient des fichiers invalides
+product.form.filepond.max_size_exceeded: Fichier trop volumineux
+product.form.filepond.max_size: La taille maximale est de {filesize}
+
+breadcrumb.products: Produits

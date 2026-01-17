@@ -204,3 +204,64 @@ warehouse.form.filepond.max_size_exceeded: File is too large
 warehouse.form.filepond.max_size: Maximum file size is {filesize}
 warehouse.form.filepond.max_total_size_exceeded: Maximum total size exceeded
 warehouse.form.filepond.max_total_size: Maximum total file size is {filesize}
+
+
+# ... (previous warehouse translations)
+
+# Product
+product.list.title: Product List
+product.new.title: New Product
+product.edit.title: Edit Product
+product.show.title: Product Details
+product.list.no_products: No products found
+
+product.table.id: ID
+product.table.name: Name
+product.table.year_edition: Year
+product.table.language: Language
+product.table.variant: Variant
+product.table.images: Images
+product.table.image_count: image
+product.table.images_count: images
+product.table.created_at: Created at
+product.table.actions: Actions
+
+product.form.name: Product Name
+product.form.name.placeholder: e.g. COTE Magazine - February 2024
+product.form.year_edition: Edition Year
+product.form.year_edition.placeholder: 2024
+product.form.language: Language
+product.form.language.placeholder: Select a language
+product.form.language.french: French
+product.form.language.german: German
+product.form.language.italian: Italian
+product.form.language.english: English
+product.form.variant: Variant
+product.form.variant.placeholder: e.g. Special Edition, Collector
+product.form.images: Images
+product.form.add_images: Add Images
+product.form.existing_images: Existing Images
+product.form.images_help: Accepted formats JPEG, PNG, WebP, GIF. Max size 5MB per image
+product.form.images.invalid_type: Please upload a valid image
+
+product.actions.new: New Product
+product.actions.edit: Edit
+product.actions.show: View
+product.actions.delete: Delete
+product.actions.delete_image: Delete Image
+
+product.confirm_delete: Are you sure you want to delete this product?
+product.confirm_delete_image: Are you sure you want to delete this image?
+product.created_successfully: Product created successfully
+product.updated_successfully: Product updated successfully
+product.deleted_successfully: Product deleted successfully
+product.image_deleted_successfully: Image deleted successfully
+product.error_deleting_image: Error deleting image
+product.network_error: Network error. Please try again.
+
+product.form.filepond.label_idle: Drag & Drop your images or <span class="filepond--label-action">Browse</span>
+product.form.filepond.invalid_field: Field contains invalid files
+product.form.filepond.max_size_exceeded: File is too large
+product.form.filepond.max_size: Maximum file size is {filesize}
+
+breadcrumb.products: Products
