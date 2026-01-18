@@ -385,3 +385,24 @@ distribution.confirm_cancel: 'Êtes-vous sûr de vouloir annuler cette distribut
 distribution.status.unknown: 'Statut inconnu'
 nav.distributions: 'Distributions'
 
+stats.products_stock: 'Produits en Stock'
+stats.total_products: '%count% produits différents'
+stats.racks: 'Rayons'
+stats.warehouses: '%count% entrepôts'
+stats.products_distributed: 'Produits Distribués'
+stats.total_distributions: '%count% distributions'
+stats.distributions: 'distributions'
+stats.distribution_status: 'Statut des Distributions'
+
+
+activities.product: 'Produit'
+activities.quantity: 'Quantité'
+activities.destination: 'Destination'
+
+activities.no_activities: 'Aucune activité récente'
+
+quick_access.products: 'Produits'
+quick_access.racks: 'Rayons'
+
+quick_stats.racks_active: 'Rayons actifs'
+

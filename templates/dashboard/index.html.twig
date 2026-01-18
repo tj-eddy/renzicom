@@ -17,7 +17,7 @@
     <section class="row">
         <div class="col-12 col-lg-9">
             <div class="row">
-                {# Total des Magazines en Stock #}
+                {# Total des Produits en Stock #}
                 <div class="col-6 col-lg-4 col-md-6">
                     <div class="card">
                         <div class="card-body px-4 py-4-5">
@@ -28,10 +28,10 @@
                                     </div>
                                 </div>
                                 <div class="col-md-8 col-lg-12 col-xl-12 col-xxl-7">
-                                    <h6 class="text-muted font-semibold">{{ 'stats.magazines_stock'|trans }}</h6>
-                                    <h6 class="font-extrabold mb-0">731</h6>
-                                    <small class="text-success">
-                                        <i class="bi bi-arrow-up-short"></i> {{ 'stats.magazines_stock_change'|trans }}
+                                    <h6 class="text-muted font-semibold">{{ 'stats.products_stock'|trans }}</h6>
+                                    <h6 class="font-extrabold mb-0">{{ total_stock|number_format(0, ',', ' ') }}</h6>
+                                    <small class="text-muted">
+                                        {{ 'stats.total_products'|trans({'%count%': total_products}) }}
                                     </small>
                                 </div>
                             </div>
@@ -39,7 +39,7 @@
                     </div>
                 </div>
 
-                {# Total des Presentoirs #}
+                {# Total des Rayons #}
                 <div class="col-6 col-lg-4 col-md-6">
                     <div class="card">
                         <div class="card-body px-4 py-4-5">
@@ -50,10 +50,10 @@
                                     </div>
                                 </div>
                                 <div class="col-md-8 col-lg-12 col-xl-12 col-xxl-7">
-                                    <h6 class="text-muted font-semibold">{{ 'stats.presentoirs'|trans }}</h6>
-                                    <h6 class="font-extrabold mb-0">6</h6>
+                                    <h6 class="text-muted font-semibold">{{ 'stats.racks'|trans }}</h6>
+                                    <h6 class="font-extrabold mb-0">{{ total_racks }}</h6>
                                     <small class="text-muted">
-                                        <i class="bi bi-dash"></i> {{ 'stats.presentoirs_change'|trans }}
+                                        {{ 'stats.warehouses'|trans({'%count%': total_warehouses}) }}
                                     </small>
                                 </div>
                             </div>
@@ -61,7 +61,7 @@
                     </div>
                 </div>
 
-                {# Magazines Distribués #}
+                {# Produits Distribués #}
                 <div class="col-6 col-lg-4 col-md-6">
                     <div class="card">
                         <div class="card-body px-4 py-4-5">
@@ -72,35 +72,55 @@
                                     </div>
                                 </div>
                                 <div class="col-md-8 col-lg-12 col-xl-12 col-xxl-7">
-                                    <h6 class="text-muted font-semibold">{{ 'stats.magazines_distributed'|trans }}</h6>
-                                    <h6 class="font-extrabold mb-0">0</h6>
+                                    <h6 class="text-muted font-semibold">{{ 'stats.products_distributed'|trans }}</h6>
+                                    <h6 class="font-extrabold mb-0">{{ total_distributed_quantity|number_format(0, ',', ' ') }}</h6>
                                     <small class="text-muted">
-                                        <i class="bi bi-dash"></i> {{ 'stats.magazines_distributed_change'|trans }}
+                                        {{ 'stats.total_distributions'|trans({'%count%': total_distributions}) }}
                                     </small>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
+            </div>
 
-                {# Comptes Utilisateurs #}
-{#                <div class="col-6 col-lg-4 col-md-6">#}
-{#                    <div class="card">#}
-{#                        <div class="card-body px-4 py-4-5">#}
-{#                            <div class="row">#}
-{#                                <div class="col-md-4 col-lg-12 col-xl-12 col-xxl-5 d-flex justify-content-start">#}
-{#                                    <div class="stats-icon red mb-2">#}
-{#                                        <i class="iconly-boldProfile"></i>#}
-{#                                    </div>#}
-{#                                </div>#}
-{#                                <div class="col-md-8 col-lg-12 col-xl-12 col-xxl-7">#}
-{#                                    <h6 class="text-muted font-semibold">{{ 'stats.user_accounts'|trans }}</h6>#}
-{#                                    <h6 class="font-extrabold mb-0">{{ total_users|default(0) }}</h6>#}
-{#                                </div>#}
-{#                            </div>#}
-{#                        </div>#}
-{#                    </div>#}
-{#                </div>#}
+            {# Statistiques des distributions en cours #}
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h4>{{ 'stats.distribution_status'|trans }}</h4>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="d-flex align-items-center mb-3">
+                                        <div>
+                                            <h5 class="mb-0">{{ 'distribution.status.preparing'|trans }}</h5>
+                                            <h6 class="text-muted mb-0">{{ distributions_preparing }} {{ 'stats.distributions'|trans }}</h6>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="d-flex align-items-center mb-3">
+                                        <div>
+                                            <h5 class="mb-0">{{ 'distribution.status.in_progress'|trans }}</h5>
+                                            <h6 class="text-muted mb-0">{{ distributions_in_progress }} {{ 'stats.distributions'|trans }}</h6>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="d-flex align-items-center mb-3">
+                                        <div>
+                                            <h5 class="mb-0">{{ 'distribution.status.delivered'|trans }}</h5>
+                                            <h6 class="text-muted mb-0">{{ total_distributions - distributions_preparing - distributions_in_progress }} {{ 'stats.distributions'|trans }}</h6>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
 
             {# Statistiques des rôles #}
@@ -114,34 +134,25 @@
                             <div class="row">
                                 <div class="col-md-4">
                                     <div class="d-flex align-items-center mb-3">
-{#                                        <div class="avatar avatar-lg bg-primary me-3">#}
-{#                                            <i class="bi bi-shield-check text-white"></i>#}
-{#                                        </div>#}
                                         <div>
                                             <h5 class="mb-0">{{ 'stats.role.admin'|trans }}</h5>
-                                            <h6 class="text-muted mb-0">{{ 'stats.role.accounts'|trans({'%count%': admin_count|default(0)}, 'messages') }}</h6>
+                                            <h6 class="text-muted mb-0">{{ 'stats.role.accounts'|trans({'%count%': admin_count}) }}</h6>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="col-md-4">
                                     <div class="d-flex align-items-center mb-3">
-{#                                        <div class="avatar avatar-lg bg-success me-3">#}
-{#                                            <i class="bi bi-person-check text-white"></i>#}
-{#                                        </div>#}
                                         <div>
                                             <h5 class="mb-0">{{ 'stats.role.driver'|trans }}</h5>
-                                            <h6 class="text-muted mb-0">{{ 'stats.role.accounts'|trans({'%count%': driver_count|default(0)}) }}</h6>
+                                            <h6 class="text-muted mb-0">{{ 'stats.role.accounts'|trans({'%count%': driver_count}) }}</h6>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="col-md-4">
                                     <div class="d-flex align-items-center mb-3">
-{#                                        <div class="avatar avatar-lg bg-info me-3">#}
-{#                                            <i class="bi bi-people text-white"></i>#}
-{#                                        </div>#}
                                         <div>
                                             <h5 class="mb-0">{{ 'stats.role.statistics'|trans }}</h5>
-                                            <h6 class="text-muted mb-0">{{ 'stats.role.accounts'|trans({'%count%': statistics_count|default(0)}) }}</h6>
+                                            <h6 class="text-muted mb-0">{{ 'stats.role.accounts'|trans({'%count%': statistics_count}) }}</h6>
                                         </div>
                                     </div>
                                 </div>
@@ -178,31 +189,40 @@
                                 <table class="table table-hover">
                                     <thead>
                                     <tr>
-                                        <th>{{ 'activities.action'|trans }}</th>
+                                        <th>{{ 'activities.product'|trans }}</th>
+                                        <th>{{ 'activities.quantity'|trans }}</th>
                                         <th>{{ 'activities.user'|trans }}</th>
+                                        <th>{{ 'activities.destination'|trans }}</th>
                                         <th>{{ 'activities.date'|trans }}</th>
                                         <th>{{ 'activities.status'|trans }}</th>
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    <tr>
-                                        <td><i class="bi bi-box-seam text-primary"></i> {{ 'activities.distribution'|trans }}</td>
-                                        <td>{{ 'activities.user.admin'|trans }}</td>
-                                        <td>{{ 'now'|date('d/m/Y H:i') }}</td>
-                                        <td><span class="badge bg-success">{{ 'activities.status.completed'|trans }}</span></td>
-                                    </tr>
-                                    <tr>
-                                        <td><i class="bi bi-person-plus text-info"></i> {{ 'activities.new_user'|trans }}</td>
-                                        <td>{{ 'activities.user.system'|trans }}</td>
-                                        <td>{{ 'now'|date('d/m/Y H:i') }}</td>
-                                        <td><span class="badge bg-info">{{ 'activities.status.info'|trans }}</span></td>
-                                    </tr>
-                                    <tr>
-                                        <td><i class="bi bi-truck text-warning"></i> {{ 'activities.delivery'|trans }}</td>
-                                        <td>{{ 'activities.user.driver'|trans }}</td>
-                                        <td>{{ 'now'|date('d/m/Y H:i') }}</td>
-                                        <td><span class="badge bg-warning">{{ 'activities.status.in_progress'|trans }}</span></td>
-                                    </tr>
+                                    {% for activity in recent_activities %}
+                                        <tr>
+                                            <td>
+                                                <i class="bi bi-box-seam text-primary"></i>
+                                                {{ activity.product ? activity.product.name : 'N/A' }}
+                                            </td>
+                                            <td>
+                                                <span class="badge bg-primary">{{ activity.quantity }}</span>
+                                            </td>
+                                            <td>{{ activity.user ? activity.user.name : 'N/A' }}</td>
+                                            <td>
+                                                <small>{{ activity.destination|slice(0, 30) }}{% if activity.destination|length > 30 %}...{% endif %}</small>
+                                            </td>
+                                            <td>{{ activity.createAt|date('d/m/Y H:i') }}</td>
+                                            <td>
+                                                <span class="badge {{ activity.statusBadgeClass }}">
+                                                    {{ activity.statusLabel|trans }}
+                                                </span>
+                                            </td>
+                                        </tr>
+                                    {% else %}
+                                        <tr>
+                                            <td colspan="6" class="text-center">{{ 'activities.no_activities'|trans }}</td>
+                                        </tr>
+                                    {% endfor %}
                                     </tbody>
                                 </table>
                             </div>
@@ -220,17 +240,17 @@
                 </div>
                 <div class="card-content pb-4">
                     <div class="px-4 py-3">
-                        <a href="{{ path('app_user_index') }}" class="btn btn-primary btn-block mb-2">
+                        <a href="{{ path('app_user_index') }}" class="btn btn-primary btn-block mb-2 w-100">
                             <i class="bi bi-people"></i> {{ 'quick_access.users'|trans }}
                         </a>
-                        <a href="{{ path('app_product_index') }}" class="btn btn-success btn-block mb-2">
-                            <i class="bi bi-box-seam"></i> {{ 'quick_access.magazines'|trans }}
+                        <a href="{{ path('app_product_index') }}" class="btn btn-success btn-block mb-2 w-100">
+                            <i class="bi bi-box-seam"></i> {{ 'quick_access.products'|trans }}
                         </a>
-                        <a href="#" class="btn btn-info btn-block mb-2">
+                        <a href="{{ path('app_distribution_index') }}" class="btn btn-info btn-block mb-2 w-100">
                             <i class="bi bi-truck"></i> {{ 'quick_access.distributions'|trans }}
                         </a>
-                        <a href="{{ path('app_rack_index') }}" class="btn btn-warning btn-block">
-                            <i class="bi bi-bookmark"></i> {{ 'quick_access.presentoirs'|trans }}
+                        <a href="{{ path('app_rack_index') }}" class="btn btn-warning btn-block w-100">
+                            <i class="bi bi-bookmark"></i> {{ 'quick_access.racks'|trans }}
                         </a>
                     </div>
                 </div>
@@ -242,26 +262,32 @@
                 <div class="card-body">
                     <div class="d-flex justify-content-between mb-3">
                         <span>{{ 'quick_stats.stock_available'|trans }}</span>
-                        <span class="font-bold">97%</span>
+                        <span class="font-bold">{{ stock_percentage }}%</span>
                     </div>
                     <div class="progress mb-3" style="height: 10px;">
-                        <div class="progress-bar bg-success" role="progressbar" style="width: 97%"></div>
+                        <div class="progress-bar {% if stock_percentage > 80 %}bg-success{% elseif stock_percentage > 50 %}bg-warning{% else %}bg-danger{% endif %}"
+                             role="progressbar"
+                             style="width: {{ stock_percentage }}%"></div>
                     </div>
 
                     <div class="d-flex justify-content-between mb-3">
                         <span>{{ 'quick_stats.distributions'|trans }}</span>
-                        <span class="font-bold">0%</span>
+                        <span class="font-bold">{{ distribution_percentage }}%</span>
                     </div>
                     <div class="progress mb-3" style="height: 10px;">
-                        <div class="progress-bar bg-danger" role="progressbar" style="width: 0%"></div>
+                        <div class="progress-bar bg-info"
+                             role="progressbar"
+                             style="width: {{ distribution_percentage }}%"></div>
                     </div>
 
                     <div class="d-flex justify-content-between mb-3">
-                        <span>{{ 'quick_stats.presentoirs_active'|trans }}</span>
-                        <span class="font-bold">100%</span>
+                        <span>{{ 'quick_stats.racks_active'|trans }}</span>
+                        <span class="font-bold">{{ active_racks_percentage }}%</span>
                     </div>
                     <div class="progress" style="height: 10px;">
-                        <div class="progress-bar bg-primary" role="progressbar" style="width: 100%"></div>
+                        <div class="progress-bar bg-primary"
+                             role="progressbar"
+                             style="width: {{ active_racks_percentage }}%"></div>
                     </div>
                 </div>
             </div>
@@ -274,8 +300,8 @@
     <script>
         var optionsDistribution = {
             series: [{
-                name: "{{ 'distribution.magazines'|trans }}",
-                data: [45, 52, 38, 65, 70, 58, 85, 92, 75, 88, 95, 105]
+                name: "{{ 'distribution.products'|trans }}",
+                data: {{ monthly_distributions|json_encode|raw }}
             }],
             chart: {
                 type: 'bar',
