@@ -2,6 +2,10 @@
 
 {% block title %}{{ 'product.list.title'|trans }}{% endblock %}
 
+{% block stylesheets %}
+    {{ parent() }}
+{% endblock %}
+
 {% block page_title %}
     <div class="page-title">
         <div class="row">
@@ -18,10 +22,6 @@
             </div>
         </div>
     </div>
-{% endblock %}
-
-{% block stylesheets %}
-    <link rel="stylesheet" href="{{ asset('assets/vendors/simple-datatables/style.css') }}">
 {% endblock %}
 
 {% block body %}
@@ -107,7 +107,7 @@
 {% endblock %}
 
 {% block javascripts %}
-    <script src="{{ asset('assets/vendors/simple-datatables/simple-datatables.js') }}"></script>
+    {{ parent() }}
     <script>
         let table1 = document.querySelector('#table1');
         let dataTable = new simpleDatatables.DataTable(table1, {

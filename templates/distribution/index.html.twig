@@ -23,7 +23,7 @@
 {% endblock %}
 
 {% block stylesheets %}
-    <link rel="stylesheet" href="{{ asset('assets/vendors/simple-datatables/style.css') }}">
+    {{ parent() }}
     <style>
         .status-actions {
             display: flex;
@@ -49,7 +49,7 @@
                 <table class="table table-striped" id="table1">
                     <thead>
                     <tr>
-                        <th>{{ 'distribution.table.id'|trans }}</th>
+                        <th>ID</th>
                         <th>{{ 'distribution.table.product'|trans }}</th>
                         <th>{{ 'distribution.table.quantity'|trans }}</th>
                         <th>{{ 'distribution.table.user'|trans }}</th>
@@ -163,7 +163,9 @@
 {% endblock %}
 
 {% block javascripts %}
-    <script src="{{ asset('assets/vendors/simple-datatables/simple-datatables.js') }}"></script>
+
+    {{ parent() }}
+
     <script>
         let table1 = document.querySelector('#table1');
         let dataTable = new simpleDatatables.DataTable(table1, {
