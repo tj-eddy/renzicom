@@ -296,7 +296,7 @@
 {% endblock %}
 
 {% block javascripts %}
-    <script src="{{ asset('assets/vendors/apexcharts/apexcharts.js') }}"></script>
+    {{ parent() }}
     <script>
         var optionsDistribution = {
             series: [{
