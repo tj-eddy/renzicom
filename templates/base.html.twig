@@ -220,14 +220,37 @@
     </div>
 </div>
 
-
-
 {% block javascripts %}
     <script src="{{ asset('assets/vendors/simple-datatables/simple-datatables.js') }}"></script>
     <script src="{{ asset('assets/vendors/perfect-scrollbar/perfect-scrollbar.min.js') }}"></script>
     <script src="{{ asset('assets/js/bootstrap.bundle.min.js') }}"></script>
     <script src="{{ asset('assets/vendors/apexcharts/apexcharts.js') }}"></script>
     <script src="{{ asset('assets/js/main.js') }}"></script>
+    <script>
+        function initDataTable(tableId, options = {}) {
+            let table = document.querySelector(tableId);
+            if (!table) return null;
+            const defaultOptions = {
+                searchable: true,
+                fixedHeight: false,
+                perPage: 10,
+                labels: {
+                    placeholder: "{{ 'datatable.search'|trans }}",
+                    noRows: "{{ 'datatable.no_data'|trans }}",
+                    info: "{{ 'datatable.info'|trans }}"
+                }
+            };
+
+            return new simpleDatatables.DataTable(table, {...defaultOptions, ...options});
+        }
+
+        function confirmDelete(id, formId = null) {
+            if (confirm("{{ 'user.confirm_delete'|trans }}")) {
+                const form = formId ? document.getElementById(formId) : document.getElementById('delete-form-' + id);
+                if (form) form.submit();
+            }
+        }
+    </script>
 {% endblock %}
 </body>
 </html>

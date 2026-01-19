@@ -60,13 +60,22 @@ class Product
     /**
      * @var Collection<int, Stock>
      */
-    #[ORM\OneToMany(targetEntity: Stock::class, mappedBy: 'product')]
+    #[ORM\OneToMany(
+        targetEntity: Stock::class,
+        mappedBy: 'product',
+        cascade: ['remove'],
+        orphanRemoval: true,
+    )]
     private Collection $stocks;
 
     /**
      * @var Collection<int, Distribution>
      */
-    #[ORM\OneToMany(targetEntity: Distribution::class, mappedBy: 'product')]
+    #[ORM\OneToMany(
+        targetEntity: Distribution::class,
+        mappedBy: 'product',cascade: ['remove'],
+        orphanRemoval: true
+    )]
     private Collection $distributions;
 
     public function __construct()

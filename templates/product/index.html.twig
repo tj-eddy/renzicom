@@ -34,7 +34,7 @@
                 </a>
             </div>
             <div class="card-body">
-                <table class="table table-striped" id="table1">
+                <table class="table table-striped" id="product-table">
                     <thead>
                     <tr>
                         <th>{{ 'product.table.id'|trans }}</th>
@@ -109,22 +109,6 @@
 {% block javascripts %}
     {{ parent() }}
     <script>
-        let table1 = document.querySelector('#table1');
-        let dataTable = new simpleDatatables.DataTable(table1, {
-            searchable: true,
-            fixedHeight: false,
-            perPage: 10,
-            labels: {
-                placeholder: "{{ 'datatable.search'|trans }}",
-                noRows: "{{ 'datatable.no_data'|trans }}",
-                info: "{{ 'datatable.info'|trans }}"
-            }
-        });
-
-        function confirmDelete(productId) {
-            if (confirm("{{ 'product.confirm_delete'|trans }}")) {
-                document.getElementById('delete-form-' + productId).submit();
-            }
-        }
+        initDataTable('#product-table');
     </script>
 {% endblock %}

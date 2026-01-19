@@ -139,6 +139,10 @@ class ComposerStaticInit75e7f8d848176580e9902a32f6f14640
             'Metadata\\' => 9,
             'Masterminds\\' => 12,
         ),
+        'F' =>
+        array (
+            'Faker\\' => 6,
+        ),
         'E' =>
         array (
             'Egulias\\EmailValidator\\' => 23,
@@ -154,9 +158,11 @@ class ComposerStaticInit75e7f8d848176580e9902a32f6f14640
             'Doctrine\\Deprecations\\' => 22,
             'Doctrine\\DBAL\\' => 14,
             'Doctrine\\Common\\Lexer\\' => 22,
+            'Doctrine\\Common\\DataFixtures\\' => 29,
             'Doctrine\\Common\\Collections\\' => 28,
             'Doctrine\\Common\\' => 16,
             'Doctrine\\Bundle\\MigrationsBundle\\' => 33,
+            'Doctrine\\Bundle\\FixturesBundle\\' => 31,
             'Doctrine\\Bundle\\DoctrineBundle\\' => 31,
             'DeepCopy\\' => 9,
         ),
@@ -530,6 +536,10 @@ class ComposerStaticInit75e7f8d848176580e9902a32f6f14640
         array (
             0 => __DIR__ . '/..' . '/masterminds/html5/src',
         ),
+        'Faker\\' =>
+        array (
+            0 => __DIR__ . '/..' . '/fakerphp/faker/src/Faker',
+        ),
         'Egulias\\EmailValidator\\' =>
         array (
             0 => __DIR__ . '/..' . '/egulias/email-validator/src',
@@ -570,6 +580,10 @@ class ComposerStaticInit75e7f8d848176580e9902a32f6f14640
         array (
             0 => __DIR__ . '/..' . '/doctrine/lexer/src',
         ),
+        'Doctrine\\Common\\DataFixtures\\' =>
+        array (
+            0 => __DIR__ . '/..' . '/doctrine/data-fixtures/src',
+        ),
         'Doctrine\\Common\\Collections\\' =>
         array (
             0 => __DIR__ . '/..' . '/doctrine/collections/src',
@@ -581,6 +595,10 @@ class ComposerStaticInit75e7f8d848176580e9902a32f6f14640
         'Doctrine\\Bundle\\MigrationsBundle\\' =>
         array (
             0 => __DIR__ . '/..' . '/doctrine/doctrine-migrations-bundle/src',
+        ),
+        'Doctrine\\Bundle\\FixturesBundle\\' =>
+        array (
+            0 => __DIR__ . '/..' . '/doctrine/doctrine-fixtures-bundle/src',
         ),
         'Doctrine\\Bundle\\DoctrineBundle\\' =>
         array (

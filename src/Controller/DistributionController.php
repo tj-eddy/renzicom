@@ -182,7 +182,12 @@ class DistributionController extends AbstractController
             return $this->redirectToRoute('app_distribution_index');
         }
 
+        if ($status == Distribution::STATUS_CANCELLED){
+
+
+        }
         $distribution->setStatus($status);
+
         $entityManager->flush();
 
         $this->addFlash('success', 'Statut mis à jour avec succès');
