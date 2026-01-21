@@ -406,3 +406,12 @@ quick_access.racks: 'Rayons'
 
 quick_stats.racks_active: 'Rayons actifs'
 
+rack.products.title: "Produits du rack"
+rack.products.empty: "Aucun produit dans ce rack"
+rack.address: "Adresse"
+
+product.table.image: "Image"
+product.table.year: "Année"
+
+error.loading_products: "Erreur lors du chargement des produits"
+

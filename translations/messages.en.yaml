@@ -387,3 +387,11 @@ distribution.confirm_cancel: 'Are you sure you want to cancel this distribution?
 distribution.status.unknown: 'Unknown Status'
 nav.distributions: 'Distributions'
 
+rack.products.title: "Rack Products"
+rack.products.empty: "No products in this rack"
+rack.address: "Address"
+
+product.table.image: "Image"
+product.table.year: "Year"
+
+error.loading_products: "Error loading products"

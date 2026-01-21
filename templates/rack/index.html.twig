@@ -52,11 +52,16 @@
                             <td>{{ rack.address }}</td>
                             <td>
                                 <div class="btn-group" role="group">
-                                    <a href="{{ path('app_rack_show', {'id': rack.id, '_locale': app.request.locale}) }}"
-                                       class="btn btn-sm btn-info"
-                                       title="{{ 'rack.actions.show'|trans }}">
+                                    <button type="button"
+                                            class="btn btn-outline-info btn-show-products"
+                                            data-rack-id="{{ rack.id }}"
+                                            data-bs-toggle="modal"
+                                            data-bs-target="#products-modal"
+                                            title="{{ 'rack.actions.show'|trans }}">
                                         <i class="bi bi-eye"></i>
-                                    </a>
+                                    </button>
+
+
                                     <a href="{{ path('app_rack_edit', {'id': rack.id, '_locale': app.request.locale}) }}"
                                        class="btn btn-sm btn-warning"
                                        title="{{ 'rack.actions.edit'|trans }}">
@@ -87,11 +92,132 @@
             </div>
         </div>
     </section>
+
+    {# Modal pour afficher les produits #}
+    <div class="modal fade" id="products-modal" tabindex="-1" aria-labelledby="productsModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="productsModalLabel">
+                        <i class="bi bi-box-seam"></i>
+                        <span id="rack-name">{{ 'rack.products.title'|trans }}</span>
+                    </h4>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div id="loading-spinner" class="text-center py-5">
+                        <div class="spinner-border text-primary" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                    </div>
+
+                    <div id="products-content" style="display: none;">
+                        <div class="mb-3">
+                            <strong>{{ 'rack.address'|trans }}:</strong> <span id="rack-address"></span>
+                        </div>
+
+                        <table class="table table-hover">
+                            <thead>
+                            <tr>
+                                <th>{{ 'product.table.image'|trans }}</th>
+                                <th>{{ 'product.table.name'|trans }}</th>
+                                <th>{{ 'product.table.year'|trans }}</th>
+                                <th>{{ 'product.table.language'|trans }}</th>
+                                <th>{{ 'stock.table.quantity'|trans }}</th>
+                                <th>{{ 'stock.table.note'|trans }}</th>
+                            </tr>
+                            </thead>
+                            <tbody id="products-list">
+                            {# Rempli dynamiquement via AJAX #}
+                            </tbody>
+                        </table>
+
+                        <div id="no-products" class="alert alert-info" style="display: none;">
+                            <i class="bi bi-info-circle"></i> {{ 'rack.products.empty'|trans }}
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                        <i class="bi bi-x-circle"></i> {{ 'actions.close'|trans }}
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
 {% endblock %}
 
 {% block javascripts %}
     {{ parent() }}
+    <script src="https://code.jquery.com/jquery-4.0.0.min.js"
+            integrity="sha256-OaVG6prZf4v69dPg6PhVattBXkcOWQB62pdZ3ORyrao=" crossorigin="anonymous"></script>
     <script>
         initDataTable('#rack-table');
+        $(document).ready(function () {
+            // Gestionnaire pour le bouton "Afficher les produits"
+            $('#rack-table').on('click', '.btn-show-products', function () {
+                const rackId = $(this).data('rack-id');
+                loadRackProducts(rackId);
+            });
+        });
+
+        function loadRackProducts(rackId) {
+            // Afficher le spinner
+            $('#loading-spinner').show();
+            $('#products-content').hide();
+
+            // Requête AJAX
+            $.ajax({
+                url: '{{ path('app_rack_products', {'id': '__ID__', '_locale': app.request.locale})|raw }}'.replace('__ID__', rackId),
+                type: 'GET',
+                dataType: 'json',
+                success: function (data) {
+                    console.log(data);
+                    // Masquer le spinner
+                    $('#loading-spinner').hide();
+                    $('#products-content').show();
+
+                    // Remplir les informations du rack
+                    $('#rack-name').text(data.rack.name);
+                    $('#rack-address').text(data.rack.address || '-');
+
+                    // Remplir la liste des produits
+                    const $productsList = $('#products-list');
+                    $productsList.empty();
+
+                    if (data.products.length === 0) {
+                        $('#no-products').show();
+                        $productsList.closest('table').hide();
+                    } else {
+                        $('#no-products').hide();
+                        $productsList.closest('table').show();
+
+                        $.each(data.products, function (index, product) {
+                            const imageHtml = product.image
+                                ? `<img src="${product.image}" alt="${product.name}" style="width: 50px; height: 50px; object-fit: cover;" class="rounded">`
+                                : '<div class="bg-secondary rounded" style="width: 50px; height: 50px;"></div>';
+
+                            const row = `
+                                <tr>
+                                    <td>${imageHtml}</td>
+                                    <td>${product.name}</td>
+                                    <td>${product.year_edition || '-'}</td>
+                                    <td>${product.language || '-'}</td>
+                                    <td><span class="badge bg-primary">${product.quantity}</span></td>
+                                    <td>${product.note || '-'}</td>
+                                </tr>
+                            `;
+
+                            $productsList.append(row);
+                        });
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.error('Error:', error);
+                    $('#loading-spinner').hide();
+                    alert('{{ 'error.loading_products'|trans }}');
+                }
+            });
+        }
     </script>
 {% endblock %}

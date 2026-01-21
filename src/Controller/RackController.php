@@ -47,11 +47,36 @@ final class RackController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}', name: 'app_rack_show', methods: ['GET'])]
-    public function show(Rack $rack): Response
+
+    #[Route('/rack/{id}/products', name: 'app_rack_products', methods: ['GET'])]
+    public function getRackProducts(Rack $rack): \Symfony\Component\HttpFoundation\JsonResponse
     {
-        return $this->render('rack/show.html.twig', [
-            'rack' => $rack,
+        $products = [];
+
+
+        foreach ($rack->getStocks() as $stock) {
+
+            $product = $stock->getProduct();
+            $images = $product->getImages();
+            $products[] = [
+                'id' => $product->getId(),
+                'name' => $product->getName(),
+                'image' => '/uploads/products/'.$images->first()->getFilename(),
+                'year_edition' => $product->getYearEdition(),
+                'language' => $product->getLanguage(),
+                'quantity' => $stock->getQuantity(),
+                'stock_id' => $stock->getId(),
+                'note' => $stock->getNote(),
+            ];
+        }
+
+        return $this->json([
+            'rack' => [
+                'id' => $rack->getId(),
+                'name' => $rack->getName(),
+                'address' => $rack->getAddress(),
+            ],
+            'products' => $products
         ]);
     }
 
