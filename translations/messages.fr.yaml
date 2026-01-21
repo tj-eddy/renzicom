@@ -426,4 +426,5 @@ stock.actions.export : 'Exporter'
 
 nav.confirm_logout_title: "Confirmer la déconnexion"
 nav.confirm_logout_message: "Êtes-vous sûr de vouloir vous déconnecter ?"
-
+actions.confirm_delete_title: "Confirmer la suppression"
+actions.delete: "Supprimer"

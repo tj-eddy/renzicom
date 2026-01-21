@@ -19,7 +19,33 @@
         <link rel="stylesheet" href="{{ asset('assets/vendors/simple-datatables/style.css') }}">
     {% endblock %}
 </head>
-
+{# Modal de confirmation de suppression - #}
+<div class="modal fade text-left" id="deleteConfirmModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                    {{ 'actions.confirm_delete_title'|trans }}
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p class="mb-0">{{ 'user.confirm_delete'|trans }}</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-light-secondary btn-sm" data-bs-dismiss="modal">
+                    <i class="bi bi-x-circle me-1"></i>
+                    {{ 'actions.cancel'|trans }}
+                </button>
+                <button type="button" class="btn btn-danger btn-sm" id="btnConfirmDelete">
+                    <i class="bi bi-trash me-1"></i>
+                    {{ 'actions.delete'|trans }}
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
 <body>
 <div id="app">
 
@@ -312,6 +338,43 @@
         function confirmLogout() {
             $('#logoutConfirmModal').modal('show');
         }
+    </script>
+    <script>
+        var deleteFormToSubmit = null;
+
+        // Fonction de confirmation de suppression
+        function confirmDelete(id, formId = null) {
+            // Récupérer le formulaire
+            var form = formId
+                ? $('#' + formId)
+                : $('#delete-form-' + id);
+
+            if (form.length) {
+                // Stocker le formulaire
+                deleteFormToSubmit = form;
+
+                // Ouvrir le modal
+                $('#deleteConfirmModal').modal('show');
+            }
+        }
+
+        $(document).ready(function() {
+            // Quand on clique sur le bouton de confirmation dans le modal
+            $('#btnConfirmDelete').on('click', function() {
+                // Soumettre le formulaire
+                if (deleteFormToSubmit) {
+                    deleteFormToSubmit.submit();
+                }
+
+                // Fermer le modal
+                $('#deleteConfirmModal').modal('hide');
+            });
+
+            // Réinitialiser quand le modal se ferme
+            $('#deleteConfirmModal').on('hidden.bs.modal', function() {
+                deleteFormToSubmit = null;
+            });
+        });
     </script>
     <script>
         function initExport(exportUrl) {
