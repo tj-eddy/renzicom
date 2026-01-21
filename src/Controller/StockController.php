@@ -107,15 +107,6 @@ final class StockController extends AbstractController
         ]);
     }
 
-
-    #[Route('/{id}', name: 'app_stock_show', methods: ['GET'])]
-    public function show(Stock $stock): Response
-    {
-        return $this->render('stock/show.html.twig', [
-            'stock' => $stock,
-        ]);
-    }
-
     #[Route('/{id}/edit', name: 'app_stock_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Stock $stock, EntityManagerInterface $entityManager): Response
     {

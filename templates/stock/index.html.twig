@@ -71,11 +71,6 @@
                             <td>{{ stock.note|default('-') }}</td>
                             <td>
                                 <div class="btn-group" role="group">
-                                    <a href="{{ path('app_stock_show', {'id': stock.id}) }}"
-                                       class="btn btn-sm btn-info"
-                                       title="{{ 'stock.actions.show'|trans }}">
-                                        <i class="bi bi-eye"></i>
-                                    </a>
                                     <a href="{{ path('app_stock_edit', {'id': stock.id}) }}"
                                        class="btn btn-sm btn-warning"
                                        title="{{ 'stock.actions.edit'|trans }}">

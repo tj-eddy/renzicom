@@ -57,14 +57,6 @@ final class WarehouseController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}', name: 'app_warehouse_show', methods: ['GET'])]
-    public function show(Warehouse $warehouse): Response
-    {
-        return $this->render('warehouse/show.html.twig', [
-            'warehouse' => $warehouse,
-        ]);
-    }
-
     #[Route('/{id}/edit', name: 'app_warehouse_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Warehouse $warehouse, EntityManagerInterface $entityManager): Response
     {

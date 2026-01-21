@@ -1,13 +1,17 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Edit Stock{% endblock %}
+{% block title %}{{ 'stock.form.title_edit'|trans }}{% endblock %}
 
 {% block body %}
-    <h1>Edit Stock</h1>
+    <div class="card">
+        <div class="card-header">
+            <h4 class="card-title">{{ 'stock.form.title_edit'|trans }}</h4>
+        </div>
+        <div class="card-content">
+            <div class="card-body">
+                {{ include('stock/_form.html.twig', {'button_label': 'Create'}) }}
+            </div>
+        </div>
 
-    {{ include('stock/_form.html.twig', {'button_label': 'Update'}) }}
-
-    <a href="{{ path('app_stock_index') }}">back to list</a>
-
-    {{ include('stock/_delete_form.html.twig') }}
+    </div>
 {% endblock %}

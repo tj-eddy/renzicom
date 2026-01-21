@@ -42,7 +42,6 @@
                         <th>{{ 'product.table.year_edition'|trans }}</th>
 {#                        <th>{{ 'product.table.language'|trans }}</th>#}
                         <th>{{ 'product.table.variant'|trans }}</th>
-                        <th>{{ 'product.table.images'|trans }}</th>
                         <th>{{ 'product.table.created_at'|trans }}</th>
                         <th>{{ 'product.table.actions'|trans }}</th>
                     </tr>
@@ -55,24 +54,9 @@
                             <td>{{ product.yearEdition ?? '-' }}</td>
 {#                            <td>{{ product.language|upper ?? '-' }}</td>#}
                             <td>{{ product.variant ?? '-' }}</td>
-                            <td>
-                                <span class="badge bg-info">
-                                    {{ product.images|length }}
-                                    {% if product.images|length > 1 %}
-                                        {{ 'product.table.images_count'|trans }}
-                                    {% else %}
-                                        {{ 'product.table.image_count'|trans }}
-                                    {% endif %}
-                                </span>
-                            </td>
                             <td>{{ product.createdAt|date('d/m/Y H:i') }}</td>
                             <td>
                                 <div class="btn-group" role="group">
-                                    <a href="{{ path('app_product_show', {'id': product.id, '_locale': app.request.locale}) }}"
-                                       class="btn btn-sm btn-info"
-                                       title="{{ 'product.actions.show'|trans }}">
-                                        <i class="bi bi-eye"></i>
-                                    </a>
                                     <a href="{{ path('app_product_edit', {'id': product.id, '_locale': app.request.locale}) }}"
                                        class="btn btn-sm btn-warning"
                                        title="{{ 'product.actions.edit'|trans }}">
