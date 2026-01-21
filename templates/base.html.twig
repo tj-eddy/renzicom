@@ -313,6 +313,44 @@
             $('#logoutConfirmModal').modal('show');
         }
     </script>
+    <script>
+        function initExport(exportUrl) {
+            $('#btnExport').on('click', function() {
+                $('#exportConfirmModal').modal('show');
+            });
+
+            $('#btnConfirmExport').on('click', function() {
+                $('#exportConfirmModal').modal('hide');
+                $('#exportProgressModal').modal('show');
+
+                $.ajax({
+                    url: exportUrl,
+                    type: 'POST',
+                    dataType: 'json',
+                    success: function(response) {
+                        if (response.success) {
+                            const link = document.createElement('a');
+                            link.href = response.download_url;
+                            link.download = response.filename;
+                            document.body.appendChild(link);
+                            link.click();
+                            document.body.removeChild(link);
+
+                            setTimeout(function() {
+                                $('#exportProgressModal').modal('hide');
+                            }, 1500);
+                        } else {
+                            $('#exportProgressModal').modal('hide');
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        $('#exportProgressModal').modal('hide');
+                        console.error('Export error:', error);
+                    }
+                });
+            });
+        }
+    </script>
 {% endblock %}
 </body>
 </html>

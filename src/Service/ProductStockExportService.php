@@ -7,14 +7,15 @@ use App\Repository\ProductRepository;
 use App\Repository\StockRepository;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
-class ProductStockExportService
+readonly class ProductStockExportService
 {
     public function __construct(
         private ProductRepository $productRepository,
-        private StockRepository $stockRepository,
+        private StockRepository   $stockRepository,
         #[Autowire('%kernel.project_dir%')]
-        private string $projectDir
-    ) {
+        private string            $projectDir
+    )
+    {
     }
 
     public function exportToCSV(): string
@@ -33,7 +34,7 @@ class ProductStockExportService
         $handle = fopen($filepath, 'w');
 
         // BOM UTF-8 pour Excel
-        fprintf($handle, chr(0xEF).chr(0xBB).chr(0xBF));
+        fprintf($handle, chr(0xEF) . chr(0xBB) . chr(0xBF));
 
         // En-têtes
         $headers = [

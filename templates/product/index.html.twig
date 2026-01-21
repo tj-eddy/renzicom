@@ -29,6 +29,9 @@
         <div class="card">
             <div class="card-header d-flex justify-content-between align-items-center">
                 <h4 class="mb-0">{{ 'product.list.title'|trans }}</h4>
+                <button type="button" class="btn btn-success me-2" id="btnExport">
+                    <i class="bi bi-download"></i> {{ 'stock.actions.export'|trans }}
+                </button>
                 <a href="{{ path('app_product_new', {'_locale': app.request.locale}) }}" class="btn btn-primary">
                     <i class="bi bi-plus-circle"></i> {{ 'product.actions.new'|trans }}
                 </a>
@@ -88,11 +91,91 @@
             </div>
         </div>
     </section>
+
+    {# Modal de confirmation #}
+
+    <div class="modal fade text-left" id="exportConfirmModal" tabindex="-1" role="dialog"
+         aria-labelledby="myModalLabel19" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-sm"
+             role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="myModalLabel19">{{ 'stock.export.confirm.title'|trans }}</h4>
+                    <button type="button" class="close" data-bs-dismiss="modal"
+                            aria-label="Close">
+                        <i data-feather="x"></i>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    {{ 'stock.export.confirm.message'|trans }}
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-light-secondary btn-sm"
+                            data-bs-dismiss="modal">
+                        <i class="bx bx-x d-block d-sm-none"></i>
+                        <span class="d-sm-block d-none">{{ 'actions.cancel'|trans }}</span>
+                    </button>
+                    <button id="btnConfirmExport" type="button" class="btn btn-primary ml-1 btn-sm"
+                            data-bs-dismiss="modal">
+                        <i class="bx bx-check d-block d-sm-none"></i>
+                        <span class="d-sm-block d-none"> {{ 'stock.export.confirm.yes'|trans }}</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade text-left" id="small" tabindex="-1" role="dialog"
+         aria-labelledby="myModalLabel19" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-sm"
+             role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="myModalLabel19">{{ 'stock.export.confirm.title'|trans }}</h4>
+                    <button type="button" class="close" data-bs-dismiss="modal"
+                            aria-label="Close">
+                        <i data-feather="x"></i>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    {{ 'stock.export.confirm.message'|trans }}
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-light-secondary btn-sm"
+                            data-bs-dismiss="modal">
+                        <i class="bx bx-x d-block d-sm-none"></i>
+                        <span class="d-sm-block d-none">{{ 'actions.cancel'|trans }}</span>
+                    </button>
+                    <button type="button" class="btn btn-primary ml-1 btn-sm" id="btnConfirmExport"
+                            data-bs-dismiss="modal">
+                        <i class="bx bx-check d-block d-sm-none" ></i>
+                        <span class="d-sm-block d-none"> {{ 'stock.export.confirm.yes'|trans }}</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {# Modal de progression #}
+    <div class="modal fade" id="exportProgressModal" tabindex="-1" aria-hidden="true" data-bs-backdrop="static">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-body text-center py-5">
+                    <div class="spinner-border text-success mb-3" role="status" style="width: 3rem; height: 3rem;">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                    <h5 class="mb-2">{{ 'stock.export.progress.title'|trans }}</h5>
+                    <p class="text-muted mb-0">{{ 'stock.export.progress.message'|trans }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
 {% endblock %}
 
 {% block javascripts %}
     {{ parent() }}
     <script>
         initDataTable('#product-table');
+        initExport('{{ path('app_export_products_stock_generate') }}');
     </script>
 {% endblock %}
