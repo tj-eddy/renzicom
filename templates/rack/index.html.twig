@@ -53,7 +53,7 @@
                             <td>
                                 <div class="btn-group" role="group">
                                     <button type="button"
-                                            class="btn btn-outline-info btn-show-products"
+                                            class="btn btn-dark btn-show-products"
                                             data-rack-id="{{ rack.id }}"
                                             data-bs-toggle="modal"
                                             data-bs-target="#products-modal"
@@ -149,7 +149,6 @@
 
 {% block javascripts %}
     {{ parent() }}
-
     <script>
         initDataTable('#rack-table');
         $(document).ready(function () {

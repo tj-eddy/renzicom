@@ -247,7 +247,7 @@
 
         <div class="page-content">
             {% for message in app.flashes('success') %}
-                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                <div class="alert alert-dark alert-dismissible fade show" role="alert">
                     <i class="bi bi-check-circle-fill"></i>
                     {{ message }}
                     <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
@@ -281,8 +281,8 @@
     <script src="{{ asset('assets/js/bootstrap.bundle.min.js') }}"></script>
     <script src="{{ asset('assets/vendors/apexcharts/apexcharts.js') }}"></script>
     <script src="{{ asset('assets/js/main.js') }}"></script>
-    <script src="https://code.jquery.com/jquery-4.0.0.min.js"
-            integrity="sha256-OaVG6prZf4v69dPg6PhVattBXkcOWQB62pdZ3ORyrao=" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <script>
         function initDataTable(tableId, options = {}) {
             let table = document.querySelector(tableId);
@@ -290,12 +290,13 @@
             const defaultOptions = {
                 searchable: true,
                 fixedHeight: false,
-                perPage: 10,
+                perPage: 20,
                 labels: {
                     placeholder: "{{ 'datatable.search'|trans }}",
                     noRows: "{{ 'datatable.no_data'|trans }}",
-                    info: "{{ 'datatable.info'|trans }}"
-                }
+                    info: "{{ 'datatable.info'|trans }}",
+                },
+                perPageSelect: [20, 50, 100, 200],
             };
 
             return new simpleDatatables.DataTable(table, {...defaultOptions, ...options});
