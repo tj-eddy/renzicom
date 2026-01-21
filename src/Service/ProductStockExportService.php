@@ -29,7 +29,7 @@ readonly class ProductStockExportService
             mkdir($dir, 0755, true);
         }
 
-        $products = $this->productRepository->findAll();
+        $products = $this->productRepository->findBy([], ['id' => 'DESC']);
 
         $handle = fopen($filepath, 'w');
 

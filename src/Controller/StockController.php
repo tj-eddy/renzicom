@@ -53,7 +53,7 @@ final class StockController extends AbstractController
     public function index(StockRepository $stockRepository): Response
     {
         return $this->render('stock/index.html.twig', [
-            'stocks' => $stockRepository->findAll(),
+            'stocks' => $stockRepository->findBy([], ['id' => 'DESC']),
         ]);
     }
 

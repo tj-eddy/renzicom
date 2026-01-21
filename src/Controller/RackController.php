@@ -22,7 +22,7 @@ final class RackController extends AbstractController
     public function index(RackRepository $rackRepository): Response
     {
         return $this->render('rack/index.html.twig', [
-            'racks' => $rackRepository->findAll(),
+            'racks' => $rackRepository->findBy([], ['id' => 'DESC']),
         ]);
     }
 

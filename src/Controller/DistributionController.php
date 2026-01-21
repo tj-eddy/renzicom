@@ -24,7 +24,7 @@ class DistributionController extends AbstractController
     {
         $distributions = $entityManager
             ->getRepository(Distribution::class)
-            ->findAll();
+            ->findBy([], ['id' => 'DESC']);
 
         return $this->render('distribution/index.html.twig', [
             'distributions' => $distributions,
@@ -95,7 +95,7 @@ class DistributionController extends AbstractController
         return $this->render('distribution/new.html.twig', [
             'distribution' => $distribution,
             'form' => $form,
-            'warehouses' => $warehouseRepository->findAll(),
+            'warehouses' => $warehouseRepository->findBy([], ['id' => 'DESC']),
             'button_label' => 'create',
         ]);
     }

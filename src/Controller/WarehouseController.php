@@ -19,7 +19,7 @@ final class WarehouseController extends AbstractController
     public function index(WarehouseRepository $warehouseRepository): Response
     {
         return $this->render('warehouse/index.html.twig', [
-            'warehouses' => $warehouseRepository->findAll(),
+            'warehouses' => $warehouseRepository->findBy([], ['id' => 'DESC']),
         ]);
     }
 

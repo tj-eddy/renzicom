@@ -23,7 +23,7 @@ class ProductController extends AbstractController
     #[Route('/', name: 'app_product_index', methods: ['GET'])]
     public function index(EntityManagerInterface $entityManager): Response
     {
-        $products = $entityManager->getRepository(Product::class)->findAll();
+        $products = $entityManager->getRepository(Product::class)->findBy([], ['id' => 'DESC']);
 
         return $this->render('product/index.html.twig', [
             'products' => $products,
