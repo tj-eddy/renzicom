@@ -407,3 +407,5 @@ stock.export.error: "Export error. Please try again."
 actions.cancel: "Cancel"
 stock.actions.export : 'Export'
 
+nav.confirm_logout_title: "Confirm Logout"
+nav.confirm_logout_message: "Are you sure you want to log out?"

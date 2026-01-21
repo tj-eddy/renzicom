@@ -165,18 +165,43 @@
                                     <li><a class="dropdown-item" href="#"><i class="icon-mid bi bi-person me-2"></i>
                                             {{ 'nav.my.profile'|trans }}</a></li>
                                     <hr class="dropdown-divider">
-                                    </li>
                                     <li>
-                                        <form method="post"
-                                              action="{{ path('app_logout') }}"
-                                              onsubmit="return confirm('{{ 'nav.logout.confirm'|trans|e('js') }}')">
-                                            <button type="submit" class="dropdown-item">
-                                                <i class="icon-mid bi bi-box-arrow-left me-2"></i>
-                                                {{ 'nav.logout'|trans }}
-                                            </button>
+                                        <button type="button" class="dropdown-item" onclick="confirmLogout()">
+                                            <i class="icon-mid bi bi-box-arrow-left me-2"></i>
+                                            {{ 'nav.logout'|trans }}
+                                        </button>
+
+                                        <form id="logout-form" method="post" action="{{ path('app_logout') }}" style="display: none;">
+                                            {# CSRF token si nécessaire #}
                                         </form>
                                     </li>
                                 </ul>
+                            </div>
+                            <div class="modal fade text-left" id="logoutConfirmModal" tabindex="-1" role="dialog" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered modal-sm" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header  ">
+                                            <h5 class="modal-title  ">
+                                                <i class="bi bi-box-arrow-left me-2"></i>
+                                                {{ 'nav.confirm_logout_title'|trans }}
+                                            </h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <p class="mb-0">{{ 'nav.confirm_logout_message'|trans }}</p>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-light-secondary btn-sm" data-bs-dismiss="modal">
+                                                <i class="bi bi-x-circle me-1"></i>
+                                                {{ 'actions.cancel'|trans }}
+                                            </button>
+                                            <button type="button" class="btn btn-danger btn-sm" id="btnConfirmLogout">
+                                                <i class="bi bi-box-arrow-left me-1"></i>
+                                                {{ 'nav.logout'|trans }}
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         {% endif %}
                     </div>
@@ -245,12 +270,47 @@
 
             return new simpleDatatables.DataTable(table, {...defaultOptions, ...options});
         }
+    </script>
+    <script>
+        $(document).ready(function() {
+            // ========== MODAL DE SUPPRESSION ==========
+            var deleteFormToSubmit = null;
 
+            // Gérer le clic sur le bouton de confirmation de suppression
+            $('#btnConfirmDelete').on('click', function() {
+                if (deleteFormToSubmit) {
+                    deleteFormToSubmit.submit();
+                }
+                $('#deleteConfirmModal').modal('hide');
+            });
+
+            // Réinitialiser quand le modal se ferme
+            $('#deleteConfirmModal').on('hidden.bs.modal', function() {
+                deleteFormToSubmit = null;
+            });
+
+            // ========== MODAL DE LOGOUT ==========
+            // Gérer le clic sur le bouton de confirmation de logout
+            $('#btnConfirmLogout').on('click', function() {
+                $('#logout-form').submit();
+            });
+        });
+
+        // Fonction pour ouvrir le modal de confirmation de suppression
         function confirmDelete(id, formId = null) {
-            if (confirm("{{ 'user.confirm_delete'|trans }}")) {
-                const form = formId ? document.getElementById(formId) : document.getElementById('delete-form-' + id);
-                if (form) form.submit();
+            var form = formId
+                ? $('#' + formId)
+                : $('#delete-form-' + id);
+
+            if (form.length) {
+                deleteFormToSubmit = form;
+                $('#deleteConfirmModal').modal('show');
             }
+        }
+
+        // Fonction pour ouvrir le modal de confirmation de logout
+        function confirmLogout() {
+            $('#logoutConfirmModal').modal('show');
         }
     </script>
 {% endblock %}
