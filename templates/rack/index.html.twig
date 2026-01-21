@@ -30,7 +30,7 @@
         <div class="card">
             <div class="card-header d-flex justify-content-between align-items-center">
                 <h4 class="mb-0">{{ 'rack.title.subtitle'|trans }}</h4>
-                <a href="{{ path('app_rack_new', {'_locale': app.request.locale}) }}" class="btn btn-primary">
+                <a href="{{ path('app_rack_new', {'_locale': app.request.locale}) }}" class="btn btn-dark">
                     <i class="bi bi-plus-circle"></i> {{ 'rack.actions.new'|trans }}
                 </a>
             </div>
@@ -63,12 +63,12 @@
 
 
                                     <a href="{{ path('app_rack_edit', {'id': rack.id, '_locale': app.request.locale}) }}"
-                                       class="btn btn-sm btn-warning"
+                                       class="btn btn-sm btn-dark"
                                        title="{{ 'rack.actions.edit'|trans }}">
                                         <i class="bi bi-pencil"></i>
                                     </a>
                                     <button type="button"
-                                            class="btn btn-sm btn-danger"
+                                            class="btn btn-sm btn-dark"
                                             onclick="confirmDelete({{ rack.id }})"
                                             title="{{ 'rack.actions.delete'|trans }}">
                                         <i class="bi bi-trash"></i>
@@ -202,7 +202,7 @@
                                     <td>${product.name}</td>
                                     <td>${product.year_edition || '-'}</td>
                                     <td>${product.language || '-'}</td>
-                                    <td><span class="badge bg-primary">${product.quantity}</span></td>
+                                    <td><span class="badge bg-dark">${product.quantity}</span></td>
                                     <td>${product.note || '-'}</td>
                                 </tr>
                             `;

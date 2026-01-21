@@ -29,10 +29,10 @@
         <div class="card">
             <div class="card-header d-flex justify-content-between align-items-center">
                 <h4 class="mb-0">{{ 'stock.title.subtitle'|trans }}</h4>
-                <button type="button" class="btn btn-success me-2" id="btnExport">
+                <button type="button" class="btn btn-dark me-2" id="btnExport">
                     <i class="bi bi-download"></i> {{ 'stock.actions.export'|trans }}
                 </button>
-                <a href="{{ path('app_stock_new') }}" class="btn btn-primary">
+                <a href="{{ path('app_stock_new') }}" class="btn btn-dark">
                     <i class="bi bi-plus-circle"></i> {{ 'stock.actions.new'|trans }}
                 </a>
             </div>
@@ -62,7 +62,7 @@
                             </td>
                             <td>
                                 {% if stock.quantity > 0 %}
-                                    <span class="badge bg-success">{{ stock.quantity }}</span>
+                                    <span class="badge bg-dark">{{ stock.quantity }}</span>
                                 {% elseif stock.quantity == 0 %}
                                     <span class="badge bg-warning">{{ stock.quantity }}</span>
                                 {% else %}
@@ -75,12 +75,12 @@
                             <td>
                                 <div class="btn-group" role="group">
                                     <a href="{{ path('app_stock_edit', {'id': stock.id}) }}"
-                                       class="btn btn-sm btn-warning"
+                                       class="btn btn-sm btn-dark"
                                        title="{{ 'stock.actions.edit'|trans }}">
                                         <i class="bi bi-pencil"></i>
                                     </a>
                                     <button type="button"
-                                            class="btn btn-sm btn-danger"
+                                            class="btn btn-sm btn-dark"
                                             onclick="confirmDelete({{ stock.id }})"
                                             title="{{ 'stock.actions.delete'|trans }}">
                                         <i class="bi bi-trash"></i>

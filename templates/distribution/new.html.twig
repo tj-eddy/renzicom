@@ -133,7 +133,7 @@
                             <a href="{{ path('app_distribution_index') }}" class="btn btn-light-secondary me-1 mb-1">
                                 <i class="bi bi-x-circle"></i> {{ 'form.button.cancel'|trans }}
                             </a>
-                            <button type="submit" class="btn btn-primary me-1 mb-1">
+                            <button type="submit" class="btn btn-dark me-1 mb-1">
                                 <i class="bi bi-check-circle"></i> {{ 'form.button.create'|trans }}
                             </button>
                         </div>
@@ -219,7 +219,7 @@
                                                 ${stock.product_language ? '- ' + stock.product_language : ''}
                                             </small>
                                             <br>
-                                            <span class="badge bg-success stock-badge">
+                                            <span class="badge bg-dark stock-badge">
                                                 {{ 'distribution.form.available'|trans }}: ${stock.available_quantity}
                                             </span>
                                             ${stock.note ? `<br><small class="text-info">${stock.note}</small>` : ''}
@@ -238,7 +238,7 @@
                                         </div>
                                         <div class="col-md-2">
                                             <button type="button"
-                                                    class="btn btn-sm btn-primary add-product-btn"
+                                                    class="btn btn-sm btn-dark add-product-btn"
                                                     data-stock-id="${stock.stock_id}"
                                                     data-product-id="${stock.product_id}">
                                                 <i class="bi bi-plus-circle"></i> {{ 'distribution.form.add'|trans }}
@@ -281,8 +281,8 @@
                             }
 
                             $(this).html('<i class="bi bi-check-circle"></i> {{ 'distribution.form.added'|trans }}')
-                                .removeClass('btn-primary')
-                                .addClass('btn-success');
+                                .removeClass('btn-dark')
+                                .addClass('btn-dark');
 
                             updateProductsData();
                         });

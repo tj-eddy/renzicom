@@ -23,7 +23,7 @@
                         <div class="card-body px-4 py-4-5">
                             <div class="row">
                                 <div class="col-md-4 col-lg-12 col-xl-12 col-xxl-5 d-flex justify-content-start">
-                                    <div class="stats-icon purple mb-2">
+                                    <div class="stats-icon dark mb-2">
                                         <i class="iconly-boldShow"></i>
                                     </div>
                                 </div>
@@ -45,7 +45,7 @@
                         <div class="card-body px-4 py-4-5">
                             <div class="row">
                                 <div class="col-md-4 col-lg-12 col-xl-12 col-xxl-5 d-flex justify-content-start">
-                                    <div class="stats-icon blue mb-2">
+                                    <div class="stats-icon dark mb-2">
                                         <i class="iconly-boldBookmark"></i>
                                     </div>
                                 </div>
@@ -67,7 +67,7 @@
                         <div class="card-body px-4 py-4-5">
                             <div class="row">
                                 <div class="col-md-4 col-lg-12 col-xl-12 col-xxl-5 d-flex justify-content-start">
-                                    <div class="stats-icon green mb-2">
+                                    <div class="stats-icon dark mb-2">
                                         <i class="iconly-boldAdd-User"></i>
                                     </div>
                                 </div>
@@ -171,16 +171,16 @@
                 </div>
                 <div class="card-content pb-4">
                     <div class="px-4 py-3">
-                        <a href="{{ path('app_user_index') }}" class="btn btn-primary btn-block mb-2 w-100">
+                        <a href="{{ path('app_user_index') }}" class="btn btn-dark btn-block mb-2 w-100">
                             <i class="bi bi-people"></i> {{ 'quick_access.users'|trans }}
                         </a>
-                        <a href="{{ path('app_product_index') }}" class="btn btn-success btn-block mb-2 w-100">
+                        <a href="{{ path('app_product_index') }}" class="btn btn-dark btn-block mb-2 w-100">
                             <i class="bi bi-box-seam"></i> {{ 'quick_access.products'|trans }}
                         </a>
-                        <a href="{{ path('app_distribution_index') }}" class="btn btn-info btn-block mb-2 w-100">
+                        <a href="{{ path('app_distribution_index') }}" class="btn btn-dark btn-block mb-2 w-100">
                             <i class="bi bi-truck"></i> {{ 'quick_access.distributions'|trans }}
                         </a>
-                        <a href="{{ path('app_rack_index') }}" class="btn btn-warning btn-block w-100">
+                        <a href="{{ path('app_rack_index') }}" class="btn btn-dark btn-block w-100">
                             <i class="bi bi-bookmark"></i> {{ 'quick_access.racks'|trans }}
                         </a>
                     </div>
@@ -197,7 +197,7 @@
                     </div>
                     <div class="progress mb-3" style="height: 10px;">
                         <div
-                            class="progress-bar {% if stock_percentage > 80 %}bg-success{% elseif stock_percentage > 50 %}bg-warning{% else %}bg-danger{% endif %}"
+                            class="progress-bar {% if stock_percentage > 80 %}bg-dark{% elseif stock_percentage > 50 %}bg-warning{% else %}bg-danger{% endif %}"
                             role="progressbar"
                             style="width: {{ stock_percentage }}%"></div>
                     </div>
@@ -207,7 +207,7 @@
                         <span class="font-bold">{{ distribution_percentage }}%</span>
                     </div>
                     <div class="progress mb-3" style="height: 10px;">
-                        <div class="progress-bar bg-info"
+                        <div class="progress-bar bg-dark"
                              role="progressbar"
                              style="width: {{ distribution_percentage }}%"></div>
                     </div>
@@ -217,7 +217,7 @@
                         <span class="font-bold">{{ active_racks_percentage }}%</span>
                     </div>
                     <div class="progress" style="height: 10px;">
-                        <div class="progress-bar bg-primary"
+                        <div class="progress-bar bg-dark"
                              role="progressbar"
                              style="width: {{ active_racks_percentage }}%"></div>
                     </div>
@@ -263,7 +263,7 @@
                                         {{ activity.product ? activity.product.name : 'N/A' }}
                                     </td>
                                     <td>
-                                        <span class="badge bg-primary">{{ activity.quantity }}</span>
+                                        <span class="badge bg-dark">{{ activity.quantity }}</span>
                                     </td>
                                     <td>{{ activity.user ? activity.user.name : 'N/A' }}</td>
                                     <td>
@@ -336,7 +336,7 @@
             },
             fill: {
                 opacity: 1,
-                colors: ['#435ebe']
+                colors: ['#212529']
             },
             tooltip: {
                 y: {
@@ -345,7 +345,7 @@
                     }
                 }
             },
-            colors: ['#435ebe']
+            colors: ['#212529']
         };
 
         var chartDistribution = new ApexCharts(document.querySelector("#chart-distribution"), optionsDistribution);

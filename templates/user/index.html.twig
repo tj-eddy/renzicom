@@ -29,7 +29,7 @@
         <div class="card">
             <div class="card-header d-flex justify-content-between align-items-center">
                 <h4 class="mb-0">{{ 'user.list.title'|trans }}</h4>
-                <a href="{{ path('app_user_new') }}" class="btn btn-primary">
+                <a href="{{ path('app_user_new') }}" class="btn btn-dark">
                     <i class="bi bi-plus-circle"></i> {{ 'user.actions.new'|trans }}
                 </a>
             </div>
@@ -53,18 +53,18 @@
                             <td>{{ user.email }}</td>
                             <td>
                                 {% if user.role == 'ROLE_ADMIN' %}
-                                    <span class="badge bg-primary">{{ 'role.admin'|trans }}</span>
+                                    <span class="badge bg-dark">{{ 'role.admin'|trans }}</span>
                                 {% elseif user.role == 'ROLE_DRIVER' %}
-                                    <span class="badge bg-success">{{ 'role.driver'|trans }}</span>
+                                    <span class="badge bg-dark">{{ 'role.driver'|trans }}</span>
                                 {% elseif user.role == 'ROLE_STATISTICS' %}
-                                    <span class="badge bg-info">{{ 'role.statistics'|trans }}</span>
+                                    <span class="badge bg-dark">{{ 'role.statistics'|trans }}</span>
                                 {% else %}
                                     <span class="badge bg-secondary">{{ user.role }}</span>
                                 {% endif %}
                             </td>
                             <td>
                                 {% if user.isActive %}
-                                    <span class="badge bg-success">{{ 'user.status.active'|trans }}</span>
+                                    <span class="badge bg-dark">{{ 'user.status.active'|trans }}</span>
                                 {% else %}
                                     <span class="badge bg-secondary">{{ 'user.status.inactive'|trans }}</span>
                                 {% endif %}
@@ -72,7 +72,7 @@
                             <td>
                                 <div class="btn-group" role="group">
                                     <a href="{{ path('app_user_edit', {'id': user.id}) }}"
-                                       class="btn btn-sm btn-warning"
+                                       class="btn btn-sm btn-dark"
                                        title="{{ 'user.actions.edit'|trans }}">
                                         <i class="bi bi-pencil"></i>
                                     </a>

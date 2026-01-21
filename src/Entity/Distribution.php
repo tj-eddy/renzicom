@@ -83,10 +83,7 @@ class Distribution
     public function getStatusBadgeClass(): string
     {
         return match($this->status) {
-            self::STATUS_PREPARING => 'bg-info',
-            self::STATUS_IN_PROGRESS => 'bg-warning',
-            self::STATUS_DELIVERED => 'bg-success',
-            self::STATUS_CANCELLED => 'bg-danger',
+            self::STATUS_PREPARING, self::STATUS_CANCELLED, self::STATUS_IN_PROGRESS, self::STATUS_DELIVERED => 'bg-dark',
             default => 'bg-secondary',
         };
     }

@@ -31,7 +31,7 @@
             <div class="card-header d-flex justify-content-between align-items-center">
                 <h4 class="mb-0">{{ 'product.list.title'|trans }}</h4>
 
-                <a href="{{ path('app_product_new', {'_locale': app.request.locale}) }}" class="btn btn-primary">
+                <a href="{{ path('app_product_new', {'_locale': app.request.locale}) }}" class="btn btn-dark">
                     <i class="bi bi-plus-circle"></i> {{ 'product.actions.new'|trans }}
                 </a>
             </div>
@@ -60,12 +60,12 @@
                             <td>
                                 <div class="btn-group" role="group">
                                     <a href="{{ path('app_product_edit', {'id': product.id, '_locale': app.request.locale}) }}"
-                                       class="btn btn-sm btn-warning"
+                                       class="btn btn-sm btn-dark"
                                        title="{{ 'product.actions.edit'|trans }}">
                                         <i class="bi bi-pencil"></i>
                                     </a>
                                     <button type="button"
-                                            class="btn btn-sm btn-danger"
+                                            class="btn btn-sm btn-dark"
                                             onclick="confirmDelete({{ product.id }})"
                                             title="{{ 'product.actions.delete'|trans }}">
                                         <i class="bi bi-trash"></i>
@@ -88,7 +88,7 @@
                     </tbody>
                 </table>
                 <div class="card-header d-flex justify-content-between align-items-center">
-                    <button type="button" class="btn btn-success me-2" id="btnExport">
+                    <button type="button" class="btn btn-dark me-2" id="btnExport">
                         <i class="bi bi-download"></i> {{ 'stock.actions.export'|trans }}
                     </button>
                 </div>
@@ -119,7 +119,7 @@
                         <i class="bx bx-x d-block d-sm-none"></i>
                         <span class="d-sm-block d-none">{{ 'actions.cancel'|trans }}</span>
                     </button>
-                    <button id="btnConfirmExport" type="button" class="btn btn-primary ml-1 btn-sm"
+                    <button id="btnConfirmExport" type="button" class="btn btn-dark ml-1 btn-sm"
                             data-bs-dismiss="modal">
                         <i class="bx bx-check d-block d-sm-none"></i>
                         <span class="d-sm-block d-none"> {{ 'stock.export.confirm.yes'|trans }}</span>
@@ -150,7 +150,7 @@
                         <i class="bx bx-x d-block d-sm-none"></i>
                         <span class="d-sm-block d-none">{{ 'actions.cancel'|trans }}</span>
                     </button>
-                    <button type="button" class="btn btn-primary ml-1 btn-sm" id="btnConfirmExport"
+                    <button type="button" class="btn btn-dark ml-1 btn-sm" id="btnConfirmExport"
                             data-bs-dismiss="modal">
                         <i class="bx bx-check d-block d-sm-none"></i>
                         <span class="d-sm-block d-none"> {{ 'stock.export.confirm.yes'|trans }}</span>

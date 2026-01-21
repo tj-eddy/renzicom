@@ -50,7 +50,7 @@
                                          style="height: 150px; object-fit: cover;">
                                     <div class="card-body p-2 text-center">
                                         <button type="button"
-                                                class="btn btn-danger btn-sm w-100"
+                                                class="btn btn-dark btn-sm w-100"
                                                 onclick="deleteImage({{ image.id }}, '{{ csrf_token('delete' ~ image.id) }}')">
                                             <i class="bi bi-trash"></i> {{ 'warehouse.actions.delete_image'|trans }}
                                         </button>
@@ -87,7 +87,7 @@
                class="btn btn-light-secondary me-1 mb-1">
                 <i class="bi bi-x-circle"></i> {{ 'form.button.cancel'|trans }}
             </a>
-            <button type="submit" class="btn btn-primary me-1 mb-1">
+            <button type="submit" class="btn btn-dark me-1 mb-1">
                 <i class="bi bi-check-circle"></i> {{ button_label|default('create') == 'update' ? 'form.button.update'|trans : 'form.button.create'|trans }}
             </button>
         </div>

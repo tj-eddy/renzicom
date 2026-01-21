@@ -41,7 +41,7 @@
         <div class="card">
             <div class="card-header d-flex justify-content-between align-items-center">
                 <h4 class="mb-0">{{ 'distribution.list.title'|trans }}</h4>
-                <a href="{{ path('app_distribution_new', {'_locale': app.request.locale}) }}" class="btn btn-primary">
+                <a href="{{ path('app_distribution_new', {'_locale': app.request.locale}) }}" class="btn btn-dark">
                     <i class="bi bi-plus-circle"></i> {{ 'distribution.actions.new'|trans }}
                 </a>
             </div>
@@ -78,7 +78,7 @@
                                 {% endif %}
                             </td>
                             <td>
-                                <span class="badge bg-primary">{{ distribution.quantity }}</span>
+                                <span class="badge bg-dark">{{ distribution.quantity }}</span>
                             </td>
                             <td>{{ distribution.user ? distribution.user.name : 'N/A' }}</td>
                             <td>
@@ -93,7 +93,7 @@
                                     {% if distribution.status == constant('App\\Entity\\Distribution::STATUS_PREPARING') %}
                                         <form method="post" action="{{ path('app_distribution_change_status', {'id': distribution.id, 'status': constant('App\\Entity\\Distribution::STATUS_IN_PROGRESS'), '_locale': app.request.locale}) }}">
                                             <input type="hidden" name="_token" value="{{ csrf_token('change-status' ~ distribution.id) }}">
-                                            <button type="submit" class="btn btn-xs btn-warning" title="{{ 'distribution.actions.start'|trans }}">
+                                            <button type="submit" class="btn btn-xs btn-dark" title="{{ 'distribution.actions.start'|trans }}">
                                                 <i class="bi bi-play-circle"></i>
                                             </button>
                                         </form>
@@ -103,7 +103,7 @@
                                     {% if distribution.status == constant('App\\Entity\\Distribution::STATUS_IN_PROGRESS') %}
                                         <form method="post" action="{{ path('app_distribution_change_status', {'id': distribution.id, 'status': constant('App\\Entity\\Distribution::STATUS_DELIVERED'), '_locale': app.request.locale}) }}">
                                             <input type="hidden" name="_token" value="{{ csrf_token('change-status' ~ distribution.id) }}">
-                                            <button type="submit" class="btn btn-xs btn-success" title="{{ 'distribution.actions.complete'|trans }}">
+                                            <button type="submit" class="btn btn-xs btn-dark" title="{{ 'distribution.actions.complete'|trans }}">
                                                 <i class="bi bi-check-circle"></i>
                                             </button>
                                         </form>
@@ -123,7 +123,7 @@
                                     {% if distribution.status == constant('App\\Entity\\Distribution::STATUS_CANCELLED') %}
                                         <form method="post" action="{{ path('app_distribution_change_status', {'id': distribution.id, 'status': constant('App\\Entity\\Distribution::STATUS_PREPARING'), '_locale': app.request.locale}) }}">
                                             <input type="hidden" name="_token" value="{{ csrf_token('change-status' ~ distribution.id) }}">
-                                            <button type="submit" class="btn btn-xs btn-info" title="{{ 'distribution.actions.reactivate'|trans }}">
+                                            <button type="submit" class="btn btn-xs btn-dark" title="{{ 'distribution.actions.reactivate'|trans }}">
                                                 <i class="bi bi-arrow-clockwise"></i>
                                             </button>
                                         </form>
@@ -135,7 +135,7 @@
                                 <div class="btn-group-vertical" role="group">
 
                                     <button type="button"
-                                            class="btn btn-sm btn-danger"
+                                            class="btn btn-sm btn-dark"
                                             onclick="confirmDelete({{ distribution.id }})"
                                             title="{{ 'distribution.actions.delete'|trans }}">
                                         <i class="bi bi-trash"></i>
