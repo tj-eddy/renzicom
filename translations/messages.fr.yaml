@@ -415,3 +415,13 @@ product.table.year: "Année"
 
 error.loading_products: "Erreur lors du chargement des produits"
 
+# translations/messages.fr.yaml
+stock.export.confirm.title: "Confirmer l'export"
+stock.export.confirm.message: "Voulez-vous exporter tous les produits avec leur stock en CSV ?"
+stock.export.confirm.yes: "Oui, exporter"
+stock.export.progress.title: "Génération de l'export en cours..."
+stock.export.progress.message: "Veuillez patienter, vous pouvez continuer à travailler pendant ce temps."
+stock.export.success: "Export terminé ! Le téléchargement va démarrer automatiquement."
+stock.export.error: "Erreur lors de l'export. Veuillez réessayer."
+actions.cancel: "Annuler"
+stock.actions.export : 'Exporter'

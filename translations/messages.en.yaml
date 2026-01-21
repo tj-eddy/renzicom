@@ -395,3 +395,15 @@ product.table.image: "Image"
 product.table.year: "Year"
 
 error.loading_products: "Error loading products"
+
+# translations/messages.en.yaml
+stock.export.confirm.title: "Confirm Export"
+stock.export.confirm.message: "Do you want to export all products with their stock to CSV?"
+stock.export.confirm.yes: "Yes, export"
+stock.export.progress.title: "Generating export..."
+stock.export.progress.message: "Please wait, you can continue working in the meantime."
+stock.export.success: "Export completed! Download will start automatically."
+stock.export.error: "Export error. Please try again."
+actions.cancel: "Cancel"
+stock.actions.export : 'Export'
+
