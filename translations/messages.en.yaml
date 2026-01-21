@@ -416,3 +416,6 @@ form.is_active: "Active account"
 user.table.status: "Status"
 user.status.active: "Active"
 user.status.inactive: "Inactive"
+
+error.access_denied: "You are not authorized to access this page."
+error.access_denied.change_status: 'You are not authorized to change the status.'

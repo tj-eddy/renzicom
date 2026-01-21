@@ -15,7 +15,8 @@
             <div class="col-12 col-md-6 order-md-2 order-first">
                 <nav aria-label="breadcrumb" class="breadcrumb-header float-start float-lg-end">
                     <ol class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="{{ path('app_dashboard') }}">{{ 'breadcrumb.home'|trans }}</a></li>
+                        <li class="breadcrumb-item"><a
+                                href="{{ path('app_dashboard') }}">{{ 'breadcrumb.home'|trans }}</a></li>
                         <li class="breadcrumb-item active" aria-current="page">{{ 'breadcrumb.stocks'|trans }}</li>
                     </ol>
                 </nav>
@@ -29,9 +30,11 @@
         <div class="card">
             <div class="card-header d-flex justify-content-between align-items-center">
                 <h4 class="mb-0">{{ 'stock.title.subtitle'|trans }}</h4>
-                <a href="{{ path('app_stock_new') }}" class="btn btn-dark">
-                    <i class="bi bi-plus-circle"></i> {{ 'stock.actions.new'|trans }}
-                </a>
+                {% if not is_granted('ROLE_STATISTICS') %}
+                    <a href="{{ path('app_stock_new') }}" class="btn btn-dark">
+                        <i class="bi bi-plus-circle"></i> {{ 'stock.actions.new'|trans }}
+                    </a>
+                {% endif %}
             </div>
             <div class="card-body">
                 <table class="table table-striped" id="stock-table">
@@ -44,7 +47,9 @@
                         <th>{{ 'nav.products'|trans }}</th>
                         <th>{{ 'stock.table.create_at'|trans }}</th>
                         <th>{{ 'stock.table.note'|trans }}</th>
-                        <th>{{ 'stock.table.actions'|trans }}</th>
+                        {% if not is_granted('ROLE_STATISTICS') %}
+                            <th>{{ 'stock.table.actions'|trans }}</th>
+                        {% endif %}
                     </tr>
                     </thead>
                     <tbody>
@@ -71,19 +76,22 @@
                             <td>{{ stock.note|default('-') }}</td>
                             <td>
                                 <div class="btn-group" role="group">
-                                    <a href="{{ path('app_stock_edit', {'id': stock.id}) }}"
-                                       class="btn btn-sm btn-dark"
-                                       title="{{ 'stock.actions.edit'|trans }}">
-                                        <i class="bi bi-pencil"></i>
-                                    </a>
-                                    <button type="button"
-                                            class="btn btn-sm btn-dark"
-                                            onclick="confirmDelete({{ stock.id }})"
-                                            title="{{ 'stock.actions.delete'|trans }}">
-                                        <i class="bi bi-trash"></i>
-                                    </button>
+                                    {% if not is_granted('ROLE_STATISTICS') %}
+                                        <a href="{{ path('app_stock_edit', {'id': stock.id}) }}"
+                                           class="btn btn-sm btn-dark"
+                                           title="{{ 'stock.actions.edit'|trans }}">
+                                            <i class="bi bi-pencil"></i>
+                                        </a>
+                                    {% endif %}
+                                    {% if is_granted('ROLE_ADMIN') %}
+                                        <button type="button"
+                                                class="btn btn-sm btn-dark"
+                                                onclick="confirmDelete({{ stock.id }})"
+                                                title="{{ 'stock.actions.delete'|trans }}">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    {% endif %}
                                 </div>
-
                                 {# Formulaire de suppression caché #}
                                 <form id="delete-form-{{ stock.id }}"
                                       action="{{ path('app_stock_delete', {'id': stock.id}) }}"

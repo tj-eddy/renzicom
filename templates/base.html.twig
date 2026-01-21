@@ -15,7 +15,7 @@
     <link rel="stylesheet" href="{{ asset('assets/css/app.css') }}">
     <link rel="shortcut icon" href="{{ asset('assets/images/favicon.svg') }}" type="image/x-icon">
     <style>
-        .page-link.active{
+        .page-link.active {
             background-color: #1a1a1a !important;
         }
     </style>
@@ -32,7 +32,8 @@
                     <i class="bi bi-exclamation-triangle-fill me-2"></i>
                     {{ 'actions.confirm_delete_title'|trans }}
                 </h5>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 <p class="mb-0">{{ 'user.confirm_delete'|trans }}</p>
@@ -85,44 +86,52 @@
             <div class="sidebar-menu">
                 <ul class="menu">
                     <li class="sidebar-item {% if app.request.get('_route') == 'app_dashboard' %}active{% endif %}">
-                        <a href="{{ path('app_dashboard') }}" class='sidebar-link  {% if app.request.get('_route') == 'app_dashboard' %}bg-dark{% endif %}'>
+                        <a href="{{ path('app_dashboard') }}"
+                           class='sidebar-link  {% if app.request.get('_route') == 'app_dashboard' %}bg-dark{% endif %}'>
                             <i class="bi bi-grid-fill"></i>
                             <span>{{ 'nav.dashboard'|trans }}</span>
                         </a>
                     </li>
                     <li class="sidebar-item {% if app.request.get('_route') starts with 'app_distribution' %}active{% endif %}">
-                        <a href="{{ path('app_distribution_index') }}" class='sidebar-link {% if app.request.get('_route') starts with 'app_distribution' %}bg-dark{% endif %}'>
+                        <a href="{{ path('app_distribution_index') }}"
+                           class='sidebar-link {% if app.request.get('_route') starts with 'app_distribution' %}bg-dark{% endif %}'>
                             <i class="bi bi-truck"></i>
                             <span>{{ 'nav.distributions'|trans }}</span>
                         </a>
                     </li>
-                    <li class="sidebar-item {% if app.request.get('_route') starts with 'app_user' %}active{% endif %}">
-                        <a href="{{ path('app_user_index') }}" class='sidebar-link  {% if app.request.get('_route') starts with 'app_user' %}bg-dark{% endif %}'>
-                            <i class="bi bi-people-fill"></i>
-                            <span>{{ 'nav.users'|trans }}</span>
-                        </a>
-                    </li>
-
+                    {% if is_granted('ROLE_ADMIN') %}
+                        <li class="sidebar-item {% if app.request.get('_route') starts with 'app_user' %}active{% endif %}">
+                            <a href="{{ path('app_user_index') }}"
+                               class='sidebar-link  {% if app.request.get('_route') starts with 'app_user' %}bg-dark{% endif %}'>
+                                <i class="bi bi-people-fill"></i>
+                                <span>{{ 'nav.users'|trans }}</span>
+                            </a>
+                        </li>
+                    {% endif %}
                     <li class="sidebar-item {% if app.request.get('_route') starts with 'app_warehouse' %}active{% endif %}">
-                        <a href="{{ path('app_warehouse_index') }}" class='sidebar-link {% if app.request.get('_route') starts with 'app_warehouse' %}bg-dark{% endif %}'>
+                        <a href="{{ path('app_warehouse_index') }}"
+                           class='sidebar-link {% if app.request.get('_route') starts with 'app_warehouse' %}bg-dark{% endif %}'>
                             <i class="bi    bi-building"></i>
                             <span>{{ 'nav.warehouses'|trans }}</span>
                         </a>
                     </li>
                     <li class="sidebar-item {% if app.request.get('_route') starts with 'app_product' %}active{% endif %}">
-                        <a href="{{ path('app_product_index') }}" class='sidebar-link {% if app.request.get('_route') starts with 'app_product' %}bg-dark{% endif %}'>
+                        <a href="{{ path('app_product_index') }}"
+                           class='sidebar-link {% if app.request.get('_route') starts with 'app_product' %}bg-dark{% endif %}'>
                             <i class="bi bi-book"></i>
                             <span>{{ 'nav.products'|trans }}</span>
                         </a>
                     </li>
                     <li class="sidebar-item {% if app.request.get('_route') starts with 'app_rack' %}active{% endif %}">
-                        <a href="{{ path('app_rack_index') }}" class='sidebar-link {% if app.request.get('_route') starts with 'app_rack' %}bg-dark{% endif %}'>
+                        <a href="{{ path('app_rack_index') }}"
+                           class='sidebar-link {% if app.request.get('_route') starts with 'app_rack' %}bg-dark{% endif %}'>
                             <i class="bi bi-list"></i>
                             <span>{{ 'nav.rack'|trans }}</span>
                         </a>
                     </li>
                     <li class="sidebar-item {% if app.request.get('_route') starts with 'app_stock' %}active{% endif %}">
-                        <a href="{{ path('app_stock_index') }}" class='sidebar-link {% if app.request.get('_route') starts with 'app_stock' %}bg-dark{% endif %}'>
+                        <a href="{{ path('app_stock_index') }}"
+                           class='sidebar-link {% if app.request.get('_route') starts with 'app_stock' %}bg-dark{% endif %}'>
                             <i class="bi bi-box-seam"></i>
                             <span>{{ 'nav.stocks'|trans }}</span>
                         </a>
@@ -192,22 +201,24 @@
                                     <li>
                                         <h6 class="dropdown-header">Hello, {{ app.user.name }}!</h6>
                                     </li>
-                                    <li><a class="dropdown-item" href="#"><i class="icon-mid bi bi-person me-2"></i>
-                                            {{ 'nav.my.profile'|trans }}</a></li>
-                                    <hr class="dropdown-divider">
+{#                                    <li><a class="dropdown-item" href="#"><i class="icon-mid bi bi-person me-2"></i>#}
+{#                                            {{ 'nav.my.profile'|trans }}</a></li>#}
+{#                                    <hr class="dropdown-divider">#}
                                     <li>
                                         <button type="button" class="dropdown-item" onclick="confirmLogout()">
                                             <i class="icon-mid bi bi-box-arrow-left me-2"></i>
                                             {{ 'nav.logout'|trans }}
                                         </button>
 
-                                        <form id="logout-form" method="post" action="{{ path('app_logout') }}" style="display: none;">
+                                        <form id="logout-form" method="post" action="{{ path('app_logout') }}"
+                                              style="display: none;">
                                             {# CSRF token si nécessaire #}
                                         </form>
                                     </li>
                                 </ul>
                             </div>
-                            <div class="modal fade text-left" id="logoutConfirmModal" tabindex="-1" role="dialog" aria-hidden="true">
+                            <div class="modal fade text-left" id="logoutConfirmModal" tabindex="-1" role="dialog"
+                                 aria-hidden="true">
                                 <div class="modal-dialog modal-dialog-centered modal-sm" role="document">
                                     <div class="modal-content">
                                         <div class="modal-header  ">
@@ -215,13 +226,15 @@
                                                 <i class="bi bi-box-arrow-left me-2"></i>
                                                 {{ 'nav.confirm_logout_title'|trans }}
                                             </h5>
-                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                    aria-label="Close"></button>
                                         </div>
                                         <div class="modal-body">
                                             <p class="mb-0">{{ 'nav.confirm_logout_message'|trans }}</p>
                                         </div>
                                         <div class="modal-footer">
-                                            <button type="button" class="btn btn-light-secondary btn-sm" data-bs-dismiss="modal">
+                                            <button type="button" class="btn btn-light-secondary btn-sm"
+                                                    data-bs-dismiss="modal">
                                                 <i class="bi bi-x-circle me-1"></i>
                                                 {{ 'actions.cancel'|trans }}
                                             </button>
@@ -303,12 +316,12 @@
         }
     </script>
     <script>
-        $(document).ready(function() {
+        $(document).ready(function () {
             // ========== MODAL DE SUPPRESSION ==========
             var deleteFormToSubmit = null;
 
             // Gérer le clic sur le bouton de confirmation de suppression
-            $('#btnConfirmDelete').on('click', function() {
+            $('#btnConfirmDelete').on('click', function () {
                 if (deleteFormToSubmit) {
                     deleteFormToSubmit.submit();
                 }
@@ -316,13 +329,13 @@
             });
 
             // Réinitialiser quand le modal se ferme
-            $('#deleteConfirmModal').on('hidden.bs.modal', function() {
+            $('#deleteConfirmModal').on('hidden.bs.modal', function () {
                 deleteFormToSubmit = null;
             });
 
             // ========== MODAL DE LOGOUT ==========
             // Gérer le clic sur le bouton de confirmation de logout
-            $('#btnConfirmLogout').on('click', function() {
+            $('#btnConfirmLogout').on('click', function () {
                 $('#logout-form').submit();
             });
         });
@@ -363,9 +376,9 @@
             }
         }
 
-        $(document).ready(function() {
+        $(document).ready(function () {
             // Quand on clique sur le bouton de confirmation dans le modal
-            $('#btnConfirmDelete').on('click', function() {
+            $('#btnConfirmDelete').on('click', function () {
                 // Soumettre le formulaire
                 if (deleteFormToSubmit) {
                     deleteFormToSubmit.submit();
@@ -376,18 +389,18 @@
             });
 
             // Réinitialiser quand le modal se ferme
-            $('#deleteConfirmModal').on('hidden.bs.modal', function() {
+            $('#deleteConfirmModal').on('hidden.bs.modal', function () {
                 deleteFormToSubmit = null;
             });
         });
     </script>
     <script>
         function initExport(exportUrl) {
-            $('#btnExport').on('click', function() {
+            $('#btnExport').on('click', function () {
                 $('#exportConfirmModal').modal('show');
             });
 
-            $('#btnConfirmExport').on('click', function() {
+            $('#btnConfirmExport').on('click', function () {
                 $('#exportConfirmModal').modal('hide');
                 $('#exportProgressModal').modal('show');
 
@@ -395,7 +408,7 @@
                     url: exportUrl,
                     type: 'POST',
                     dataType: 'json',
-                    success: function(response) {
+                    success: function (response) {
                         if (response.success) {
                             const link = document.createElement('a');
                             link.href = response.download_url;
@@ -404,14 +417,14 @@
                             link.click();
                             document.body.removeChild(link);
 
-                            setTimeout(function() {
+                            setTimeout(function () {
                                 $('#exportProgressModal').modal('hide');
                             }, 1500);
                         } else {
                             $('#exportProgressModal').modal('hide');
                         }
                     },
-                    error: function(xhr, status, error) {
+                    error: function (xhr, status, error) {
                         $('#exportProgressModal').modal('hide');
                         console.error('Export error:', error);
                     }

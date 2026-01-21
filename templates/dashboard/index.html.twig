@@ -171,9 +171,11 @@
                 </div>
                 <div class="card-content pb-4">
                     <div class="px-4 py-3">
-                        <a href="{{ path('app_user_index') }}" class="btn btn-dark btn-block mb-2 w-100">
-                            <i class="bi bi-people"></i> {{ 'quick_access.users'|trans }}
-                        </a>
+                        {% if is_granted('ROLE_ADMIN') %}
+                            <a href="{{ path('app_user_index') }}" class="btn btn-dark btn-block mb-2 w-100">
+                                <i class="bi bi-people"></i> {{ 'quick_access.users'|trans }}
+                            </a>
+                        {% endif %}
                         <a href="{{ path('app_product_index') }}" class="btn btn-dark btn-block mb-2 w-100">
                             <i class="bi bi-box-seam"></i> {{ 'quick_access.products'|trans }}
                         </a>

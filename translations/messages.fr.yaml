@@ -433,4 +433,5 @@ user.table.status: "Statut"
 user.status.active: "Actif"
 user.status.inactive: "Inactif"
 
-
+error.access_denied: "Vous n'êtes pas autorisé à accéder à cette page."
+error.access_denied.change_status: Vous n’êtes pas autorisé à changer le statut.

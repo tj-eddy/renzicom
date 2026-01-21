@@ -11,10 +11,16 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 #[Route('/warehouse')]
 final class WarehouseController extends AbstractController
 {
+    public function __construct(private readonly TranslatorInterface $translator)
+    {
+    }
+
     #[Route(name: 'app_warehouse_index', methods: ['GET'])]
     public function index(WarehouseRepository $warehouseRepository): Response
     {
@@ -22,10 +28,13 @@ final class WarehouseController extends AbstractController
             'warehouses' => $warehouseRepository->findBy([], ['id' => 'DESC']),
         ]);
     }
-
     #[Route('/new', name: 'app_warehouse_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
+        if (!$this->isGranted('ROLE_ADMIN')) {
+            $this->addFlash('error', $this->translator->trans('error.access_denied'));
+            return $this->redirectToRoute('app_warehouse_index');
+        }
         $warehouse = new Warehouse();
         $form = $this->createForm(WarehouseType::class, $warehouse);
         $form->handleRequest($request);
@@ -60,6 +69,10 @@ final class WarehouseController extends AbstractController
     #[Route('/{id}/edit', name: 'app_warehouse_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Warehouse $warehouse, EntityManagerInterface $entityManager): Response
     {
+        if (!$this->isGranted('ROLE_ADMIN')) {
+            $this->addFlash('error', $this->translator->trans('error.access_denied'));
+            return $this->redirectToRoute('app_warehouse_index');
+        }
         $form = $this->createForm(WarehouseType::class, $warehouse);
         $form->handleRequest($request);
 
@@ -88,7 +101,7 @@ final class WarehouseController extends AbstractController
             'form' => $form,
         ]);
     }
-
+    #[IsGranted("ROLE_ADMIN")]
     #[Route('/{id}', name: 'app_warehouse_delete', methods: ['POST'])]
     public function delete(Request $request, Warehouse $warehouse, EntityManagerInterface $entityManager): Response
     {
@@ -103,6 +116,7 @@ final class WarehouseController extends AbstractController
     /**
      * Delete a specific warehouse image
      */
+    #[IsGranted("ROLE_ADMIN")]
     #[Route('/image/{id}/delete', name: 'app_warehouse_image_delete', methods: ['POST'])]
     public function deleteImage(Request $request, WarehouseImage $image, EntityManagerInterface $entityManager): Response
     {

@@ -30,9 +30,11 @@
         <div class="card">
             <div class="card-header d-flex justify-content-between align-items-center">
                 <h4 class="mb-0">{{ 'rack.title.subtitle'|trans }}</h4>
-                <a href="{{ path('app_rack_new', {'_locale': app.request.locale}) }}" class="btn btn-dark">
-                    <i class="bi bi-plus-circle"></i> {{ 'rack.actions.new'|trans }}
-                </a>
+                {% if is_granted('ROLE_ADMIN') %}
+                    <a href="{{ path('app_rack_new', {'_locale': app.request.locale}) }}" class="btn btn-dark">
+                        <i class="bi bi-plus-circle"></i> {{ 'rack.actions.new'|trans }}
+                    </a>
+                {% endif %}
             </div>
             <div class="card-body">
                 <table class="table table-striped" id="rack-table">
@@ -60,19 +62,21 @@
                                             title="{{ 'rack.actions.show'|trans }}">
                                         <i class="bi bi-eye"></i>
                                     </button>
+                                    {% if is_granted('ROLE_ADMIN') %}
 
+                                        <a href="{{ path('app_rack_edit', {'id': rack.id, '_locale': app.request.locale}) }}"
+                                           class="btn btn-sm btn-dark"
+                                           title="{{ 'rack.actions.edit'|trans }}">
+                                            <i class="bi bi-pencil"></i>
+                                        </a>
 
-                                    <a href="{{ path('app_rack_edit', {'id': rack.id, '_locale': app.request.locale}) }}"
-                                       class="btn btn-sm btn-dark"
-                                       title="{{ 'rack.actions.edit'|trans }}">
-                                        <i class="bi bi-pencil"></i>
-                                    </a>
-                                    <button type="button"
-                                            class="btn btn-sm btn-dark"
-                                            onclick="confirmDelete({{ rack.id }})"
-                                            title="{{ 'rack.actions.delete'|trans }}">
-                                        <i class="bi bi-trash"></i>
-                                    </button>
+                                        <button type="button"
+                                                class="btn btn-sm btn-dark"
+                                                onclick="confirmDelete({{ rack.id }})"
+                                                title="{{ 'rack.actions.delete'|trans }}">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    {% endif %}
                                 </div>
                                 <form id="delete-form-{{ rack.id }}"
                                       action="{{ path('app_rack_delete', {'id': rack.id, '_locale': app.request.locale}) }}"
@@ -80,6 +84,7 @@
                                       style="display: none;">
                                     <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ rack.id) }}">
                                 </form>
+
                             </td>
                         </tr>
                     {% else %}
@@ -137,11 +142,11 @@
                         </div>
                     </div>
                 </div>
-{#                <div class="modal-footer">#}
-{#                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">#}
-{#                        <i class="bi bi-x-circle"></i> {{ 'form.button.cancel'|trans }}#}
-{#                    </button>#}
-{#                </div>#}
+                {#                <div class="modal-footer"> #}
+                {#                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"> #}
+                {#                        <i class="bi bi-x-circle"></i> {{ 'form.button.cancel'|trans }} #}
+                {#                    </button> #}
+                {#                </div> #}
             </div>
         </div>
     </div>

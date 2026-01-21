@@ -30,10 +30,11 @@
         <div class="card">
             <div class="card-header d-flex justify-content-between align-items-center">
                 <h4 class="mb-0">{{ 'product.list.title'|trans }}</h4>
-
+                {% if is_granted('ROLE_ADMIN') %}
                 <a href="{{ path('app_product_new', {'_locale': app.request.locale}) }}" class="btn btn-dark">
                     <i class="bi bi-plus-circle"></i> {{ 'product.actions.new'|trans }}
                 </a>
+                {% endif %}
             </div>
             <div class="card-body">
                 <table class="table table-striped" id="product-table">
@@ -45,7 +46,9 @@
                         {#                        <th>{{ 'product.table.language'|trans }}</th> #}
                         <th>{{ 'product.table.variant'|trans }}</th>
                         <th>{{ 'product.table.created_at'|trans }}</th>
+                        {% if is_granted('ROLE_ADMIN') %}
                         <th>{{ 'product.table.actions'|trans }}</th>
+                        {% endif %}
                     </tr>
                     </thead>
                     <tbody>
@@ -59,17 +62,19 @@
                             <td>{{ product.createdAt|date('d/m/Y H:i') }}</td>
                             <td>
                                 <div class="btn-group" role="group">
-                                    <a href="{{ path('app_product_edit', {'id': product.id, '_locale': app.request.locale}) }}"
-                                       class="btn btn-sm btn-dark"
-                                       title="{{ 'product.actions.edit'|trans }}">
-                                        <i class="bi bi-pencil"></i>
-                                    </a>
-                                    <button type="button"
-                                            class="btn btn-sm btn-dark"
-                                            onclick="confirmDelete({{ product.id }})"
-                                            title="{{ 'product.actions.delete'|trans }}">
-                                        <i class="bi bi-trash"></i>
-                                    </button>
+                                    {% if is_granted('ROLE_ADMIN') %}
+                                        <a href="{{ path('app_product_edit', {'id': product.id, '_locale': app.request.locale}) }}"
+                                           class="btn btn-sm btn-dark"
+                                           title="{{ 'product.actions.edit'|trans }}">
+                                            <i class="bi bi-pencil"></i>
+                                        </a>
+                                        <button type="button"
+                                                class="btn btn-sm btn-dark"
+                                                onclick="confirmDelete({{ product.id }})"
+                                                title="{{ 'product.actions.delete'|trans }}">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    {% endif %}
                                 </div>
 
                                 <form id="delete-form-{{ product.id }}"

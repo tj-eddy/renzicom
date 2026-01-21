@@ -33,6 +33,10 @@ class ProductController extends AbstractController
     #[Route('/new', name: 'app_product_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager, ImageUploader $imageUploader): Response
     {
+        if (!$this->isGranted('ROLE_ADMIN')) {
+            $this->addFlash('error', $this->translator->trans('error.access_denied'));
+            return $this->redirectToRoute('app_product_index');
+        }
         $product = new Product();
         $form = $this->createForm(ProductType::class, $product);
         $form->handleRequest($request);
@@ -67,6 +71,10 @@ class ProductController extends AbstractController
     #[Route('/{id}/edit', name: 'app_product_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Product $product, EntityManagerInterface $entityManager, ImageUploader $imageUploader): Response
     {
+        if (!$this->isGranted('ROLE_ADMIN')) {
+            $this->addFlash('error', $this->translator->trans('error.access_denied'));
+            return $this->redirectToRoute('app_product_index');
+        }
         $form = $this->createForm(ProductType::class, $product);
         $form->handleRequest($request);
 
@@ -99,6 +107,10 @@ class ProductController extends AbstractController
     #[Route('/{id}', name: 'app_product_delete', methods: ['POST'])]
     public function delete(Request $request, Product $product, EntityManagerInterface $entityManager, ImageUploader $imageUploader): Response
     {
+        if (!$this->isGranted('ROLE_ADMIN')) {
+            $this->addFlash('error', $this->translator->trans('error.access_denied'));
+            return $this->redirectToRoute('app_product_index');
+        }
         if ($this->isCsrfTokenValid('delete'.$product->getId(), $request->request->get('_token'))) {
             foreach ($product->getImages() as $image) {
                 $imageUploader->removeProduct($image->getFilename());

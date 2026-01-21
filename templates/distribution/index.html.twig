@@ -14,7 +14,8 @@
                         <li class="breadcrumb-item">
                             <a href="{{ path('app_dashboard') }}">{{ 'breadcrumb.home'|trans }}</a>
                         </li>
-                        <li class="breadcrumb-item active" aria-current="page">{{ 'breadcrumb.distributions'|trans }}</li>
+                        <li class="breadcrumb-item active"
+                            aria-current="page">{{ 'breadcrumb.distributions'|trans }}</li>
                     </ol>
                 </nav>
             </div>
@@ -30,6 +31,7 @@
             gap: 5px;
             flex-wrap: wrap;
         }
+
         .status-actions form {
             display: inline-block;
         }
@@ -41,9 +43,11 @@
         <div class="card">
             <div class="card-header d-flex justify-content-between align-items-center">
                 <h4 class="mb-0">{{ 'distribution.list.title'|trans }}</h4>
+                {% if is_granted('ROLE_ADMIN') %}
                 <a href="{{ path('app_distribution_new', {'_locale': app.request.locale}) }}" class="btn btn-dark">
                     <i class="bi bi-plus-circle"></i> {{ 'distribution.actions.new'|trans }}
                 </a>
+                {% endif %}
             </div>
             <div class="card-body">
                 <table class="table table-striped" id="distribution-table">
@@ -56,7 +60,9 @@
                         <th>{{ 'distribution.table.destination'|trans }}</th>
                         <th>{{ 'distribution.table.status'|trans }}</th>
                         <th>{{ 'distribution.table.created_at'|trans }}</th>
-                        <th>{{ 'distribution.table.actions'|trans }}</th>
+                        {% if is_granted('ROLE_ADMIN') %}
+                            <th>{{ 'distribution.table.actions'|trans }}</th>
+                        {% endif %}
                     </tr>
                     </thead>
                     <tbody>
@@ -88,12 +94,16 @@
                                 <span class="badge {{ distribution.statusBadgeClass }}">
                                     {{ distribution.statusLabel|trans }}
                                 </span>
+                                {% if is_granted('ROLE_ADMIN','ROLE_DRIVER') %}
                                 <div class="status-actions mt-2">
                                     {# Bouton "Démarrer" si en préparation #}
                                     {% if distribution.status == constant('App\\Entity\\Distribution::STATUS_PREPARING') %}
-                                        <form method="post" action="{{ path('app_distribution_change_status', {'id': distribution.id, 'status': constant('App\\Entity\\Distribution::STATUS_IN_PROGRESS'), '_locale': app.request.locale}) }}">
-                                            <input type="hidden" name="_token" value="{{ csrf_token('change-status' ~ distribution.id) }}">
-                                            <button type="submit" class="btn btn-xs btn-dark" title="{{ 'distribution.actions.start'|trans }}">
+                                        <form method="post"
+                                              action="{{ path('app_distribution_change_status', {'id': distribution.id, 'status': constant('App\\Entity\\Distribution::STATUS_IN_PROGRESS'), '_locale': app.request.locale}) }}">
+                                            <input type="hidden" name="_token"
+                                                   value="{{ csrf_token('change-status' ~ distribution.id) }}">
+                                            <button type="submit" class="btn btn-xs btn-dark"
+                                                    title="{{ 'distribution.actions.start'|trans }}">
                                                 <i class="bi bi-play-circle"></i>
                                             </button>
                                         </form>
@@ -101,9 +111,12 @@
 
                                     {# Bouton "Livrer" si en cours #}
                                     {% if distribution.status == constant('App\\Entity\\Distribution::STATUS_IN_PROGRESS') %}
-                                        <form method="post" action="{{ path('app_distribution_change_status', {'id': distribution.id, 'status': constant('App\\Entity\\Distribution::STATUS_DELIVERED'), '_locale': app.request.locale}) }}">
-                                            <input type="hidden" name="_token" value="{{ csrf_token('change-status' ~ distribution.id) }}">
-                                            <button type="submit" class="btn btn-xs btn-dark" title="{{ 'distribution.actions.complete'|trans }}">
+                                        <form method="post"
+                                              action="{{ path('app_distribution_change_status', {'id': distribution.id, 'status': constant('App\\Entity\\Distribution::STATUS_DELIVERED'), '_locale': app.request.locale}) }}">
+                                            <input type="hidden" name="_token"
+                                                   value="{{ csrf_token('change-status' ~ distribution.id) }}">
+                                            <button type="submit" class="btn btn-xs btn-dark"
+                                                    title="{{ 'distribution.actions.complete'|trans }}">
                                                 <i class="bi bi-check-circle"></i>
                                             </button>
                                         </form>
@@ -111,9 +124,13 @@
 
                                     {# Bouton "Annuler" si pas encore livré #}
                                     {% if distribution.status != constant('App\\Entity\\Distribution::STATUS_DELIVERED') and distribution.status != constant('App\\Entity\\Distribution::STATUS_CANCELLED') %}
-                                        <form method="post" action="{{ path('app_distribution_change_status', {'id': distribution.id, 'status': constant('App\\Entity\\Distribution::STATUS_CANCELLED'), '_locale': app.request.locale}) }}" onsubmit="return confirm('{{ 'distribution.confirm_cancel'|trans }}')">
-                                            <input type="hidden" name="_token" value="{{ csrf_token('change-status' ~ distribution.id) }}">
-                                            <button type="submit" class="btn btn-xs btn-secondary" title="{{ 'distribution.actions.cancel'|trans }}">
+                                        <form method="post"
+                                              action="{{ path('app_distribution_change_status', {'id': distribution.id, 'status': constant('App\\Entity\\Distribution::STATUS_CANCELLED'), '_locale': app.request.locale}) }}"
+                                              onsubmit="return confirm('{{ 'distribution.confirm_cancel'|trans }}')">
+                                            <input type="hidden" name="_token"
+                                                   value="{{ csrf_token('change-status' ~ distribution.id) }}">
+                                            <button type="submit" class="btn btn-xs btn-secondary"
+                                                    title="{{ 'distribution.actions.cancel'|trans }}">
                                                 <i class="bi bi-x-circle"></i>
                                             </button>
                                         </form>
@@ -121,34 +138,41 @@
 
                                     {# Bouton "Réactiver" si annulé #}
                                     {% if distribution.status == constant('App\\Entity\\Distribution::STATUS_CANCELLED') %}
-                                        <form method="post" action="{{ path('app_distribution_change_status', {'id': distribution.id, 'status': constant('App\\Entity\\Distribution::STATUS_PREPARING'), '_locale': app.request.locale}) }}">
-                                            <input type="hidden" name="_token" value="{{ csrf_token('change-status' ~ distribution.id) }}">
-                                            <button type="submit" class="btn btn-xs btn-dark" title="{{ 'distribution.actions.reactivate'|trans }}">
+                                        <form method="post"
+                                              action="{{ path('app_distribution_change_status', {'id': distribution.id, 'status': constant('App\\Entity\\Distribution::STATUS_PREPARING'), '_locale': app.request.locale}) }}">
+                                            <input type="hidden" name="_token"
+                                                   value="{{ csrf_token('change-status' ~ distribution.id) }}">
+                                            <button type="submit" class="btn btn-xs btn-dark"
+                                                    title="{{ 'distribution.actions.reactivate'|trans }}">
                                                 <i class="bi bi-arrow-clockwise"></i>
                                             </button>
                                         </form>
                                     {% endif %}
+                                    {% endif %}
                                 </div>
                             </td>
                             <td>{{ distribution.createAt ? distribution.createAt|date('d/m/Y H:i') : '-' }}</td>
-                            <td>
-                                <div class="btn-group-vertical" role="group">
+                            {% if is_granted('ROLE_ADMIN') %}
+                                <td>
+                                    <div class="btn-group-vertical" role="group">
 
-                                    <button type="button"
-                                            class="btn btn-sm btn-dark"
-                                            onclick="confirmDelete({{ distribution.id }})"
-                                            title="{{ 'distribution.actions.delete'|trans }}">
-                                        <i class="bi bi-trash"></i>
-                                    </button>
-                                </div>
+                                        <button type="button"
+                                                class="btn btn-sm btn-dark"
+                                                onclick="confirmDelete({{ distribution.id }})"
+                                                title="{{ 'distribution.actions.delete'|trans }}">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    </div>
 
-                                <form id="delete-form-{{ distribution.id }}"
-                                      action="{{ path('app_distribution_delete', {'id': distribution.id, '_locale': app.request.locale}) }}"
-                                      method="post"
-                                      style="display: none;">
-                                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ distribution.id) }}">
-                                </form>
-                            </td>
+                                    <form id="delete-form-{{ distribution.id }}"
+                                          action="{{ path('app_distribution_delete', {'id': distribution.id, '_locale': app.request.locale}) }}"
+                                          method="post"
+                                          style="display: none;">
+                                        <input type="hidden" name="_token"
+                                               value="{{ csrf_token('delete' ~ distribution.id) }}">
+                                    </form>
+                                </td>
+                            {% endif %}
                         </tr>
                     {% else %}
                         <tr>

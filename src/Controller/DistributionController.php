@@ -15,10 +15,14 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 #[Route('/distribution')]
 class DistributionController extends AbstractController
 {
+    public function __construct(private readonly TranslatorInterface $translator)
+    {
+    }
     #[Route('/', name: 'app_distribution_index', methods: ['GET'])]
     public function index(EntityManagerInterface $entityManager): Response
     {
@@ -37,6 +41,10 @@ class DistributionController extends AbstractController
         EntityManagerInterface $entityManager,
         WarehouseRepository $warehouseRepository
     ): Response {
+        if (!$this->isGranted('ROLE_ADMIN')) {
+            $this->addFlash('error', $this->translator->trans('error.access_denied'));
+            return $this->redirectToRoute('app_distribution_index');
+        }
         $distribution = new Distribution();
         $form = $this->createForm(DistributionType::class, $distribution);
         $form->handleRequest($request);
@@ -165,6 +173,11 @@ class DistributionController extends AbstractController
         EntityManagerInterface $entityManager
     ): Response {
         // Vérifier le token CSRF
+
+        if (!$this->isGranted(['ROLE_ADMIN','ROLE_DRIVER'])) {
+            $this->addFlash('error', $this->translator->trans('error.access_denied.change_status'));
+            return $this->redirectToRoute('app_distribution_index');
+        }
         $token = $request->request->get('_token');
         if (!$this->isCsrfTokenValid('change-status' . $distribution->getId(), $token)) {
             $this->addFlash('error', 'Token CSRF invalide');
@@ -203,6 +216,10 @@ class DistributionController extends AbstractController
         Distribution $distribution,
         EntityManagerInterface $entityManager
     ): Response {
+        if (!$this->isGranted(['ROLE_ADMIN','ROLE_DRIVER'])) {
+            $this->addFlash('error', $this->translator->trans('error.access_denied.change_status'));
+            return $this->redirectToRoute('app_distribution_index');
+        }
         if ($this->isCsrfTokenValid('delete' . $distribution->getId(), $request->request->get('_token'))) {
             // Si la distribution n'est pas encore livrée, on peut remettre le stock
             if ($distribution->getStatus() !== Distribution::STATUS_DELIVERED) {

@@ -15,7 +15,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 #[Route('/rack')]
 final class RackController extends AbstractController
 {
-    public function __construct(private TranslatorInterface $translator)
+    public function __construct(private readonly TranslatorInterface $translator)
     {
     }
     #[Route(name: 'app_rack_index', methods: ['GET'])]
@@ -29,6 +29,10 @@ final class RackController extends AbstractController
     #[Route('/new', name: 'app_rack_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
+        if (!$this->isGranted('ROLE_ADMIN')) {
+            $this->addFlash('error', $this->translator->trans('error.access_denied'));
+            return $this->redirectToRoute('app_rack_index');
+        }
         $rack = new Rack();
         $form = $this->createForm(RackType::class, $rack);
         $form->handleRequest($request);
@@ -83,6 +87,10 @@ final class RackController extends AbstractController
     #[Route('/{id}/edit', name: 'app_rack_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Rack $rack, EntityManagerInterface $entityManager): Response
     {
+        if (!$this->isGranted('ROLE_ADMIN')) {
+            $this->addFlash('error', $this->translator->trans('error.access_denied'));
+            return $this->redirectToRoute('app_rack_index');
+        }
         $form = $this->createForm(RackType::class, $rack);
         $form->handleRequest($request);
 
