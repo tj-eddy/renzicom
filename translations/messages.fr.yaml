@@ -428,3 +428,9 @@ nav.confirm_logout_title: "Confirmer la déconnexion"
 nav.confirm_logout_message: "Êtes-vous sûr de vouloir vous déconnecter ?"
 actions.confirm_delete_title: "Confirmer la suppression"
 actions.delete: "Supprimer"
+form.is_active: "Compte actif"
+user.table.status: "Statut"
+user.status.active: "Actif"
+user.status.inactive: "Inactif"
+
+

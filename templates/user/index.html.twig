@@ -41,6 +41,7 @@
                         <th>{{ 'user.table.name'|trans }}</th>
                         <th>{{ 'user.table.email'|trans }}</th>
                         <th>{{ 'user.table.role'|trans }}</th>
+                        <th>{{ 'user.table.status'|trans }}</th>
                         <th>{{ 'user.table.actions'|trans }}</th>
                     </tr>
                     </thead>
@@ -59,6 +60,13 @@
                                     <span class="badge bg-info">{{ 'role.statistics'|trans }}</span>
                                 {% else %}
                                     <span class="badge bg-secondary">{{ user.role }}</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if user.isActive %}
+                                    <span class="badge bg-success">{{ 'user.status.active'|trans }}</span>
+                                {% else %}
+                                    <span class="badge bg-secondary">{{ 'user.status.inactive'|trans }}</span>
                                 {% endif %}
                             </td>
                             <td>

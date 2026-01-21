@@ -26,6 +26,7 @@ security:
 #                success_handler: App\Security\LoginSuccessHandler
                 default_target_path: /fr/
                 always_use_default_target_path: true
+            user_checker: App\Security\UserChecker
             logout:
                 path: app_logout
                 # where to redirect after logout

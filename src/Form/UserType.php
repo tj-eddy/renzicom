@@ -4,6 +4,7 @@ namespace App\Form;
 
 use App\Entity\User;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
@@ -43,6 +44,11 @@ class UserType extends AbstractType
                     'class' => 'form-control',
                     'autocomplete' => 'new-password'
                 ]
+            ])
+            ->add('isActive', CheckboxType::class, [
+                'label' => 'form.is_active',
+                'required' => false,
+                'attr' => ['class' => 'form-check-input']
             ])
         ;
     }

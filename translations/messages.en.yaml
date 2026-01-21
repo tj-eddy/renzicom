@@ -412,3 +412,7 @@ nav.confirm_logout_message: "Are you sure you want to log out?"
 
 actions.confirm_delete_title: "Confirm Deletion"
 actions.delete: "Delete"
+form.is_active: "Active account"
+user.table.status: "Status"
+user.status.active: "Active"
+user.status.inactive: "Inactive"

@@ -70,6 +70,18 @@
             </div>
         </div>
 
+        <div class="col-md-4">
+            <label for="{{ form.isActive.vars.id }}">{{ form_label(form.isActive) }}</label>
+        </div>
+        <div class="col-md-8">
+            <div class="form-group has-icon-left">
+                <div class="position-relative">
+                    {{ form_widget(form.isActive) }}
+                </div>
+                {{ form_errors(form.name) }}
+            </div>
+        </div>
+
         {# Boutons #}
         <div class="col-12 d-flex justify-content-end">
             <a href="{{ path('app_user_index') }}" class="btn btn-light-secondary me-1 mb-1">
