@@ -2,6 +2,7 @@
 
 namespace App\Service;
 
+use Exception;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\String\Slugger\SluggerInterface;
@@ -22,16 +23,25 @@ class ImageUploader
         $this->slugger = $slugger;
     }
 
+    /**
+     * @throws Exception
+     */
     public function upload(UploadedFile $file): string
     {
         return $this->uploadWarehouse($file);
     }
 
+    /**
+     * @throws Exception
+     */
     public function uploadWarehouse(UploadedFile $file): string
     {
         return $this->uploadFile($file, $this->warehouseImagesDirectory);
     }
 
+    /**
+     * @throws Exception
+     */
     public function uploadProduct(UploadedFile $file): string
     {
         return $this->uploadFile($file, $this->productImagesDirectory);
@@ -46,7 +56,7 @@ class ImageUploader
         try {
             $file->move($targetDirectory, $fileName);
         } catch (FileException $e) {
-            throw new \Exception('Erreur lors de l\'upload du fichier');
+            throw new Exception('Erreur lors de l\'upload du fichier');
         }
 
         return $fileName;
