@@ -1,4 +1,143 @@
-{{ form_start(form) }}
-    {{ form_widget(form) }}
-    <button class="btn">{{ button_label|default('Save') }}</button>
+{{ form_start(form, {'attr': {'class': 'form form-horizontal'}}) }}
+<div class="form-body">
+    <div class="row">
+        {# Présentoir #}
+        <div class="col-md-4">
+            <label for="{{ form.display.vars.id }}">{{ form_label(form.display) }}</label>
+        </div>
+        <div class="col-md-8">
+            <div class="form-group">
+                <div class="position-relative">
+                    {{ form_widget(form.display, {
+                        'attr': {
+                            'class': 'form-select select2-display',
+                            'data-placeholder': 'rack.form.display.placeholder'|trans
+                        }
+                    }) }}
+                </div>
+                {{ form_errors(form.display) }}
+            </div>
+        </div>
+
+        {# Nom du rack #}
+        <div class="col-md-4">
+            <label for="{{ form.name.vars.id }}">{{ form_label(form.name) }}</label>
+        </div>
+        <div class="col-md-8">
+            <div class="form-group has-icon-left">
+                <div class="position-relative">
+                    {{ form_widget(form.name, {'attr': {'class': 'form-control', 'placeholder': 'rack.form.name.placeholder'|trans}}) }}
+                    <div class="form-control-icon">
+                        <i class="bi bi-hdd-rack"></i>
+                    </div>
+                </div>
+                {{ form_errors(form.name) }}
+            </div>
+        </div>
+
+        {# Produit #}
+        <div class="col-md-4">
+            <label for="{{ form.product.vars.id }}">{{ form_label(form.product) }}</label>
+        </div>
+        <div class="col-md-8">
+            <div class="form-group">
+                <div class="position-relative">
+                    {{ form_widget(form.product, {
+                        'attr': {
+                            'class': 'form-select select2-product',
+                            'data-placeholder': 'rack.form.product.placeholder'|trans
+                        }
+                    }) }}
+                </div>
+                {{ form_errors(form.product) }}
+            </div>
+        </div>
+
+        {# Position #}
+        <div class="col-md-4">
+            <label for="{{ form.position.vars.id }}">{{ form_label(form.position) }}</label>
+        </div>
+        <div class="col-md-8">
+            <div class="form-group has-icon-left">
+                <div class="position-relative">
+                    {{ form_widget(form.position, {'attr': {'class': 'form-control', 'placeholder': 'rack.form.position.placeholder'|trans}}) }}
+                    <div class="form-control-icon">
+                        <i class="bi bi-sort-numeric-up"></i>
+                    </div>
+                </div>
+                <small class="text-muted">
+                    <i class="bi bi-info-circle"></i> Ordre d'affichage du rack dans le présentoir
+                </small>
+                {{ form_errors(form.position) }}
+            </div>
+        </div>
+
+        {# Séparateur visuel #}
+        <div class="col-12">
+            <hr class="my-4">
+            <h5 class="text-muted mb-3">
+                <i class="bi bi-boxes"></i> Gestion des quantités
+            </h5>
+        </div>
+
+        {# Quantité requise #}
+        <div class="col-md-4">
+            <label for="{{ form.requiredQuantity.vars.id }}">{{ form_label(form.requiredQuantity) }}</label>
+        </div>
+        <div class="col-md-8">
+            <div class="form-group has-icon-left">
+                <div class="position-relative">
+                    {{ form_widget(form.requiredQuantity, {'attr': {'class': 'form-control', 'placeholder': 'rack.form.required_quantity.placeholder'|trans}}) }}
+                    <div class="form-control-icon">
+                        <i class="bi bi-box-seam"></i>
+                    </div>
+                </div>
+                <small class="text-muted">
+                    <i class="bi bi-info-circle"></i> Quantité maximale que le rack peut contenir
+                </small>
+                {{ form_errors(form.requiredQuantity) }}
+            </div>
+        </div>
+
+        {# Quantité actuelle #}
+        <div class="col-md-4">
+            <label for="{{ form.currentQuantity.vars.id }}">{{ form_label(form.currentQuantity) }}</label>
+        </div>
+        <div class="col-md-8">
+            <div class="form-group has-icon-left">
+                <div class="position-relative">
+                    {{ form_widget(form.currentQuantity, {'attr': {'class': 'form-control', 'placeholder': 'rack.form.current_quantity.placeholder'|trans}}) }}
+                    <div class="form-control-icon">
+                        <i class="bi bi-box"></i>
+                    </div>
+                </div>
+                <small class="text-muted">
+                    <i class="bi bi-info-circle"></i> Quantité actuellement présente dans le rack
+                </small>
+                {{ form_errors(form.currentQuantity) }}
+            </div>
+        </div>
+
+        {# Boutons #}
+        <div class="col-12 d-flex justify-content-end">
+            <a href="{{ path('app_rack_index') }}" class="btn btn-light-secondary me-1 mb-1">
+                <i class="bi bi-x-circle"></i> {{ 'form.button.cancel'|trans }}
+            </a>
+            <button type="submit" class="btn btn-dark me-1 mb-1">
+                <i class="bi bi-check-circle"></i>
+                {{ button_label|default('create')|lower == 'update' ? 'form.button.update'|trans : 'form.button.create'|trans }}
+            </button>
+        </div>
+    </div>
+</div>
 {{ form_end(form) }}
+
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function() {
+        // Initialiser Select2 sur tous les selects
+        initSelect2('.select2-display');
+        initSelect2('.select2-product');
+    });
+</script>
