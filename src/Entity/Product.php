@@ -55,6 +55,16 @@ class Product
     #[ORM\OneToMany(mappedBy: 'product', targetEntity: Distribution::class)]
     private Collection $distributions;
 
+    /**
+     * @var File|null
+     */
+    #[Assert\Image(
+        maxSize: '2M',
+        mimeTypes: ['image/jpeg', 'image/png', 'image/webp'],
+        mimeTypesMessage: 'Veuillez uploader une image valide (JPEG, PNG, WEBP)'
+    )]
+    private ?File $imageFile = null;
+
     public function __construct()
     {
         $this->stocks = new ArrayCollection();
@@ -224,6 +234,18 @@ class Product
                 $distribution->setProduct(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getImageFile(): ?File
+    {
+        return $this->imageFile;
+    }
+
+    public function setImageFile(?File $imageFile): static
+    {
+        $this->imageFile = $imageFile;
 
         return $this;
     }

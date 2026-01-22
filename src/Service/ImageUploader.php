@@ -10,13 +10,16 @@ use Symfony\Component\String\Slugger\SluggerInterface;
 class ImageUploader
 {
     private string $avatarImagesDirectory;
+    private string $productImagesDirectory;
     private SluggerInterface $slugger;
 
     public function __construct(
         string $avatarImagesDirectory,
+        string $productImagesDirectory,
         SluggerInterface $slugger
     ) {
         $this->avatarImagesDirectory = $avatarImagesDirectory;
+        $this->productImagesDirectory = $productImagesDirectory;
         $this->slugger = $slugger;
     }
 
@@ -27,6 +30,12 @@ class ImageUploader
     {
         return $this->uploadFile($file, $this->avatarImagesDirectory);
     }
+
+    public function uploadProductImage(UploadedFile $file): string
+    {
+        return $this->uploadFile($file, $this->productImagesDirectory);
+    }
+
 
     private function uploadFile(UploadedFile $file, string $targetDirectory): string
     {
@@ -47,6 +56,12 @@ class ImageUploader
     public function removeAvatar(string $filename): void
     {
         $this->removeFile($filename, $this->avatarImagesDirectory);
+    }
+
+
+    public function removeProductImage(string $filename): void
+    {
+        $this->removeFile($filename, $this->productImagesDirectory);
     }
 
 

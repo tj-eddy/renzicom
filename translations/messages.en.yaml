@@ -1,158 +1,207 @@
-# Navigation
-nav:
-    dashboard: "Dashboard"
-    users: "Users"
-    products: "Products"
-    warehouses: "Warehouses"
-    racks: "Racks"
-    displays: "Displays"
-    hotels: "Hotels"
-    interventions: "Interventions"
-    distributions: "Distributions"
-    my:
-        profile: "My Profile"
-    logout: "Logout"
-    confirm_logout_title: "Confirm Logout"
-    confirm_logout_message: "Are you sure you want to logout?"
-
-# Dashboard
-dashboard:
-    title: "Dashboard"
-    welcome: "Welcome"
-    statistics: "Statistics"
-
-# Actions
-actions:
-    add: "Add"
-    edit: "Edit"
-    delete: "Delete"
-    cancel: "Cancel"
-    save: "Save"
-    confirm: "Confirm"
-    back: "Back"
-    search: "Search"
-    export: "Export"
-    import: "Import"
-    view: "View"
-    close: "Close"
-    confirm_delete_title: "Confirm Deletion"
-    confirm_export_title: "Confirm Export"
-    export_in_progress: "Export in progress..."
-
-# User
-user:
-    title: "Users"
-    add: "Add User"
-    edit: "Edit User"
-    delete: "Delete User"
-    confirm_delete: "Are you sure you want to delete this user?"
-    name: "Name"
-    email: "Email"
-    role: "Role"
-    is_active: "Active"
-    avatar: "Avatar"
-    created_at: "Created At"
-    password: "Password"
-    roles:
-        admin: "Administrator"
-        driver: "Driver"
-        statistics: "Statistics"
-
 # Product
 product:
     title: "Products"
-    add: "Add Product"
-    edit: "Edit Product"
-    delete: "Delete Product"
-    confirm_delete: "Are you sure you want to delete this product?"
-    name: "Name"
-    image: "Image"
-    year_edition: "Edition Year"
-    language: "Language"
-    variant: "Variant"
-    created_at: "Created At"
+    list:
+        title: "Products List"
+        no_products: "No products found"
+    actions:
+        new: "New Product"
+        edit: "Edit Product"
+        delete: "Delete Product"
+    table:
+        id: "ID"
+        image: "Image"
+        name: "Name"
+        year_edition: "Year"
+        language: "Language"
+        created_at: "Created At"
+        actions: "Actions"
+    form:
+        name:
+            label: "Product Name"
+            placeholder: "e.g. Paris Match, Elle, Geo..."
+        image:
+            label: "Product Image"
+            help: "Accepted formats: JPG, PNG, WEBP. Max size: 2MB"
+            current: "Current image"
+            new_preview: "New image"
+            invalid_type: "Invalid file type. Please upload a JPG, PNG or WEBP image."
+            too_large: "Image is too large. Maximum size: 2MB"
+        year_edition:
+            label: "Edition Year"
+            placeholder: "2024"
+        language:
+            label: "Language"
+            placeholder: "FR, EN, DE..."
+        variant:
+            label: "Variants (JSON)"
+            placeholder: '{"color": "red", "size": "A4"}'
+            help: "JSON format for product variants"
 
 # Warehouse
 warehouse:
     title: "Warehouses"
-    add: "Add Warehouse"
-    edit: "Edit Warehouse"
-    delete: "Delete Warehouse"
-    confirm_delete: "Are you sure you want to delete this warehouse?"
-    name: "Name"
-    address: "Address"
-    created_at: "Created At"
-
-# Stock
-stock:
-    title: "Stock"
-    add: "Add Stock"
-    edit: "Edit Stock"
-    delete: "Delete Stock"
-    confirm_delete: "Are you sure you want to delete this stock?"
-    quantity: "Quantity"
-    warehouse: "Warehouse"
-    product: "Product"
-    note: "Note"
-    created_at: "Created At"
+    list:
+        title: "Warehouses List"
+        no_warehouses: "No warehouses found"
+    actions:
+        new: "New Warehouse"
+        edit: "Edit Warehouse"
+        delete: "Delete Warehouse"
+    table:
+        id: "ID"
+        name: "Name"
+        address: "Address"
+        created_at: "Created At"
+        actions: "Actions"
+    form:
+        name:
+            label: "Warehouse Name"
+            placeholder: "Paris Warehouse..."
+        address:
+            label: "Address"
+            placeholder: "123 Peace Street, 75001 Paris"
 
 # Hotel
 hotel:
     title: "Hotels"
-    add: "Add Hotel"
-    edit: "Edit Hotel"
-    delete: "Delete Hotel"
-    confirm_delete: "Are you sure you want to delete this hotel?"
-    name: "Name"
-    address: "Address"
-    contact_name: "Contact Name"
-    contact_email: "Contact Email"
-    contact_phone: "Contact Phone"
-    created_at: "Created At"
+    list:
+        title: "Hotels List"
+        no_hotels: "No hotels found"
+    actions:
+        new: "New Hotel"
+        edit: "Edit Hotel"
+        delete: "Delete Hotel"
+    table:
+        id: "ID"
+        name: "Name"
+        address: "Address"
+        contact_name: "Contact"
+        contact_email: "Email"
+        contact_phone: "Phone"
+        created_at: "Created At"
+        actions: "Actions"
+    form:
+        name:
+            label: "Hotel Name"
+            placeholder: "Marriott, Hilton..."
+        address:
+            label: "Address"
+            placeholder: "123 Champs-Élysées Avenue"
+        contact_name:
+            label: "Contact Name"
+            placeholder: "John Doe"
+        contact_email:
+            label: "Contact Email"
+            placeholder: "contact@hotel.com"
+        contact_phone:
+            label: "Contact Phone"
+            placeholder: "+33 1 23 45 67 89"
 
 # Display
 display:
     title: "Displays"
-    add: "Add Display"
-    edit: "Edit Display"
-    delete: "Delete Display"
-    confirm_delete: "Are you sure you want to delete this display?"
-    name: "Name"
-    location: "Location"
-    hotel: "Hotel"
-    created_at: "Created At"
+    list:
+        title: "Displays List"
+        no_displays: "No displays found"
+    actions:
+        new: "New Display"
+        edit: "Edit Display"
+        delete: "Delete Display"
+    table:
+        id: "ID"
+        name: "Name"
+        location: "Location"
+        hotel: "Hotel"
+        created_at: "Created At"
+        actions: "Actions"
+    form:
+        name:
+            label: "Display Name"
+            placeholder: "Lobby Display, Floor 2 Display..."
+        location:
+            label: "Location"
+            placeholder: "Entrance hall, Floor 2..."
+        hotel:
+            label: "Hotel"
+            placeholder: "Select a hotel"
 
 # Rack
 rack:
     title: "Racks"
-    add: "Add Rack"
-    edit: "Edit Rack"
-    delete: "Delete Rack"
-    confirm_delete: "Are you sure you want to delete this rack?"
-    name: "Name"
-    position: "Position"
-    required_quantity: "Required Quantity"
-    current_quantity: "Current Quantity"
-    display: "Display"
-    product: "Product"
-    created_at: "Created At"
-    fill_rate: "Fill Rate"
-    needs_refill: "Needs Refill"
+    list:
+        title: "Racks List"
+        no_racks: "No racks found"
+    actions:
+        new: "New Rack"
+        edit: "Edit Rack"
+        delete: "Delete Rack"
+    table:
+        id: "ID"
+        name: "Name"
+        position: "Position"
+        required_quantity: "Required Qty"
+        current_quantity: "Current Qty"
+        display: "Display"
+        product: "Product"
+        fill_rate: "Rate"
+        created_at: "Created At"
+        actions: "Actions"
+    form:
+        name:
+            label: "Rack Name"
+            placeholder: "Rack 1, Rack A..."
+        position:
+            label: "Position"
+            placeholder: "1"
+        required_quantity:
+            label: "Required Quantity"
+            placeholder: "10"
+        current_quantity:
+            label: "Current Quantity"
+            placeholder: "5"
+        display:
+            label: "Display"
+            placeholder: "Select a display"
+        product:
+            label: "Product"
+            placeholder: "Select a product"
 
 # Distribution
 distribution:
     title: "Distributions"
-    add: "Add Distribution"
-    edit: "Edit Distribution"
-    delete: "Delete Distribution"
-    confirm_delete: "Are you sure you want to delete this distribution?"
-    user: "Driver"
-    product: "Product"
-    quantity: "Quantity"
-    status: "Status"
-    destination: "Destination"
-    created_at: "Created At"
-    completed_at: "Completed At"
+    list:
+        title: "Distributions List"
+        no_distributions: "No distributions found"
+    actions:
+        new: "New Distribution"
+        edit: "Edit Distribution"
+        delete: "Delete Distribution"
+    table:
+        id: "ID"
+        user: "Driver"
+        product: "Product"
+        quantity: "Quantity"
+        status: "Status"
+        destination: "Destination"
+        created_at: "Created At"
+        completed_at: "Completed At"
+        actions: "Actions"
+    form:
+        user:
+            label: "Driver"
+            placeholder: "Select a driver"
+        product:
+            label: "Product"
+            placeholder: "Select a product"
+        quantity:
+            label: "Quantity"
+            placeholder: "100"
+        status:
+            label: "Status"
+        destination:
+            label: "Destination"
+            placeholder: "List of hotels to visit"
     statuses:
         preparing: "Preparing"
         in_progress: "In Progress"
@@ -162,24 +211,130 @@ distribution:
 # Intervention
 intervention:
     title: "Interventions"
-    add: "Add Intervention"
-    edit: "Edit Intervention"
-    delete: "Delete Intervention"
-    confirm_delete: "Are you sure you want to delete this intervention?"
-    distribution: "Distribution"
-    rack: "Rack"
-    quantity_added: "Quantity Added"
-    photo_before: "Photo Before"
-    photo_after: "Photo After"
-    notes: "Notes"
-    created_at: "Created At"
+    list:
+        title: "Interventions List"
+        no_interventions: "No interventions found"
+    actions:
+        new: "New Intervention"
+        edit: "Edit Intervention"
+        delete: "Delete Intervention"
+    table:
+        id: "ID"
+        distribution: "Distribution"
+        rack: "Rack"
+        quantity_added: "Qty Added"
+        photo_before: "Photo Before"
+        photo_after: "Photo After"
+        notes: "Notes"
+        created_at: "Created At"
+        actions: "Actions"
+    form:
+        distribution:
+            label: "Distribution"
+            placeholder: "Select a distribution"
+        rack:
+            label: "Rack"
+            placeholder: "Select a rack"
+        quantity_added:
+            label: "Quantity Added"
+            placeholder: "5"
+        photo_before:
+            label: "Photo Before"
+        photo_after:
+            label: "Photo After"
+        notes:
+            label: "Notes"
+            placeholder: "Observations..."
 
-# DataTable
-datatable:
-    search: "Search..."
-    no_data: "No data available"
-    info: "Showing {start} to {end} of {rows} entries"
-    per_page: "Rows per page"
+# Stock
+stock:
+    title: "Stock"
+    list:
+        title: "Stock List"
+        no_stocks: "No stocks found"
+    actions:
+        new: "New Stock"
+        edit: "Edit Stock"
+        delete: "Delete Stock"
+    table:
+        id: "ID"
+        warehouse: "Warehouse"
+        product: "Product"
+        quantity: "Quantity"
+        note: "Note"
+        created_at: "Created At"
+        actions: "Actions"
+    form:
+        warehouse:
+            label: "Warehouse"
+            placeholder: "Select a warehouse"
+        product:
+            label: "Product"
+            placeholder: "Select a product"
+        quantity:
+            label: "Quantity"
+            placeholder: "100"
+        note:
+            label: "Note"
+            placeholder: "Additional information..."
+
+# Breadcrumb
+breadcrumb:
+    home: "Home"
+    users: "Users"
+    products: "Products"
+    warehouses: "Warehouses"
+    hotels: "Hotels"
+    displays: "Displays"
+    racks: "Racks"
+    distributions: "Distributions"
+    interventions: "Interventions"
+    stocks: "Stocks"
+    new: "New"
+    edit: "Edit"
+
+# Form buttons
+form:
+    button:
+        create: "Create"
+        update: "Update"
+        cancel: "Cancel"
+        save: "Save"
+    name:
+        placeholder: "Full name"
+    email:
+        placeholder: "email@address.com"
+    password:
+        placeholder: "••••••••"
+        placeholder_edit: "Leave blank to keep unchanged"
+        help_edit: "Leave blank if you don't want to change the password"
+
+# Roles
+role:
+    admin: "Administrator"
+    driver: "Driver"
+    statistics: "Statistics"
+
+# User status
+user:
+    status:
+        active: "Active"
+        inactive: "Inactive"
+    list:
+        title: "Users List"
+        no_users: "No users found"
+    actions:
+        new: "New User"
+        edit: "Edit User"
+        delete: "Delete User"
+    table:
+        id: "ID"
+        name: "Name"
+        email: "Email"
+        role: "Role"
+        status: "Status"
+        actions: "Actions"
+    confirm_delete: "Are you sure you want to delete this user?"
 
 # Messages
 messages:
@@ -192,11 +347,4 @@ messages:
         general: "An error occurred"
         not_found: "Item not found"
         validation: "Please check the entered data"
-
-# Form
-form:
-    required: "Required field"
-    invalid_email: "Invalid email"
-    invalid_format: "Invalid format"
-    min_length: "Minimum {count} characters"
-    max_length: "Maximum {count} characters"
+        image_upload: "Error uploading image"

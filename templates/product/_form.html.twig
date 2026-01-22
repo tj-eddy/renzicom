@@ -1,4 +1,252 @@
-{{ form_start(form) }}
-    {{ form_widget(form) }}
-    <button class="btn">{{ button_label|default('Save') }}</button>
+{{ form_start(form, {'attr': {'class': 'form form-horizontal'}}) }}
+<div class="form-body">
+    <div class="row">
+        {# Nom #}
+        <div class="col-md-4">
+            <label for="{{ form.name.vars.id }}">{{ form_label(form.name) }}</label>
+        </div>
+        <div class="col-md-8">
+            <div class="form-group has-icon-left">
+                <div class="position-relative">
+                    {{ form_widget(form.name, {'attr': {'class': 'form-control', 'placeholder': 'product.form.name.placeholder'|trans}}) }}
+                    <div class="form-control-icon">
+                        <i class="bi bi-book"></i>
+                    </div>
+                </div>
+                {{ form_errors(form.name) }}
+            </div>
+        </div>
+
+        {# Image avec prévisualisation #}
+        <div class="col-md-4">
+            <label for="{{ form.imageFile.vars.id }}">{{ form_label(form.imageFile) }}</label>
+        </div>
+        <div class="col-md-8">
+            <div class="form-group">
+                {# Prévisualisation de l'image existante #}
+                {% if form.vars.data.image %}
+                    <div class="mb-3" id="current-image-container">
+                        <div class="card" style="max-width: 300px;">
+                            <div class="card-body p-2">
+                                <p class="text-muted mb-2 small">
+                                    <i class="bi bi-image"></i> {{ 'product.form.image.current'|trans }}
+                                </p>
+                                <img src="{{ asset('uploads/products/' ~ form.vars.data.image) }}"
+                                     alt="{{ form.vars.data.name }}"
+                                     class="img-fluid rounded"
+                                     id="current-image"
+                                     style="max-height: 250px; object-fit: contain;">
+                                <div class="mt-2">
+                                    <small class="text-muted">{{ form.vars.data.image }}</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+
+                {# Input pour la nouvelle image #}
+                <div class="position-relative">
+                    {{ form_widget(form.imageFile, {
+                        'attr': {
+                            'class': 'form-control',
+                            'id': 'product-image-file',
+                            'accept': 'image/jpeg,image/png,image/webp'
+                        }
+                    }) }}
+                </div>
+
+                {# Prévisualisation de la nouvelle image #}
+                <div id="new-image-preview" class="mt-3" style="display: none;">
+                    <div class="card" style="max-width: 300px;">
+                        <div class="card-body p-2">
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <p class="text-success mb-0 small">
+                                    <i class="bi bi-check-circle"></i> {{ 'product.form.image.new_preview'|trans }}
+                                </p>
+                                <button type="button"
+                                        class="btn btn-sm btn-danger"
+                                        id="cancel-image-btn">
+                                    <i class="bi bi-x"></i>
+                                </button>
+                            </div>
+                            <img id="preview-img"
+                                 src=""
+                                 alt="Preview"
+                                 class="img-fluid rounded"
+                                 style="max-height: 250px; object-fit: contain;">
+                            <div class="mt-2">
+                                <small class="text-muted" id="new-image-name"></small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <small class="text-muted">{{ 'product.form.image.help'|trans }}</small>
+                {{ form_errors(form.imageFile) }}
+            </div>
+        </div>
+
+        {# Année d'édition #}
+        <div class="col-md-4">
+            <label for="{{ form.yearEdition.vars.id }}">{{ form_label(form.yearEdition) }}</label>
+        </div>
+        <div class="col-md-8">
+            <div class="form-group has-icon-left">
+                <div class="position-relative">
+                    {{ form_widget(form.yearEdition, {'attr': {'class': 'form-control', 'placeholder': 'product.form.year_edition.placeholder'|trans}}) }}
+                    <div class="form-control-icon">
+                        <i class="bi bi-calendar"></i>
+                    </div>
+                </div>
+                {{ form_errors(form.yearEdition) }}
+            </div>
+        </div>
+
+        {# Langue #}
+        <div class="col-md-4">
+            <label for="{{ form.language.vars.id }}">{{ form_label(form.language) }}</label>
+        </div>
+        <div class="col-md-8">
+            <div class="form-group has-icon-left">
+                <div class="position-relative">
+                    {{ form_widget(form.language, {'attr': {'class': 'form-control', 'placeholder': 'product.form.language.placeholder'|trans}}) }}
+                    <div class="form-control-icon">
+                        <i class="bi bi-translate"></i>
+                    </div>
+                </div>
+                {{ form_errors(form.language) }}
+            </div>
+        </div>
+
+        {# Variante (JSON) #}
+        {% if form.variant is defined %}
+            <div class="col-md-4">
+                <label for="{{ form.variant.vars.id }}">{{ form_label(form.variant) }}</label>
+            </div>
+            <div class="col-md-8">
+                <div class="form-group">
+                    <div class="position-relative">
+                        {{ form_widget(form.variant, {'attr': {'class': 'form-control', 'rows': '4', 'placeholder': 'product.form.variant.placeholder'|trans}}) }}
+                    </div>
+                    <small class="text-muted">{{ 'product.form.variant.help'|trans }}</small>
+                    {{ form_errors(form.variant) }}
+                </div>
+            </div>
+        {% endif %}
+
+        {# Boutons #}
+        <div class="col-12 d-flex justify-content-end">
+            <a href="{{ path('app_product_index') }}" class="btn btn-light-secondary me-1 mb-1">
+                <i class="bi bi-x-circle"></i> {{ 'form.button.cancel'|trans }}
+            </a>
+            <button type="submit" class="btn btn-dark me-1 mb-1">
+                <i class="bi bi-check-circle"></i>
+                {{ button_label|default('create')|lower == 'update' ? 'form.button.update'|trans : 'form.button.create'|trans }}
+            </button>
+        </div>
+    </div>
+</div>
 {{ form_end(form) }}
+
+<style>
+    #new-image-preview {
+        animation: fadeIn 0.3s ease-in;
+    }
+
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(-10px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .card {
+        transition: opacity 0.3s ease;
+    }
+</style>
+
+<script>
+    $(document).ready(function() {
+        const allowedTypes = ['image/jpeg', 'image/png', 'image/webp'];
+        const maxSize = 2 * 1024 * 1024; // 2MB en bytes
+
+        // Gestion du changement de fichier
+        $('#product-image-file').on('change', function(e) {
+            const file = e.target.files[0];
+
+            if (!file) {
+                return;
+            }
+
+            // Vérifier le type de fichier
+            if (!allowedTypes.includes(file.type)) {
+                alert('{{ 'product.form.image.invalid_type'|trans }}');
+                $(this).val('');
+                return;
+            }
+
+            // Vérifier la taille
+            if (file.size > maxSize) {
+                alert('{{ 'product.form.image.too_large'|trans }}');
+                $(this).val('');
+                return;
+            }
+
+            // Créer le FileReader pour la prévisualisation
+            const reader = new FileReader();
+
+            reader.onload = function(event) {
+                // Afficher la prévisualisation de la nouvelle image
+                $('#preview-img').attr('src', event.target.result);
+                $('#new-image-name').text(file.name);
+                $('#new-image-preview').fadeIn(300);
+
+                // Réduire l'opacité de l'image actuelle si elle existe
+                $('#current-image-container .card').animate({
+                    opacity: 0.5
+                }, 300);
+            };
+
+            reader.readAsDataURL(file);
+        });
+
+        // Gestion de l'annulation
+        $('#cancel-image-btn').on('click', function() {
+            // Réinitialiser l'input file
+            $('#product-image-file').val('');
+
+            // Masquer la prévisualisation avec animation
+            $('#new-image-preview').fadeOut(300);
+
+            // Restaurer l'opacité de l'image actuelle
+            $('#current-image-container .card').animate({
+                opacity: 1
+            }, 300);
+        });
+
+        // Empêcher la soumission du formulaire si l'image est invalide
+        $('form').on('submit', function(e) {
+            const fileInput = $('#product-image-file')[0];
+
+            if (fileInput.files.length > 0) {
+                const file = fileInput.files[0];
+
+                if (!allowedTypes.includes(file.type)) {
+                    e.preventDefault();
+                    alert('{{ 'product.form.image.invalid_type'|trans }}');
+                    return false;
+                }
+
+                if (file.size > maxSize) {
+                    e.preventDefault();
+                    alert('{{ 'product.form.image.too_large'|trans }}');
+                    return false;
+                }
+            }
+        });
+    });
+</script>

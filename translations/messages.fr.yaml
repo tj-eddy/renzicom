@@ -1,4 +1,6 @@
-# Navigation
+# ========================================
+# NAVIGATION
+# ========================================
 nav:
     dashboard: "Tableau de bord"
     users: "Utilisateurs"
@@ -9,19 +11,24 @@ nav:
     hotels: "Hôtels"
     interventions: "Interventions"
     distributions: "Distributions"
+    stocks: "Stocks"
     my:
         profile: "Mon profil"
     logout: "Déconnexion"
     confirm_logout_title: "Confirmer la déconnexion"
     confirm_logout_message: "Êtes-vous sûr de vouloir vous déconnecter ?"
 
-# Dashboard
+# ========================================
+# DASHBOARD
+# ========================================
 dashboard:
     title: "Tableau de bord"
     welcome: "Bienvenue"
     statistics: "Statistiques"
 
-# Actions
+# ========================================
+# ACTIONS GÉNÉRALES
+# ========================================
 actions:
     add: "Ajouter"
     edit: "Modifier"
@@ -39,149 +46,58 @@ actions:
     confirm_export_title: "Confirmer l'export"
     export_in_progress: "Export en cours..."
 
-# User
-user:
-    title: "Utilisateurs"
-    add: "Ajouter un utilisateur"
-    edit: "Modifier l'utilisateur"
-    delete: "Supprimer l'utilisateur"
-    confirm_delete: "Êtes-vous sûr de vouloir supprimer cet utilisateur ?"
-    name: "Nom"
-    email: "Email"
-    role: "Rôle"
-    is_active: "Actif"
-    avatar: "Avatar"
-    created_at: "Créé le"
-    password: "Mot de passe"
-    roles:
-        admin: "Administrateur"
-        driver: "Livreur"
-        statistics: "Statistiques"
+# ========================================
+# BREADCRUMB
+# ========================================
+breadcrumb:
+    home: "Accueil"
+    users: "Utilisateurs"
+    products: "Produits"
+    warehouses: "Entrepôts"
+    hotels: "Hôtels"
+    displays: "Présentoirs"
+    racks: "Racks"
+    distributions: "Distributions"
+    interventions: "Interventions"
+    stocks: "Stocks"
+    new: "Nouveau"
+    edit: "Modifier"
 
-# Product
-product:
-    title: "Produits"
-    add: "Ajouter un produit"
-    edit: "Modifier le produit"
-    delete: "Supprimer le produit"
-    confirm_delete: "Êtes-vous sûr de vouloir supprimer ce produit ?"
-    name: "Nom"
-    image: "Image"
-    year_edition: "Année d'édition"
-    language: "Langue"
-    variant: "Variante"
-    created_at: "Créé le"
+# ========================================
+# FORMULAIRES
+# ========================================
+form:
+    button:
+        create: "Créer"
+        update: "Mettre à jour"
+        cancel: "Annuler"
+        save: "Enregistrer"
+    validation:
+        required: "Champ obligatoire"
+        invalid_email: "Email invalide"
+        invalid_format: "Format invalide"
+        min_length: "Minimum {count} caractères"
+        max_length: "Maximum {count} caractères"
+    placeholder:
+        name: "Nom complet"
+        email: "adresse@email.com"
+        password: "••••••••"
+        password_edit: "Laisser vide pour ne pas modifier"
+    help:
+        password_edit: "Laissez vide si vous ne souhaitez pas modifier le mot de passe"
 
-# Warehouse
-warehouse:
-    title: "Entrepôts"
-    add: "Ajouter un entrepôt"
-    edit: "Modifier l'entrepôt"
-    delete: "Supprimer l'entrepôt"
-    confirm_delete: "Êtes-vous sûr de vouloir supprimer cet entrepôt ?"
-    name: "Nom"
-    address: "Adresse"
-    created_at: "Créé le"
-
-# Stock
-stock:
-    title: "Stock"
-    add: "Ajouter du stock"
-    edit: "Modifier le stock"
-    delete: "Supprimer le stock"
-    confirm_delete: "Êtes-vous sûr de vouloir supprimer ce stock ?"
-    quantity: "Quantité"
-    warehouse: "Entrepôt"
-    product: "Produit"
-    note: "Note"
-    created_at: "Créé le"
-
-# Hotel
-hotel:
-    title: "Hôtels"
-    add: "Ajouter un hôtel"
-    edit: "Modifier l'hôtel"
-    delete: "Supprimer l'hôtel"
-    confirm_delete: "Êtes-vous sûr de vouloir supprimer cet hôtel ?"
-    name: "Nom"
-    address: "Adresse"
-    contact_name: "Nom du contact"
-    contact_email: "Email du contact"
-    contact_phone: "Téléphone du contact"
-    created_at: "Créé le"
-
-# Display
-display:
-    title: "Présentoirs"
-    add: "Ajouter un présentoir"
-    edit: "Modifier le présentoir"
-    delete: "Supprimer le présentoir"
-    confirm_delete: "Êtes-vous sûr de vouloir supprimer ce présentoir ?"
-    name: "Nom"
-    location: "Emplacement"
-    hotel: "Hôtel"
-    created_at: "Créé le"
-
-# Rack
-rack:
-    title: "Racks"
-    add: "Ajouter un rack"
-    edit: "Modifier le rack"
-    delete: "Supprimer le rack"
-    confirm_delete: "Êtes-vous sûr de vouloir supprimer ce rack ?"
-    name: "Nom"
-    position: "Position"
-    required_quantity: "Quantité requise"
-    current_quantity: "Quantité actuelle"
-    display: "Présentoir"
-    product: "Produit"
-    created_at: "Créé le"
-    fill_rate: "Taux de remplissage"
-    needs_refill: "Nécessite un réapprovisionnement"
-
-# Distribution
-distribution:
-    title: "Distributions"
-    add: "Ajouter une distribution"
-    edit: "Modifier la distribution"
-    delete: "Supprimer la distribution"
-    confirm_delete: "Êtes-vous sûr de vouloir supprimer cette distribution ?"
-    user: "Livreur"
-    product: "Produit"
-    quantity: "Quantité"
-    status: "Statut"
-    destination: "Destination"
-    created_at: "Créé le"
-    completed_at: "Terminé le"
-    statuses:
-        preparing: "En préparation"
-        in_progress: "En cours"
-        delivered: "Livrée"
-        cancelled: "Annulée"
-
-# Intervention
-intervention:
-    title: "Interventions"
-    add: "Ajouter une intervention"
-    edit: "Modifier l'intervention"
-    delete: "Supprimer l'intervention"
-    confirm_delete: "Êtes-vous sûr de vouloir supprimer cette intervention ?"
-    distribution: "Distribution"
-    rack: "Rack"
-    quantity_added: "Quantité ajoutée"
-    photo_before: "Photo avant"
-    photo_after: "Photo après"
-    notes: "Notes"
-    created_at: "Créé le"
-
-# DataTable
+# ========================================
+# DATATABLE
+# ========================================
 datatable:
     search: "Rechercher..."
     no_data: "Aucune donnée disponible"
     info: "Affichage de {start} à {end} sur {rows} entrées"
     per_page: "Lignes par page"
 
-# Messages
+# ========================================
+# MESSAGES
+# ========================================
 messages:
     success:
         created: "Élément créé avec succès"
@@ -192,11 +108,358 @@ messages:
         general: "Une erreur s'est produite"
         not_found: "Élément non trouvé"
         validation: "Veuillez vérifier les données saisies"
+        image_upload: "Erreur lors de l'upload de l'image"
 
-# Form
-form:
-    required: "Champ obligatoire"
-    invalid_email: "Email invalide"
-    invalid_format: "Format invalide"
-    min_length: "Minimum {count} caractères"
-    max_length: "Maximum {count} caractères"
+# ========================================
+# RÔLES & STATUTS
+# ========================================
+role:
+    admin: "Administrateur"
+    driver: "Livreur"
+    statistics: "Statistiques"
+
+status:
+    active: "Actif"
+    inactive: "Inactif"
+    preparing: "En préparation"
+    in_progress: "En cours"
+    delivered: "Livrée"
+    cancelled: "Annulée"
+
+# ========================================
+# UTILISATEURS
+# ========================================
+user:
+    title: "Utilisateurs"
+    list:
+        title: "Liste des utilisateurs"
+        no_users: "Aucun utilisateur trouvé"
+    actions:
+        new: "Nouvel utilisateur"
+        edit: "Modifier l'utilisateur"
+        delete: "Supprimer l'utilisateur"
+    table:
+        id: "ID"
+        name: "Nom"
+        email: "Email"
+        role: "Rôle"
+        status: "Statut"
+        actions: "Actions"
+    form:
+        name:
+            label: "Nom"
+            placeholder: "Nom complet"
+        email:
+            label: "Email"
+            placeholder: "adresse@email.com"
+        password:
+            label: "Mot de passe"
+            placeholder: "••••••••"
+            placeholder_edit: "Laisser vide pour ne pas modifier"
+            help_edit: "Laissez vide si vous ne souhaitez pas modifier le mot de passe"
+        role:
+            label: "Rôle"
+        is_active:
+            label: "Actif"
+        avatar:
+            label: "Avatar"
+    confirm_delete: "Êtes-vous sûr de vouloir supprimer cet utilisateur ?"
+
+# ========================================
+# PRODUITS
+# ========================================
+product:
+    title: "Produits"
+    list:
+        title: "Liste des produits"
+        no_products: "Aucun produit trouvé"
+    actions:
+        new: "Nouveau produit"
+        edit: "Modifier le produit"
+        delete: "Supprimer le produit"
+    table:
+        id: "ID"
+        image: "Image"
+        name: "Nom"
+        year_edition: "Année"
+        language: "Langue"
+        created_at: "Créé le"
+        actions: "Actions"
+    form:
+        name:
+            label: "Nom du produit"
+            placeholder: "Ex: Paris Match, Elle, Geo..."
+        image:
+            label: "Image du produit"
+            help: "Formats acceptés: JPG, PNG, WEBP. Taille max: 2MB"
+            current: "Image actuelle"
+            new_preview: "Nouvelle image"
+            invalid_type: "Type de fichier invalide. Veuillez uploader une image JPG, PNG ou WEBP."
+            too_large: "L'image est trop volumineuse. Taille maximum: 2MB"
+        year_edition:
+            label: "Année d'édition"
+            placeholder: "2024"
+        language:
+            label: "Langue"
+            placeholder: "FR, EN, DE..."
+        variant:
+            label: "Variantes (JSON)"
+            placeholder: '{"couleur": "rouge", "taille": "A4"}'
+            help: "Format JSON pour les variantes du produit"
+    confirm_delete: "Êtes-vous sûr de vouloir supprimer ce produit ?"
+
+# ========================================
+# ENTREPÔTS
+# ========================================
+warehouse:
+    title: "Entrepôts"
+    list:
+        title: "Liste des entrepôts"
+        no_warehouses: "Aucun entrepôt trouvé"
+    actions:
+        new: "Nouvel entrepôt"
+        edit: "Modifier l'entrepôt"
+        delete: "Supprimer l'entrepôt"
+    table:
+        id: "ID"
+        name: "Nom"
+        address: "Adresse"
+        created_at: "Créé le"
+        actions: "Actions"
+    form:
+        name:
+            label: "Nom de l'entrepôt"
+            placeholder: "Entrepôt Paris..."
+        address:
+            label: "Adresse"
+            placeholder: "123 Rue de la Paix, 75001 Paris"
+    confirm_delete: "Êtes-vous sûr de vouloir supprimer cet entrepôt ?"
+
+# ========================================
+# HÔTELS
+# ========================================
+hotel:
+    title: "Hôtels"
+    list:
+        title: "Liste des hôtels"
+        no_hotels: "Aucun hôtel trouvé"
+    actions:
+        new: "Nouvel hôtel"
+        edit: "Modifier l'hôtel"
+        delete: "Supprimer l'hôtel"
+    table:
+        id: "ID"
+        name: "Nom"
+        address: "Adresse"
+        contact_name: "Contact"
+        contact_email: "Email"
+        contact_phone: "Téléphone"
+        created_at: "Créé le"
+        actions: "Actions"
+    form:
+        name:
+            label: "Nom de l'hôtel"
+            placeholder: "Marriott, Hilton..."
+        address:
+            label: "Adresse"
+            placeholder: "123 Avenue des Champs-Élysées"
+        contact_name:
+            label: "Nom du contact"
+            placeholder: "Jean Dupont"
+        contact_email:
+            label: "Email du contact"
+            placeholder: "contact@hotel.com"
+        contact_phone:
+            label: "Téléphone du contact"
+            placeholder: "+33 1 23 45 67 89"
+    confirm_delete: "Êtes-vous sûr de vouloir supprimer cet hôtel ?"
+
+# ========================================
+# PRÉSENTOIRS
+# ========================================
+display:
+    title: "Présentoirs"
+    list:
+        title: "Liste des présentoirs"
+        no_displays: "Aucun présentoir trouvé"
+    actions:
+        new: "Nouveau présentoir"
+        edit: "Modifier le présentoir"
+        delete: "Supprimer le présentoir"
+    table:
+        id: "ID"
+        name: "Nom"
+        location: "Emplacement"
+        hotel: "Hôtel"
+        created_at: "Créé le"
+        actions: "Actions"
+    form:
+        name:
+            label: "Nom du présentoir"
+            placeholder: "Présentoir Lobby, Présentoir Étage 2..."
+        location:
+            label: "Emplacement"
+            placeholder: "Hall d'entrée, Étage 2..."
+        hotel:
+            label: "Hôtel"
+            placeholder: "Sélectionner un hôtel"
+    confirm_delete: "Êtes-vous sûr de vouloir supprimer ce présentoir ?"
+
+# ========================================
+# RACKS
+# ========================================
+rack:
+    title: "Racks"
+    list:
+        title: "Liste des racks"
+        no_racks: "Aucun rack trouvé"
+    actions:
+        new: "Nouveau rack"
+        edit: "Modifier le rack"
+        delete: "Supprimer le rack"
+    table:
+        id: "ID"
+        name: "Nom"
+        position: "Position"
+        required_quantity: "Qté requise"
+        current_quantity: "Qté actuelle"
+        display: "Présentoir"
+        product: "Produit"
+        fill_rate: "Taux"
+        created_at: "Créé le"
+        actions: "Actions"
+    form:
+        name:
+            label: "Nom du rack"
+            placeholder: "Rack 1, Rack A..."
+        position:
+            label: "Position"
+            placeholder: "1"
+        required_quantity:
+            label: "Quantité requise"
+            placeholder: "10"
+        current_quantity:
+            label: "Quantité actuelle"
+            placeholder: "5"
+        display:
+            label: "Présentoir"
+            placeholder: "Sélectionner un présentoir"
+        product:
+            label: "Produit"
+            placeholder: "Sélectionner un produit"
+    confirm_delete: "Êtes-vous sûr de vouloir supprimer ce rack ?"
+
+# ========================================
+# DISTRIBUTIONS
+# ========================================
+distribution:
+    title: "Distributions"
+    list:
+        title: "Liste des distributions"
+        no_distributions: "Aucune distribution trouvée"
+    actions:
+        new: "Nouvelle distribution"
+        edit: "Modifier la distribution"
+        delete: "Supprimer la distribution"
+    table:
+        id: "ID"
+        user: "Livreur"
+        product: "Produit"
+        quantity: "Quantité"
+        status: "Statut"
+        destination: "Destination"
+        created_at: "Créé le"
+        completed_at: "Terminé le"
+        actions: "Actions"
+    form:
+        user:
+            label: "Livreur"
+            placeholder: "Sélectionner un livreur"
+        product:
+            label: "Produit"
+            placeholder: "Sélectionner un produit"
+        quantity:
+            label: "Quantité"
+            placeholder: "100"
+        status:
+            label: "Statut"
+        destination:
+            label: "Destination"
+            placeholder: "Liste des hôtels à visiter"
+    confirm_delete: "Êtes-vous sûr de vouloir supprimer cette distribution ?"
+
+# ========================================
+# INTERVENTIONS
+# ========================================
+intervention:
+    title: "Interventions"
+    list:
+        title: "Liste des interventions"
+        no_interventions: "Aucune intervention trouvée"
+    actions:
+        new: "Nouvelle intervention"
+        edit: "Modifier l'intervention"
+        delete: "Supprimer l'intervention"
+    table:
+        id: "ID"
+        distribution: "Distribution"
+        rack: "Rack"
+        quantity_added: "Qté ajoutée"
+        photo_before: "Photo avant"
+        photo_after: "Photo après"
+        notes: "Notes"
+        created_at: "Créé le"
+        actions: "Actions"
+    form:
+        distribution:
+            label: "Distribution"
+            placeholder: "Sélectionner une distribution"
+        rack:
+            label: "Rack"
+            placeholder: "Sélectionner un rack"
+        quantity_added:
+            label: "Quantité ajoutée"
+            placeholder: "5"
+        photo_before:
+            label: "Photo avant"
+        photo_after:
+            label: "Photo après"
+        notes:
+            label: "Notes"
+            placeholder: "Observations..."
+    confirm_delete: "Êtes-vous sûr de vouloir supprimer cette intervention ?"
+
+# ========================================
+# STOCKS
+# ========================================
+stock:
+    title: "Stock"
+    list:
+        title: "Liste des stocks"
+        no_stocks: "Aucun stock trouvé"
+    actions:
+        new: "Nouveau stock"
+        edit: "Modifier le stock"
+        delete: "Supprimer le stock"
+    table:
+        id: "ID"
+        warehouse: "Entrepôt"
+        product: "Produit"
+        quantity: "Quantité"
+        note: "Note"
+        created_at: "Créé le"
+        actions: "Actions"
+    form:
+        warehouse:
+            label: "Entrepôt"
+            placeholder: "Sélectionner un entrepôt"
+        product:
+            label: "Produit"
+            placeholder: "Sélectionner un produit"
+        quantity:
+            label: "Quantité"
+            placeholder: "100"
+        note:
+            label: "Note"
+            placeholder: "Informations complémentaires..."
+    confirm_delete: "Êtes-vous sûr de vouloir supprimer ce stock ?"

@@ -1,45 +1,133 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Product index{% endblock %}
+{% block stylesheets %}
+    {{ parent() }}
+{% endblock %}
+
+{% block title %}{{ 'product.list.title'|trans }}{% endblock %}
+
+{% block page_title %}
+    <div class="page-title">
+        <div class="row">
+            <div class="col-12 col-md-6 order-md-1 order-last">
+                <h3>{{ 'product.list.title'|trans }}</h3>
+            </div>
+            <div class="col-12 col-md-6 order-md-2 order-first">
+                <nav aria-label="breadcrumb" class="breadcrumb-header float-start float-lg-end">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item">
+                            <a href="{{ path('app_dashboard') }}">{{ 'breadcrumb.home'|trans }}</a>
+                        </li>
+                        <li class="breadcrumb-item active" aria-current="page">{{ 'breadcrumb.products'|trans }}</li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+    </div>
+{% endblock %}
 
 {% block body %}
-    <h1>Product index</h1>
+    <style>
+        .product-image-wrapper {
+            width: 60px;
+            height: 80px;
+            border-radius: 4px;
+            overflow: hidden;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #f8f9fa;
+            border: 1px solid #dee2e6;
+        }
 
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Name</th>
-                <th>Image</th>
-                <th>YearEdition</th>
-                <th>Language</th>
-                <th>Variant</th>
-                <th>CreatedAt</th>
-                <th>actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for product in products %}
-            <tr>
-                <td>{{ product.id }}</td>
-                <td>{{ product.name }}</td>
-                <td>{{ product.image }}</td>
-                <td>{{ product.yearEdition }}</td>
-                <td>{{ product.language }}</td>
-                <td>{{ product.variant ? product.variant|json_encode : '' }}</td>
-                <td>{{ product.createdAt ? product.createdAt|date('Y-m-d H:i:s') : '' }}</td>
-                <td>
-                    <a href="{{ path('app_product_show', {'id': product.id}) }}">show</a>
-                    <a href="{{ path('app_product_edit', {'id': product.id}) }}">edit</a>
-                </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="8">no records found</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+        .product-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
 
-    <a href="{{ path('app_product_new') }}">Create new</a>
+        .image-placeholder {
+            width: 60px;
+            height: 80px;
+            border-radius: 4px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            font-size: 20px;
+        }
+    </style>
+
+    <section class="section">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h4 class="mb-0">{{ 'product.list.title'|trans }}</h4>
+                <a href="{{ path('app_product_new') }}" class="btn btn-dark">
+                    <i class="bi bi-plus-circle"></i> {{ 'product.actions.new'|trans }}
+                </a>
+            </div>
+            <div class="card-body">
+                <table class="table table-striped" id="products-table">
+                    <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>{{ 'product.table.name'|trans }}</th>
+                        <th>{{ 'product.table.year_edition'|trans }}</th>
+                        <th>{{ 'product.table.language'|trans }}</th>
+                        <th>{{ 'product.table.created_at'|trans }}</th>
+                        <th>{{ 'product.table.actions'|trans }}</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for product in products %}
+                        <tr>
+                            <td>{{ product.id }}</td>
+                            <td>{{ product.name }}</td>
+                            <td>{{ product.yearEdition ?? '-' }}</td>
+                            <td>{{ product.language|upper }}</td>
+                            <td>{{ product.createdAt ? product.createdAt|date('d/m/Y H:i') : '' }}</td>
+                            <td>
+                                <div class="btn-group" role="group">
+                                    <a href="{{ path('app_product_edit', {'id': product.id}) }}"
+                                       class="btn btn-sm btn-dark"
+                                       title="{{ 'product.actions.edit'|trans }}">
+                                        <i class="bi bi-pencil"></i>
+                                    </a>
+                                    <button type="button"
+                                            class="btn btn-sm btn-danger"
+                                            onclick="confirmDelete({{ product.id }})"
+                                            title="{{ 'product.actions.delete'|trans }}">
+                                        <i class="bi bi-trash"></i>
+                                    </button>
+                                </div>
+
+                                {# Formulaire de suppression caché #}
+                                <form id="delete-form-{{ product.id }}"
+                                      action="{{ path('app_product_delete', {'id': product.id}) }}"
+                                      method="post"
+                                      style="display: none;">
+                                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ product.id) }}">
+                                </form>
+                            </td>
+                        </tr>
+                    {% else %}
+                        <tr>
+                            <td colspan="7" class="text-center">{{ 'product.list.no_products'|trans }}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        initDataTable('#products-table');
+    </script>
 {% endblock %}
