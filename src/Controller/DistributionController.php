@@ -10,11 +10,18 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 #[Route('/distribution')]
-final class DistributionController extends AbstractController
+class DistributionController extends AbstractController
 {
-    #[Route(name: 'app_distribution_index', methods: ['GET'])]
+    public function __construct(
+        private EntityManagerInterface $entityManager,
+        private TranslatorInterface $translator
+    ) {
+    }
+
+    #[Route('/', name: 'app_distribution_index', methods: ['GET'])]
     public function index(DistributionRepository $distributionRepository): Response
     {
         return $this->render('distribution/index.html.twig', [
@@ -23,17 +30,24 @@ final class DistributionController extends AbstractController
     }
 
     #[Route('/new', name: 'app_distribution_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager): Response
+    public function new(Request $request): Response
     {
         $distribution = new Distribution();
         $form = $this->createForm(DistributionType::class, $distribution);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->persist($distribution);
-            $entityManager->flush();
+            // Si le statut est "delivered", mettre à jour completedAt
+            if ($distribution->getStatus() === Distribution::STATUS_DELIVERED) {
+                $distribution->setCompletedAt(new \DateTimeImmutable());
+            }
 
-            return $this->redirectToRoute('app_distribution_index', [], Response::HTTP_SEE_OTHER);
+            $this->entityManager->persist($distribution);
+            $this->entityManager->flush();
+
+            $this->addFlash('success', $this->translator->trans('messages.success.created'));
+
+            return $this->redirectToRoute('app_distribution_index');
         }
 
         return $this->render('distribution/new.html.twig', [
@@ -42,24 +56,32 @@ final class DistributionController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}', name: 'app_distribution_show', methods: ['GET'])]
-    public function show(Distribution $distribution): Response
-    {
-        return $this->render('distribution/show.html.twig', [
-            'distribution' => $distribution,
-        ]);
-    }
-
     #[Route('/{id}/edit', name: 'app_distribution_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, Distribution $distribution, EntityManagerInterface $entityManager): Response
+    public function edit(Request $request, Distribution $distribution): Response
     {
+        $oldStatus = $distribution->getStatus();
+
         $form = $this->createForm(DistributionType::class, $distribution);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->flush();
+            // Si le statut passe à "delivered", mettre à jour completedAt
+            if ($distribution->getStatus() === Distribution::STATUS_DELIVERED &&
+                $oldStatus !== Distribution::STATUS_DELIVERED) {
+                $distribution->setCompletedAt(new \DateTimeImmutable());
+            }
 
-            return $this->redirectToRoute('app_distribution_index', [], Response::HTTP_SEE_OTHER);
+            // Si on revient en arrière depuis delivered, réinitialiser completedAt
+            if ($distribution->getStatus() !== Distribution::STATUS_DELIVERED &&
+                $oldStatus === Distribution::STATUS_DELIVERED) {
+                $distribution->setCompletedAt(null);
+            }
+
+            $this->entityManager->flush();
+
+            $this->addFlash('success', $this->translator->trans('messages.success.updated'));
+
+            return $this->redirectToRoute('app_distribution_index');
         }
 
         return $this->render('distribution/edit.html.twig', [
@@ -69,13 +91,15 @@ final class DistributionController extends AbstractController
     }
 
     #[Route('/{id}', name: 'app_distribution_delete', methods: ['POST'])]
-    public function delete(Request $request, Distribution $distribution, EntityManagerInterface $entityManager): Response
+    public function delete(Request $request, Distribution $distribution): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$distribution->getId(), $request->getPayload()->getString('_token'))) {
-            $entityManager->remove($distribution);
-            $entityManager->flush();
+        if ($this->isCsrfTokenValid('delete' . $distribution->getId(), $request->request->get('_token'))) {
+            $this->entityManager->remove($distribution);
+            $this->entityManager->flush();
+
+            $this->addFlash('success', $this->translator->trans('messages.success.deleted'));
         }
 
-        return $this->redirectToRoute('app_distribution_index', [], Response::HTTP_SEE_OTHER);
+        return $this->redirectToRoute('app_distribution_index');
     }
 }

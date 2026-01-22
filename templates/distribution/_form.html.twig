@@ -1,4 +1,115 @@
-{{ form_start(form) }}
-    {{ form_widget(form) }}
-    <button class="btn">{{ button_label|default('Save') }}</button>
+{{ form_start(form, {'attr': {'class': 'form form-horizontal'}}) }}
+<div class="form-body">
+    <div class="row">
+        {# Livreur #}
+        <div class="col-md-4">
+            <label for="{{ form.user.vars.id }}">{{ form_label(form.user) }}</label>
+        </div>
+        <div class="col-md-8">
+            <div class="form-group">
+                <div class="position-relative">
+                    {{ form_widget(form.user, {
+                        'attr': {
+                            'class': 'form-select',
+                            'data-placeholder': 'distribution.form.user.placeholder'|trans
+                        }
+                    }) }}
+                </div>
+                {{ form_errors(form.user) }}
+            </div>
+        </div>
+
+        {# Produit #}
+        <div class="col-md-4">
+            <label for="{{ form.product.vars.id }}">{{ form_label(form.product) }}</label>
+        </div>
+        <div class="col-md-8">
+            <div class="form-group">
+                <div class="position-relative">
+                    {{ form_widget(form.product, {
+                        'attr': {
+                            'class': 'form-select',
+                            'data-placeholder': 'distribution.form.product.placeholder'|trans
+                        }
+                    }) }}
+                </div>
+                {{ form_errors(form.product) }}
+            </div>
+        </div>
+
+        {# Quantité #}
+        <div class="col-md-4">
+            <label for="{{ form.quantity.vars.id }}">{{ form_label(form.quantity) }}</label>
+        </div>
+        <div class="col-md-8">
+            <div class="form-group has-icon-left">
+                <div class="position-relative">
+                    {{ form_widget(form.quantity, {'attr': {'class': 'form-control', 'placeholder': 'distribution.form.quantity.placeholder'|trans}}) }}
+                    <div class="form-control-icon">
+                        <i class="bi bi-box-seam"></i>
+                    </div>
+                </div>
+                <small class="text-muted">
+                    <i class="bi bi-info-circle"></i> Quantité chargée dans la voiture pour la tournée
+                </small>
+                {{ form_errors(form.quantity) }}
+            </div>
+        </div>
+
+        {# Statut #}
+        <div class="col-md-4">
+            <label for="{{ form.status.vars.id }}">{{ form_label(form.status) }}</label>
+        </div>
+        <div class="col-md-8">
+            <div class="form-group">
+                <div class="position-relative">
+                    {{ form_widget(form.status, {
+                        'attr': {
+                            'class': 'form-select'
+                        }
+                    }) }}
+                </div>
+                {{ form_errors(form.status) }}
+            </div>
+        </div>
+
+        {# Séparateur visuel #}
+        <div class="col-12">
+            <hr class="my-4">
+            <h5 class="text-muted mb-3">
+                <i class="bi bi-geo-alt"></i> Destination et itinéraire
+            </h5>
+        </div>
+
+        {# Destination #}
+        <div class="col-md-4">
+            <label for="{{ form.destination.vars.id }}">{{ form_label(form.destination) }}</label>
+        </div>
+        <div class="col-md-8">
+            <div class="form-group has-icon-left">
+                <div class="position-relative">
+                    {{ form_widget(form.destination, {'attr': {'class': 'form-control', 'rows': '5', 'placeholder': 'distribution.form.destination.placeholder'|trans}}) }}
+                    <div class="form-control-icon">
+                        <i class="bi bi-map"></i>
+                    </div>
+                </div>
+                <small class="text-muted">
+                    <i class="bi bi-info-circle"></i> Liste des hôtels à visiter pendant cette tournée (un par ligne)
+                </small>
+                {{ form_errors(form.destination) }}
+            </div>
+        </div>
+
+        {# Boutons #}
+        <div class="col-12 d-flex justify-content-end">
+            <a href="{{ path('app_distribution_index') }}" class="btn btn-light-secondary me-1 mb-1">
+                <i class="bi bi-x-circle"></i> {{ 'form.button.cancel'|trans }}
+            </a>
+            <button type="submit" class="btn btn-dark me-1 mb-1">
+                <i class="bi bi-check-circle"></i>
+                {{ button_label|default('create')|lower == 'update' ? 'form.button.update'|trans : 'form.button.create'|trans }}
+            </button>
+        </div>
+    </div>
+</div>
 {{ form_end(form) }}

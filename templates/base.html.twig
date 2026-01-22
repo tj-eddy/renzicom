@@ -103,6 +103,13 @@
                             </a>
                         </li>
                     {% endif %}
+                    <li class="sidebar-item {% if app.request.get('_route') starts with 'app_distribution' %}active{% endif %}">
+                        <a href="{{ path('app_distribution_index') }}"
+                           class='sidebar-link  {% if app.request.get('_route') starts with 'app_distribution' %}bg-dark{% endif %}'>
+                            <i class="bi bi-book-fill"></i>
+                            <span>{{ 'nav.distributions'|trans }}</span>
+                        </a>
+                    </li>
                     <li class="sidebar-item {% if app.request.get('_route') starts with 'app_product' %}active{% endif %}">
                         <a href="{{ path('app_product_index') }}"
                            class='sidebar-link  {% if app.request.get('_route') starts with 'app_product' %}bg-dark{% endif %}'>
@@ -150,13 +157,6 @@
                            class='sidebar-link  {% if app.request.get('_route') starts with 'app_intervention' %}bg-dark{% endif %}'>
                             <i class="bi bi-tools"></i>
                             <span>{{ 'nav.interventions'|trans }}</span>
-                        </a>
-                    </li>
-                    <li class="sidebar-item {% if app.request.get('_route') starts with 'app_distribution' %}active{% endif %}">
-                        <a href="{{ path('app_distribution_index') }}"
-                           class='sidebar-link  {% if app.request.get('_route') starts with 'app_distribution' %}bg-dark{% endif %}'>
-                            <i class="bi bi-box-arrow-up-righ"></i>
-                            <span>{{ 'nav.distributions'|trans }}</span>
                         </a>
                     </li>
 
