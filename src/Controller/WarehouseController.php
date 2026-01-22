@@ -10,11 +10,19 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 #[Route('/warehouse')]
-final class WarehouseController extends AbstractController
+class WarehouseController extends AbstractController
 {
-    #[Route(name: 'app_warehouse_index', methods: ['GET'])]
+    public function __construct(
+        private readonly EntityManagerInterface $entityManager,
+        private readonly TranslatorInterface $translator
+    )
+    {
+    }
+
+    #[Route('/', name: 'app_warehouse_index', methods: ['GET'])]
     public function index(WarehouseRepository $warehouseRepository): Response
     {
         return $this->render('warehouse/index.html.twig', [
@@ -23,17 +31,19 @@ final class WarehouseController extends AbstractController
     }
 
     #[Route('/new', name: 'app_warehouse_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager): Response
+    public function new(Request $request): Response
     {
         $warehouse = new Warehouse();
         $form = $this->createForm(WarehouseType::class, $warehouse);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->persist($warehouse);
-            $entityManager->flush();
+            $this->entityManager->persist($warehouse);
+            $this->entityManager->flush();
 
-            return $this->redirectToRoute('app_warehouse_index', [], Response::HTTP_SEE_OTHER);
+            $this->addFlash('success', $this->translator->trans('messages.success.created'));
+
+            return $this->redirectToRoute('app_warehouse_index');
         }
 
         return $this->render('warehouse/new.html.twig', [
@@ -42,24 +52,18 @@ final class WarehouseController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}', name: 'app_warehouse_show', methods: ['GET'])]
-    public function show(Warehouse $warehouse): Response
-    {
-        return $this->render('warehouse/show.html.twig', [
-            'warehouse' => $warehouse,
-        ]);
-    }
-
     #[Route('/{id}/edit', name: 'app_warehouse_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, Warehouse $warehouse, EntityManagerInterface $entityManager): Response
+    public function edit(Request $request, Warehouse $warehouse): Response
     {
         $form = $this->createForm(WarehouseType::class, $warehouse);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->flush();
+            $this->entityManager->flush();
 
-            return $this->redirectToRoute('app_warehouse_index', [], Response::HTTP_SEE_OTHER);
+            $this->addFlash('success', $this->translator->trans('messages.success.updated'));
+
+            return $this->redirectToRoute('app_warehouse_index');
         }
 
         return $this->render('warehouse/edit.html.twig', [
@@ -69,13 +73,15 @@ final class WarehouseController extends AbstractController
     }
 
     #[Route('/{id}', name: 'app_warehouse_delete', methods: ['POST'])]
-    public function delete(Request $request, Warehouse $warehouse, EntityManagerInterface $entityManager): Response
+    public function delete(Request $request, Warehouse $warehouse): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$warehouse->getId(), $request->getPayload()->getString('_token'))) {
-            $entityManager->remove($warehouse);
-            $entityManager->flush();
+        if ($this->isCsrfTokenValid('delete' . $warehouse->getId(), $request->request->get('_token'))) {
+            $this->entityManager->remove($warehouse);
+            $this->entityManager->flush();
+
+            $this->addFlash('success', $this->translator->trans('messages.success.deleted'));
         }
 
-        return $this->redirectToRoute('app_warehouse_index', [], Response::HTTP_SEE_OTHER);
+        return $this->redirectToRoute('app_warehouse_index');
     }
 }
