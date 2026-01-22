@@ -1,39 +1,118 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Display index{% endblock %}
+{% block stylesheets %}
+    {{ parent() }}
+{% endblock %}
+
+{% block title %}{{ 'display.list.title'|trans }}{% endblock %}
+
+{% block page_title %}
+    <div class="page-title">
+        <div class="row">
+            <div class="col-12 col-md-6 order-md-1 order-last">
+                <h3>{{ 'display.list.title'|trans }}</h3>
+            </div>
+            <div class="col-12 col-md-6 order-md-2 order-first">
+                <nav aria-label="breadcrumb" class="breadcrumb-header float-start float-lg-end">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item">
+                            <a href="{{ path('app_dashboard') }}">{{ 'breadcrumb.home'|trans }}</a>
+                        </li>
+                        <li class="breadcrumb-item active" aria-current="page">{{ 'breadcrumb.displays'|trans }}</li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+    </div>
+{% endblock %}
 
 {% block body %}
-    <h1>Display index</h1>
+    <section class="section">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h4 class="mb-0">{{ 'display.list.title'|trans }}</h4>
+                <a href="{{ path('app_display_new') }}" class="btn btn-dark">
+                    <i class="bi bi-plus-circle"></i> {{ 'display.actions.new'|trans }}
+                </a>
+            </div>
+            <div class="card-body">
+                <table class="table table-striped" id="displays-table">
+                    <thead>
+                    <tr>
+                        <th>{{ 'display.table.id'|trans }}</th>
+                        <th>{{ 'display.table.name'|trans }}</th>
+                        <th>{{ 'display.table.hotel'|trans }}</th>
+                        <th>{{ 'display.table.location'|trans }}</th>
+                        <th>{{ 'display.table.created_at'|trans }}</th>
+                        <th>{{ 'display.table.actions'|trans }}</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for display in displays %}
+                        <tr>
+                            <td>{{ display.id }}</td>
+                            <td>
+                                <i class="bi bi-card-list text-primary"></i>
+                                <strong>{{ display.name }}</strong>
+                            </td>
+                            <td>
+                                {% if display.hotel %}
+                                    <i class="bi bi-building"></i>
+                                    <a href="{{ path('app_hotel_edit', {'id': display.hotel.id}) }}"
+                                       class="text-decoration-none">
+                                        {{ display.hotel.name }}
+                                    </a>
+                                {% else %}
+                                    <span class="text-muted">-</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if display.location %}
+                                    <i class="bi bi-geo-alt-fill text-muted"></i> {{ display.location }}
+                                {% else %}
+                                    <span class="text-muted">-</span>
+                                {% endif %}
+                            </td>
+                            <td>{{ display.createdAt ? display.createdAt|date('d/m/Y H:i') : '' }}</td>
+                            <td>
+                                <div class="btn-group" role="group">
+                                    <a href="{{ path('app_display_edit', {'id': display.id}) }}"
+                                       class="btn btn-sm btn-dark"
+                                       title="{{ 'display.actions.edit'|trans }}">
+                                        <i class="bi bi-pencil"></i>
+                                    </a>
+                                    <button type="button"
+                                            class="btn btn-sm btn-danger"
+                                            onclick="confirmDelete({{ display.id }})"
+                                            title="{{ 'display.actions.delete'|trans }}">
+                                        <i class="bi bi-trash"></i>
+                                    </button>
+                                </div>
 
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Name</th>
-                <th>Location</th>
-                <th>CreatedAt</th>
-                <th>actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for display in displays %}
-            <tr>
-                <td>{{ display.id }}</td>
-                <td>{{ display.name }}</td>
-                <td>{{ display.location }}</td>
-                <td>{{ display.createdAt ? display.createdAt|date('Y-m-d H:i:s') : '' }}</td>
-                <td>
-                    <a href="{{ path('app_display_show', {'id': display.id}) }}">show</a>
-                    <a href="{{ path('app_display_edit', {'id': display.id}) }}">edit</a>
-                </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="5">no records found</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+                                {# Formulaire de suppression caché #}
+                                <form id="delete-form-{{ display.id }}"
+                                      action="{{ path('app_display_delete', {'id': display.id}) }}"
+                                      method="post"
+                                      style="display: none;">
+                                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ display.id) }}">
+                                </form>
+                            </td>
+                        </tr>
+                    {% else %}
+                        <tr>
+                            <td colspan="6" class="text-center">{{ 'display.list.no_displays'|trans }}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+{% endblock %}
 
-    <a href="{{ path('app_display_new') }}">Create new</a>
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        initDataTable('#displays-table');
+    </script>
 {% endblock %}

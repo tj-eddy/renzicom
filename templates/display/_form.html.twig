@@ -1,4 +1,67 @@
-{{ form_start(form) }}
-    {{ form_widget(form) }}
-    <button class="btn">{{ button_label|default('Save') }}</button>
+{{ form_start(form, {'attr': {'class': 'form form-horizontal'}}) }}
+<div class="form-body">
+    <div class="row">
+        {# Hôtel #}
+        <div class="col-md-4">
+            <label for="{{ form.hotel.vars.id }}">{{ form_label(form.hotel) }}</label>
+        </div>
+        <div class="col-md-8">
+            <div class="form-group has-icon-left">
+                <div class="position-relative">
+                    {{ form_widget(form.hotel, {'attr': {'class': 'form-select'}}) }}
+{#                    <div class="form-control-icon">#}
+{#                        <i class="bi bi-building"></i>#}
+{#                    </div>#}
+                </div>
+                {{ form_errors(form.hotel) }}
+            </div>
+        </div>
+
+        {# Nom du présentoir #}
+        <div class="col-md-4">
+            <label for="{{ form.name.vars.id }}">{{ form_label(form.name) }}</label>
+        </div>
+        <div class="col-md-8">
+            <div class="form-group has-icon-left">
+                <div class="position-relative">
+                    {{ form_widget(form.name, {'attr': {'class': 'form-control', 'placeholder': 'display.form.name.placeholder'|trans}}) }}
+                    <div class="form-control-icon">
+                        <i class="bi bi-card-list"></i>
+                    </div>
+                </div>
+                {{ form_errors(form.name) }}
+            </div>
+        </div>
+
+        {# Emplacement #}
+        <div class="col-md-4">
+            <label for="{{ form.location.vars.id }}">{{ form_label(form.location) }}</label>
+        </div>
+        <div class="col-md-8">
+            <div class="form-group has-icon-left">
+                <div class="position-relative">
+                    {{ form_widget(form.location, {'attr': {'class': 'form-control', 'placeholder': 'display.form.location.placeholder'|trans}}) }}
+                    <div class="form-control-icon">
+                        <i class="bi bi-geo-alt"></i>
+                    </div>
+                </div>
+                <small class="text-muted">
+                    <i class="bi bi-info-circle"></i> Ex: Hall d'entrée, Étage 2, Salle de petit-déjeuner...
+                </small>
+                {{ form_errors(form.location) }}
+            </div>
+        </div>
+
+        {# Boutons #}
+        <div class="col-12 d-flex justify-content-end">
+            <a href="{{ path('app_display_index') }}" class="btn btn-light-secondary me-1 mb-1">
+                <i class="bi bi-x-circle"></i> {{ 'form.button.cancel'|trans }}
+            </a>
+            <button type="submit" class="btn btn-dark me-1 mb-1">
+                <i class="bi bi-check-circle"></i>
+                {{ button_label|default('create')|lower == 'update' ? 'form.button.update'|trans : 'form.button.create'|trans }}
+            </button>
+        </div>
+    </div>
+</div>
 {{ form_end(form) }}
