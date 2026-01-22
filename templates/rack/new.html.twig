@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New Rack{% endblock %}
+
+{% block body %}
+    <h1>Create new Rack</h1>
+
+    {{ include('rack/_form.html.twig') }}
+
+    <a href="{{ path('app_rack_index') }}">back to list</a>
+{% endblock %}

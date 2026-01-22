@@ -1,0 +1,39 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Display index{% endblock %}
+
+{% block body %}
+    <h1>Display index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Name</th>
+                <th>Location</th>
+                <th>CreatedAt</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for display in displays %}
+            <tr>
+                <td>{{ display.id }}</td>
+                <td>{{ display.name }}</td>
+                <td>{{ display.location }}</td>
+                <td>{{ display.createdAt ? display.createdAt|date('Y-m-d H:i:s') : '' }}</td>
+                <td>
+                    <a href="{{ path('app_display_show', {'id': display.id}) }}">show</a>
+                    <a href="{{ path('app_display_edit', {'id': display.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="5">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_display_new') }}">Create new</a>
+{% endblock %}

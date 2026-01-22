@@ -1,0 +1,43 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Rack index{% endblock %}
+
+{% block body %}
+    <h1>Rack index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Name</th>
+                <th>Position</th>
+                <th>RequiredQuantity</th>
+                <th>CurrentQuantity</th>
+                <th>CreatedAt</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for rack in racks %}
+            <tr>
+                <td>{{ rack.id }}</td>
+                <td>{{ rack.name }}</td>
+                <td>{{ rack.position }}</td>
+                <td>{{ rack.requiredQuantity }}</td>
+                <td>{{ rack.currentQuantity }}</td>
+                <td>{{ rack.createdAt ? rack.createdAt|date('Y-m-d H:i:s') : '' }}</td>
+                <td>
+                    <a href="{{ path('app_rack_show', {'id': rack.id}) }}">show</a>
+                    <a href="{{ path('app_rack_edit', {'id': rack.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="7">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_rack_new') }}">Create new</a>
+{% endblock %}
