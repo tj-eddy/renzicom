@@ -192,7 +192,11 @@
                                         </div>
                                         <div class="user-img d-flex align-items-center">
                                             <div class="avatar avatar-md">
-                                                <img src="{{ asset('assets/images/faces/2.jpg') }}">
+                                                {% if app.user.avatar %}
+                                                    <img src="{{ asset('uploads/avatars/' ~ app.user.avatar) }}" alt="{{ app.user.name }}">
+                                                {% else %}
+                                                    <img src="{{ asset('assets/images/faces/2.jpg') }}" alt="{{ app.user.name }}">
+                                                {% endif %}
                                             </div>
                                         </div>
                                     </div>

@@ -118,6 +118,21 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $avatar = null;
+
+
+    public function getAvatar(): ?string
+    {
+        return $this->avatar;
+    }
+
+    public function setAvatar(?string $avatar): static
+    {
+        $this->avatar = $avatar;
+        return $this;
+    }
+
     /**
      * A visual identifier that represents this user.
      *

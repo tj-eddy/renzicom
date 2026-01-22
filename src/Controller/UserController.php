@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\User;
 use App\Form\UserType;
 use App\Repository\UserRepository;
+use App\Service\ImageUploader;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -13,11 +14,14 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Contracts\Translation\TranslatorInterface;
+
 #[IsGranted("ROLE_ADMIN")]
 #[Route('/user')]
 final class UserController extends AbstractController
 {
-    public function __construct(private TranslatorInterface $translator){}
+    public function __construct(private TranslatorInterface $translator)
+    {
+    }
 
     #[Route(name: 'app_user_index', methods: ['GET'])]
     public function index(UserRepository $userRepository): Response
@@ -26,7 +30,7 @@ final class UserController extends AbstractController
     }
 
     #[Route('/new', name: 'app_user_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager, UserPasswordHasherInterface $passwordHasher): Response
+    public function new(Request $request, EntityManagerInterface $entityManager, UserPasswordHasherInterface $passwordHasher, ImageUploader $imageUploader): Response
     {
         if (!$this->isGranted('ROLE_ADMIN')) {
             $this->addFlash('error', $this->translator->trans('access.denied.create'));
@@ -38,17 +42,27 @@ final class UserController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            // Gérer le mot de passe
+            // PWD
             $plainPassword = $form->get('password')->getData();
             if ($plainPassword) {
                 $hashedPassword = $passwordHasher->hashPassword($user, $plainPassword);
                 $user->setPassword($hashedPassword);
             }
 
-            // Gérer le rôle (récupérer depuis le form et le mettre dans role)
+            // ROLE
             $selectedRole = $form->get('role')->getData();
             if ($selectedRole) {
                 $user->setRole($selectedRole);
+            }
+            // AVATAR
+            $avatarFile = $form->get('avatarFile')->getData();
+            if ($avatarFile) {
+                try {
+                    $avatarFileName = $imageUploader->uploadAvatar($avatarFile);
+                    $user->setAvatar($avatarFileName);
+                } catch (\Exception $e) {
+                    $this->addFlash('error', $this->translator->trans('user.avatar.upload_error'));
+                }
             }
 
             $entityManager->persist($user);
@@ -62,7 +76,8 @@ final class UserController extends AbstractController
     }
 
     #[Route('/{id}/edit', name: 'app_user_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, User $user, EntityManagerInterface $entityManager, UserPasswordHasherInterface $passwordHasher): Response
+    public function edit(Request                     $request, User $user, EntityManagerInterface $entityManager,
+                         UserPasswordHasherInterface $passwordHasher, ImageUploader $imageUploader): Response
     {
         if (!$this->isGranted('ROLE_ADMIN')) {
             $this->addFlash('error', $this->translator->trans('access.denied.edit'));
@@ -75,6 +90,8 @@ final class UserController extends AbstractController
         $form->get('role')->setData($user->getRole());
 
         $form->handleRequest($request);
+
+        $oldAvatar = $user->getAvatar();
 
         if ($form->isSubmitted() && $form->isValid()) {
             // Gérer le mot de passe (seulement si rempli)
@@ -90,6 +107,22 @@ final class UserController extends AbstractController
                 $user->setRole($selectedRole);
             }
 
+            $avatarFile = $form->get('avatarFile')->getData();
+            if ($avatarFile) {
+                try {
+                    // Supprimer l'ancien avatar si existe
+                    if ($oldAvatar) {
+                        $imageUploader->removeAvatar($oldAvatar);
+                    }
+
+                    $avatarFileName = $imageUploader->uploadAvatar($avatarFile);
+                    $user->setAvatar($avatarFileName);
+                } catch (\Exception $e) {
+                    $this->addFlash('error', $this->translator->trans('user.avatar.upload_error'));
+                }
+            }
+
+
             $entityManager->flush();
 
             $this->addFlash('success', $this->translator->trans('user.updated'));
@@ -100,9 +133,13 @@ final class UserController extends AbstractController
     }
 
     #[Route('/{id}', name: 'app_user_delete', methods: ['POST'])]
-    public function delete(Request $request, User $user, EntityManagerInterface $entityManager): Response
+    public function delete(Request       $request, User $user, EntityManagerInterface $entityManager,
+                           ImageUploader $imageUploader): Response
     {
         if ($this->isCsrfTokenValid('delete' . $user->getId(), $request->getPayload()->getString('_token'))) {
+            if ($user->getAvatar()) {
+                $imageUploader->removeAvatar($user->getAvatar());
+            }
             $entityManager->remove($user);
             $entityManager->flush();
         }

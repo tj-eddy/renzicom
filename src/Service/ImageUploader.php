@@ -11,15 +11,18 @@ class ImageUploader
 {
     private string $warehouseImagesDirectory;
     private string $productImagesDirectory;
+    private string $avatarImagesDirectory;
     private SluggerInterface $slugger;
 
     public function __construct(
         string $warehouseImagesDirectory,
         string $productImagesDirectory,
+        string $avatarImagesDirectory,
         SluggerInterface $slugger
     ) {
         $this->warehouseImagesDirectory = $warehouseImagesDirectory;
         $this->productImagesDirectory = $productImagesDirectory;
+        $this->avatarImagesDirectory = $avatarImagesDirectory;
         $this->slugger = $slugger;
     }
 
@@ -45,6 +48,14 @@ class ImageUploader
     public function uploadProduct(UploadedFile $file): string
     {
         return $this->uploadFile($file, $this->productImagesDirectory);
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function uploadAvatar(UploadedFile $file): string
+    {
+        return $this->uploadFile($file, $this->avatarImagesDirectory);
     }
 
     private function uploadFile(UploadedFile $file, string $targetDirectory): string
@@ -76,6 +87,12 @@ class ImageUploader
     {
         $this->removeFile($filename, $this->productImagesDirectory);
     }
+
+    public function removeAvatar(string $filename): void
+    {
+        $this->removeFile($filename, $this->avatarImagesDirectory);
+    }
+
 
     private function removeFile(string $filename, string $targetDirectory): void
     {

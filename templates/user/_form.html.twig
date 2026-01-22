@@ -69,7 +69,7 @@
                 {{ form_errors(form.password) }}
             </div>
         </div>
-
+        {# active #}
         <div class="col-md-4">
             <label for="{{ form.isActive.vars.id }}">{{ form_label(form.isActive) }}</label>
         </div>
@@ -79,6 +79,19 @@
                     {{ form_widget(form.isActive) }}
                 </div>
                 {{ form_errors(form.name) }}
+            </div>
+        </div>
+
+        {# avatar #}
+        <div class="col-md-4">
+            <label for="{{ form.avatarFile.vars.id }}">{{ form_label(form.avatarFile) }}</label>
+        </div>
+        <div class="col-md-8">
+            <div class="form-group has-icon-left">
+                <div class="position-relative">
+                    {{ form_widget(form.avatarFile, {'attr': {'class': 'form-control'}}) }}
+                </div>
+                {{ form_errors(form.avatarFile) }}
             </div>
         </div>
 

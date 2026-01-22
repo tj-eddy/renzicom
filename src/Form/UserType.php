@@ -7,10 +7,12 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\File;
 
 class UserType extends AbstractType
 {
@@ -50,6 +52,23 @@ class UserType extends AbstractType
                 'required' => false,
                 'attr' => ['class' => 'form-check-input']
             ])
+            ->add('avatarFile', FileType::class, [
+                'label' => 'user.avatar',
+                'mapped' => false,
+                'required' => false,
+                'attr' => [
+                    'class' => 'form-control',
+                    'accept' => 'image/*'
+                ],
+                'constraints' => [
+                    new File(maxSize: '2M', mimeTypes: [
+                        'image/jpeg',
+                        'image/png',
+                        'image/gif',
+                        'image/webp',
+                    ], mimeTypesMessage: 'user.avatar.invalid_format')
+                ],
+            ]);
         ;
     }
 
