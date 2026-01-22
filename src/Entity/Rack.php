@@ -7,47 +7,80 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
+/**
+ * Représente un espace/rack dans un présentoir (ex: Rack 1, Rack A)
+ */
 #[ORM\Entity(repositoryClass: RackRepository::class)]
+#[ORM\Table(name: 'rack')]
 class Rack
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column]
+    #[ORM\Column(type: 'integer')]
     private ?int $id = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\ManyToOne(targetEntity: Display::class, inversedBy: 'racks')]
+    #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
+    private ?Display $display = null;
+
+    #[ORM\ManyToOne(targetEntity: Product::class, inversedBy: 'racks')]
+    #[ORM\JoinColumn(nullable: true, onDelete: 'SET NULL')]
+    private ?Product $product = null;
+
+    #[ORM\Column(type: 'string', length: 100)]
     private ?string $name = null;
 
-    #[ORM\Column(length: 255, nullable: true)]
-    private ?string $image = null;
+    #[ORM\Column(type: 'integer', options: ['default' => 0])]
+    private int $position = 0;
 
-    #[ORM\Column(length: 255, nullable: true)]
-    private ?string $address = null;
+    #[ORM\Column(type: 'integer', options: ['default' => 0])]
+    private int $requiredQuantity = 0;
 
-    #[ORM\ManyToOne(inversedBy: 'racks')]
-    private ?Warehouse $warehouse = null;
+    #[ORM\Column(type: 'integer', options: ['default' => 0])]
+    private int $currentQuantity = 0;
 
-    /**
-     * @var Collection<int, Stock>
-     */
-    #[ORM\OneToMany(targetEntity: Stock::class, mappedBy: 'rack')]
-    private Collection $stocks;
+    #[ORM\Column(type: 'datetime_immutable')]
+    private ?\DateTimeImmutable $createdAt = null;
 
     /**
-     * @var Collection<int, Distribution>
+     * @var Collection<int, Intervention>
      */
-    #[ORM\OneToMany(targetEntity: Distribution::class, mappedBy: 'rack')]
-    private Collection $distributions;
+    #[ORM\OneToMany(mappedBy: 'rack', targetEntity: Intervention::class)]
+    private Collection $interventions;
 
     public function __construct()
     {
-        $this->stocks = new ArrayCollection();
-        $this->distributions = new ArrayCollection();
+        $this->interventions = new ArrayCollection();
+        $this->createdAt = new \DateTimeImmutable();
     }
 
     public function getId(): ?int
     {
         return $this->id;
+    }
+
+    public function getDisplay(): ?Display
+    {
+        return $this->display;
+    }
+
+    public function setDisplay(?Display $display): static
+    {
+        $this->display = $display;
+
+        return $this;
+    }
+
+    public function getProduct(): ?Product
+    {
+        return $this->product;
+    }
+
+    public function setProduct(?Product $product): static
+    {
+        $this->product = $product;
+
+        return $this;
     }
 
     public function getName(): ?string
@@ -62,66 +95,77 @@ class Rack
         return $this;
     }
 
-    public function getImage(): ?string
+    public function getPosition(): int
     {
-        return $this->image;
+        return $this->position;
     }
 
-    public function setImage(?string $image): static
+    public function setPosition(int $position): static
     {
-        $this->image = $image;
+        $this->position = $position;
 
         return $this;
     }
 
-    public function getAddress(): ?string
+    public function getRequiredQuantity(): int
     {
-        return $this->address;
+        return $this->requiredQuantity;
     }
 
-    public function setAddress(?string $address): static
+    public function setRequiredQuantity(int $requiredQuantity): static
     {
-        $this->address = $address;
+        $this->requiredQuantity = $requiredQuantity;
 
         return $this;
     }
 
-    public function getWarehouse(): ?Warehouse
+    public function getCurrentQuantity(): int
     {
-        return $this->warehouse;
+        return $this->currentQuantity;
     }
 
-    public function setWarehouse(?Warehouse $warehouse): static
+    public function setCurrentQuantity(int $currentQuantity): static
     {
-        $this->warehouse = $warehouse;
+        $this->currentQuantity = $currentQuantity;
+
+        return $this;
+    }
+
+    public function getCreatedAt(): ?\DateTimeImmutable
+    {
+        return $this->createdAt;
+    }
+
+    public function setCreatedAt(\DateTimeImmutable $createdAt): static
+    {
+        $this->createdAt = $createdAt;
 
         return $this;
     }
 
     /**
-     * @return Collection<int, Stock>
+     * @return Collection<int, Intervention>
      */
-    public function getStocks(): Collection
+    public function getInterventions(): Collection
     {
-        return $this->stocks;
+        return $this->interventions;
     }
 
-    public function addStock(Stock $stock): static
+    public function addIntervention(Intervention $intervention): static
     {
-        if (!$this->stocks->contains($stock)) {
-            $this->stocks->add($stock);
-            $stock->setRack($this);
+        if (!$this->interventions->contains($intervention)) {
+            $this->interventions->add($intervention);
+            $intervention->setRack($this);
         }
 
         return $this;
     }
 
-    public function removeStock(Stock $stock): static
+    public function removeIntervention(Intervention $intervention): static
     {
-        if ($this->stocks->removeElement($stock)) {
-            // set the owning side to null (unless already changed)
-            if ($stock->getRack() === $this) {
-                $stock->setRack(null);
+        if ($this->interventions->removeElement($intervention)) {
+            if ($intervention->getRack() === $this) {
+                $intervention->setRack(null);
             }
         }
 
@@ -129,32 +173,22 @@ class Rack
     }
 
     /**
-     * @return Collection<int, Distribution>
+     * Calcule le taux de remplissage du rack en pourcentage
      */
-    public function getDistributions(): Collection
+    public function getFillRate(): float
     {
-        return $this->distributions;
-    }
-
-    public function addDistribution(Distribution $distribution): static
-    {
-        if (!$this->distributions->contains($distribution)) {
-            $this->distributions->add($distribution);
-            $distribution->setRack($this);
+        if ($this->requiredQuantity === 0) {
+            return 0.0;
         }
 
-        return $this;
+        return ($this->currentQuantity / $this->requiredQuantity) * 100;
     }
 
-    public function removeDistribution(Distribution $distribution): static
+    /**
+     * Vérifie si le rack nécessite un réapprovisionnement
+     */
+    public function needsRefill(int $threshold = 50): bool
     {
-        if ($this->distributions->removeElement($distribution)) {
-            // set the owning side to null (unless already changed)
-            if ($distribution->getRack() === $this) {
-                $distribution->setRack(null);
-            }
-        }
-
-        return $this;
+        return $this->getFillRate() < $threshold;
     }
 }

@@ -30,6 +30,7 @@ class UserFixtures extends Fixture
         $admin->setEmail('admin@renzicom.com');
         $admin->setPassword($this->passwordHasher->hashPassword($admin, 'admin123'));
         $admin->setRole('ROLE_ADMIN');
+        $admin->setCreatedAt(new \DateTimeImmutable());
         $manager->persist($admin);
         $this->addReference(self::USER_ADMIN, $admin); // ✅ Pas de classe nécessaire pour addReference
 
@@ -38,6 +39,7 @@ class UserFixtures extends Fixture
         $managerUser->setName('Eddy');
         $managerUser->setEmail('eddy@renzicom.com');
         $managerUser->setPassword($this->passwordHasher->hashPassword($managerUser, 'testeddy'));
+        $admin->setCreatedAt(new \DateTimeImmutable());
         $managerUser->setRole('ROLE_ADMIN');
         $manager->persist($managerUser);
         $this->addReference(self::USER_MANAGER, $managerUser);
@@ -49,7 +51,7 @@ class UserFixtures extends Fixture
             $user->setEmail($faker->email());
             $user->setPassword($this->passwordHasher->hashPassword($user, 'password'));
             $user->setRole($faker->randomElement(['ROLE_DRIVER', 'ROLE_STATISTICS']));
-
+            $admin->setCreatedAt(new \DateTimeImmutable());
             $manager->persist($user);
             $this->addReference('user_' . $i, $user);
         }

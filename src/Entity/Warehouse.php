@@ -6,65 +6,38 @@ use App\Repository\WarehouseRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\HttpFoundation\File\File;
-use Symfony\Component\Validator\Constraints as Assert;
-use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 /**
- * Warehouse entity
- * Represents a warehouse with name, address and multiple images
+ * Représente un entrepôt de stockage
  */
 #[ORM\Entity(repositoryClass: WarehouseRepository::class)]
-#[Vich\Uploadable]
+#[ORM\Table(name: 'warehouse')]
 class Warehouse
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column]
+    #[ORM\Column(type: 'integer')]
     private ?int $id = null;
 
-    #[ORM\Column(length: 255)]
-    #[Assert\NotBlank(message: 'Le nom est obligatoire')]
-    #[Assert\Length(
-        min: 2,
-        max: 255,
-        minMessage: 'Le nom doit contenir au moins {{ limit }} caractères',
-        maxMessage: 'Le nom ne peut pas dépasser {{ limit }} caractères'
-    )]
+    #[ORM\Column(type: 'string', length: 255)]
     private ?string $name = null;
 
-    #[ORM\Column(length: 500, nullable: true)]
+    #[ORM\Column(type: 'string', length: 500, nullable: true)]
     private ?string $address = null;
 
-    /**
-     * @var Collection<int, WarehouseImage>
-     */
-    #[ORM\OneToMany(
-        mappedBy: 'warehouse',
-        targetEntity: WarehouseImage::class,
-        cascade: ['persist', 'remove'],
-        orphanRemoval: true
-    )]
-    private Collection $images;
-
-    #[ORM\Column]
+    #[ORM\Column(type: 'datetime_immutable')]
     private ?\DateTimeImmutable $createdAt = null;
 
-    #[ORM\Column]
-    private ?\DateTimeImmutable $updatedAt = null;
-
     /**
-     * @var Collection<int, Rack>
+     * @var Collection<int, Stock>
      */
-    #[ORM\OneToMany(targetEntity: Rack::class, mappedBy: 'warehouse_id')]
-    private Collection $racks;
+    #[ORM\OneToMany(mappedBy: 'warehouse', targetEntity: Stock::class, cascade: ['persist'], orphanRemoval: true)]
+    private Collection $stocks;
 
     public function __construct()
     {
-        $this->images = new ArrayCollection();
+        $this->stocks = new ArrayCollection();
         $this->createdAt = new \DateTimeImmutable();
-        $this->updatedAt = new \DateTimeImmutable();
-        $this->racks = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -80,6 +53,7 @@ class Warehouse
     public function setName(string $name): static
     {
         $this->name = $name;
+
         return $this;
     }
 
@@ -91,34 +65,6 @@ class Warehouse
     public function setAddress(?string $address): static
     {
         $this->address = $address;
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, WarehouseImage>
-     */
-    public function getImages(): Collection
-    {
-        return $this->images;
-    }
-
-    public function addImage(WarehouseImage $image): static
-    {
-        if (!$this->images->contains($image)) {
-            $this->images->add($image);
-            $image->setWarehouse($this);
-        }
-
-        return $this;
-    }
-
-    public function removeImage(WarehouseImage $image): static
-    {
-        if ($this->images->removeElement($image)) {
-            if ($image->getWarehouse() === $this) {
-                $image->setWarehouse(null);
-            }
-        }
 
         return $this;
     }
@@ -131,50 +77,33 @@ class Warehouse
     public function setCreatedAt(\DateTimeImmutable $createdAt): static
     {
         $this->createdAt = $createdAt;
+
         return $this;
-    }
-
-    public function getUpdatedAt(): ?\DateTimeImmutable
-    {
-        return $this->updatedAt;
-    }
-
-    public function setUpdatedAt(\DateTimeImmutable $updatedAt): static
-    {
-        $this->updatedAt = $updatedAt;
-        return $this;
-    }
-
-    #[ORM\PreUpdate]
-    public function preUpdate(): void
-    {
-        $this->updatedAt = new \DateTimeImmutable();
     }
 
     /**
-     * @return Collection<int, Rack>
+     * @return Collection<int, Stock>
      */
-    public function getRacks(): Collection
+    public function getStocks(): Collection
     {
-        return $this->racks;
+        return $this->stocks;
     }
 
-    public function addRack(Rack $rack): static
+    public function addStock(Stock $stock): static
     {
-        if (!$this->racks->contains($rack)) {
-            $this->racks->add($rack);
-            $rack->setWarehouseId($this);
+        if (!$this->stocks->contains($stock)) {
+            $this->stocks->add($stock);
+            $stock->setWarehouse($this);
         }
 
         return $this;
     }
 
-    public function removeRack(Rack $rack): static
+    public function removeStock(Stock $stock): static
     {
-        if ($this->racks->removeElement($rack)) {
-            // set the owning side to null (unless already changed)
-            if ($rack->getWarehouseId() === $this) {
-                $rack->setWarehouseId(null);
+        if ($this->stocks->removeElement($stock)) {
+            if ($stock->getWarehouse() === $this) {
+                $stock->setWarehouse(null);
             }
         }
 

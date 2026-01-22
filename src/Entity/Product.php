@@ -6,85 +6,62 @@ use App\Repository\ProductRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * Product entity
- * Represents a product (magazine, catalogue) to distribute
+ * Représente un produit/magazine (Paris Match, Elle, Geo, etc.)
  */
 #[ORM\Entity(repositoryClass: ProductRepository::class)]
-#[ORM\HasLifecycleCallbacks]
+#[ORM\Table(name: 'product')]
 class Product
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column]
+    #[ORM\Column(type: 'integer')]
     private ?int $id = null;
 
-    #[ORM\Column(length: 255)]
-    #[Assert\NotBlank(message: 'Le nom est obligatoire')]
-    #[Assert\Length(
-        min: 2,
-        max: 255,
-        minMessage: 'Le nom doit contenir au moins {{ limit }} caractères',
-        maxMessage: 'Le nom ne peut pas dépasser {{ limit }} caractères'
-    )]
+    #[ORM\Column(type: 'string', length: 255)]
     private ?string $name = null;
 
-    #[ORM\Column(nullable: true)]
+    #[ORM\Column(type: 'string', length: 500, nullable: true)]
+    private ?string $image = null;
+
+    #[ORM\Column(type: 'integer', nullable: true)]
     private ?int $yearEdition = null;
 
-    #[ORM\Column(length: 10, nullable: true)]
+    #[ORM\Column(type: 'string', length: 10, nullable: true)]
     private ?string $language = null;
 
-    #[ORM\Column(length: 255, nullable: true)]
-    private ?string $variant = null;
+    #[ORM\Column(type: 'json', nullable: true)]
+    private ?array $variant = null;
 
-    /**
-     * @var Collection<int, ProductImage>
-     */
-    #[ORM\OneToMany(
-        mappedBy: 'product',
-        targetEntity: ProductImage::class,
-        cascade: ['persist', 'remove'],
-        orphanRemoval: true
-    )]
-    private Collection $images;
-
-    #[ORM\Column]
+    #[ORM\Column(type: 'datetime_immutable')]
     private ?\DateTimeImmutable $createdAt = null;
-
-    #[ORM\Column]
-    private ?\DateTimeImmutable $updatedAt = null;
 
     /**
      * @var Collection<int, Stock>
      */
-    #[ORM\OneToMany(
-        targetEntity: Stock::class,
-        mappedBy: 'product',
-        cascade: ['remove'],
-        orphanRemoval: true,
-    )]
+    #[ORM\OneToMany(mappedBy: 'product', targetEntity: Stock::class, cascade: ['persist'], orphanRemoval: true)]
     private Collection $stocks;
+
+    /**
+     * @var Collection<int, Rack>
+     */
+    #[ORM\OneToMany(mappedBy: 'product', targetEntity: Rack::class)]
+    private Collection $racks;
 
     /**
      * @var Collection<int, Distribution>
      */
-    #[ORM\OneToMany(
-        targetEntity: Distribution::class,
-        mappedBy: 'product',cascade: ['remove'],
-        orphanRemoval: true
-    )]
+    #[ORM\OneToMany(mappedBy: 'product', targetEntity: Distribution::class)]
     private Collection $distributions;
 
     public function __construct()
     {
-        $this->images = new ArrayCollection();
-        $this->createdAt = new \DateTimeImmutable();
-        $this->updatedAt = new \DateTimeImmutable();
         $this->stocks = new ArrayCollection();
+        $this->racks = new ArrayCollection();
         $this->distributions = new ArrayCollection();
+        $this->createdAt = new \DateTimeImmutable();
+        $this->variant = [];
     }
 
     public function getId(): ?int
@@ -100,6 +77,18 @@ class Product
     public function setName(string $name): static
     {
         $this->name = $name;
+
+        return $this;
+    }
+
+    public function getImage(): ?string
+    {
+        return $this->image;
+    }
+
+    public function setImage(?string $image): static
+    {
+        $this->image = $image;
 
         return $this;
     }
@@ -128,43 +117,14 @@ class Product
         return $this;
     }
 
-    public function getVariant(): ?string
+    public function getVariant(): ?array
     {
         return $this->variant;
     }
 
-    public function setVariant(?string $variant): static
+    public function setVariant(?array $variant): static
     {
         $this->variant = $variant;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, ProductImage>
-     */
-    public function getImages(): Collection
-    {
-        return $this->images;
-    }
-
-    public function addImage(ProductImage $image): static
-    {
-        if (!$this->images->contains($image)) {
-            $this->images->add($image);
-            $image->setProduct($this);
-        }
-
-        return $this;
-    }
-
-    public function removeImage(ProductImage $image): static
-    {
-        if ($this->images->removeElement($image)) {
-            if ($image->getProduct() === $this) {
-                $image->setProduct(null);
-            }
-        }
 
         return $this;
     }
@@ -179,24 +139,6 @@ class Product
         $this->createdAt = $createdAt;
 
         return $this;
-    }
-
-    public function getUpdatedAt(): ?\DateTimeImmutable
-    {
-        return $this->updatedAt;
-    }
-
-    public function setUpdatedAt(\DateTimeImmutable $updatedAt): static
-    {
-        $this->updatedAt = $updatedAt;
-
-        return $this;
-    }
-
-    #[ORM\PreUpdate]
-    public function preUpdate(): void
-    {
-        $this->updatedAt = new \DateTimeImmutable();
     }
 
     /**
@@ -220,9 +162,37 @@ class Product
     public function removeStock(Stock $stock): static
     {
         if ($this->stocks->removeElement($stock)) {
-            // set the owning side to null (unless already changed)
             if ($stock->getProduct() === $this) {
                 $stock->setProduct(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Rack>
+     */
+    public function getRacks(): Collection
+    {
+        return $this->racks;
+    }
+
+    public function addRack(Rack $rack): static
+    {
+        if (!$this->racks->contains($rack)) {
+            $this->racks->add($rack);
+            $rack->setProduct($this);
+        }
+
+        return $this;
+    }
+
+    public function removeRack(Rack $rack): static
+    {
+        if ($this->racks->removeElement($rack)) {
+            if ($rack->getProduct() === $this) {
+                $rack->setProduct(null);
             }
         }
 
@@ -250,7 +220,6 @@ class Product
     public function removeDistribution(Distribution $distribution): static
     {
         if ($this->distributions->removeElement($distribution)) {
-            // set the owning side to null (unless already changed)
             if ($distribution->getProduct() === $this) {
                 $distribution->setProduct(null);
             }

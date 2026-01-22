@@ -3,112 +3,76 @@
 namespace App\Entity;
 
 use App\Repository\DistributionRepository;
-use Doctrine\DBAL\Types\Types;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
+/**
+ * Représente une tournée de livraison effectuée par un livreur
+ */
 #[ORM\Entity(repositoryClass: DistributionRepository::class)]
+#[ORM\Table(name: 'distribution')]
 class Distribution
 {
-    // Constantes pour les statuts (en string maintenant)
-    public const STATUS_PREPARING = 'en_preparation';
-    public const STATUS_IN_PROGRESS = 'en_cours';
-    public const STATUS_DELIVERED = 'livre';
-    public const STATUS_CANCELLED = 'annule';
+    public const STATUS_PREPARING = 'preparing';
+    public const STATUS_IN_PROGRESS = 'in_progress';
+    public const STATUS_DELIVERED = 'delivered';
+    public const STATUS_CANCELLED = 'cancelled';
 
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column]
+    #[ORM\Column(type: 'integer')]
     private ?int $id = null;
 
-    #[ORM\Column(type: Types::STRING, length: 50, nullable: true)]
-    private ?string $status = null;
-
-    #[ORM\Column]
-    private ?int $quantity = null;
-
-    #[ORM\ManyToOne]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?Product $product = null;
-
-    #[ORM\ManyToOne]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'distributions')]
+    #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
     private ?User $user = null;
 
-    #[ORM\Column(type: Types::STRING, length: 255)]
+    #[ORM\ManyToOne(targetEntity: Product::class, inversedBy: 'distributions')]
+    #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
+    private ?Product $product = null;
+
+    #[ORM\Column(type: 'integer', options: ['default' => 0])]
+    private int $quantity = 0;
+
+    #[ORM\Column(type: 'string', length: 50, options: ['default' => self::STATUS_PREPARING])]
+    private string $status = self::STATUS_PREPARING;
+
+    #[ORM\Column(type: 'text', nullable: true)]
     private ?string $destination = null;
 
-    #[ORM\Column]
-    private ?\DateTimeImmutable $createAt = null;
+    #[ORM\Column(type: 'datetime_immutable')]
+    private ?\DateTimeImmutable $createdAt = null;
+
+    #[ORM\Column(type: 'datetime_immutable', nullable: true)]
+    private ?\DateTimeImmutable $completedAt = null;
+
+    /**
+     * @var Collection<int, Intervention>
+     */
+    #[ORM\OneToMany(mappedBy: 'distribution', targetEntity: Intervention::class, cascade: ['persist'], orphanRemoval: true)]
+    private Collection $interventions;
 
     public function __construct()
     {
-        $this->createAt = new \DateTimeImmutable();
-        $this->status = self::STATUS_PREPARING; // Statut par défaut
+        $this->interventions = new ArrayCollection();
+        $this->createdAt = new \DateTimeImmutable();
     }
 
-    // Getters et Setters
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getStatus(): ?string
+    public function getUser(): ?User
     {
-        return $this->status;
+        return $this->user;
     }
 
-    public function setStatus(?string $status): static
+    public function setUser(?User $user): static
     {
-        $this->status = $status;
-        return $this;
-    }
+        $this->user = $user;
 
-    /**
-     * Retourne le libellé du statut pour l'affichage
-     */
-    public function getStatusLabel(): string
-    {
-        return match($this->status) {
-            self::STATUS_PREPARING => 'distribution.status.preparing',
-            self::STATUS_IN_PROGRESS => 'distribution.status.in_progress',
-            self::STATUS_DELIVERED => 'distribution.status.delivered',
-            self::STATUS_CANCELLED => 'distribution.status.cancelled',
-            default => 'distribution.status.unknown',
-        };
-    }
-
-    /**
-     * Retourne la classe CSS du badge selon le statut
-     */
-    public function getStatusBadgeClass(): string
-    {
-        return match($this->status) {
-            self::STATUS_PREPARING, self::STATUS_CANCELLED, self::STATUS_IN_PROGRESS, self::STATUS_DELIVERED => 'bg-dark',
-            default => 'bg-secondary',
-        };
-    }
-
-    /**
-     * Retourne tous les statuts disponibles
-     */
-    public static function getStatusChoices(): array
-    {
-        return [
-            'distribution.status.preparing' => self::STATUS_PREPARING,
-            'distribution.status.in_progress' => self::STATUS_IN_PROGRESS,
-            'distribution.status.delivered' => self::STATUS_DELIVERED,
-            'distribution.status.cancelled' => self::STATUS_CANCELLED,
-        ];
-    }
-
-    public function getQuantity(): ?int
-    {
-        return $this->quantity;
-    }
-
-    public function setQuantity(int $quantity): static
-    {
-        $this->quantity = $quantity;
         return $this;
     }
 
@@ -120,17 +84,31 @@ class Distribution
     public function setProduct(?Product $product): static
     {
         $this->product = $product;
+
         return $this;
     }
 
-    public function getUser(): ?User
+    public function getQuantity(): int
     {
-        return $this->user;
+        return $this->quantity;
     }
 
-    public function setUser(?User $user): static
+    public function setQuantity(int $quantity): static
     {
-        $this->user = $user;
+        $this->quantity = $quantity;
+
+        return $this;
+    }
+
+    public function getStatus(): string
+    {
+        return $this->status;
+    }
+
+    public function setStatus(string $status): static
+    {
+        $this->status = $status;
+
         return $this;
     }
 
@@ -139,20 +117,103 @@ class Distribution
         return $this->destination;
     }
 
-    public function setDestination(string $destination): static
+    public function setDestination(?string $destination): static
     {
         $this->destination = $destination;
+
         return $this;
     }
 
-    public function getCreateAt(): ?\DateTimeImmutable
+    public function getCreatedAt(): ?\DateTimeImmutable
     {
-        return $this->createAt;
+        return $this->createdAt;
     }
 
-    public function setCreateAt(\DateTimeImmutable $createAt): static
+    public function setCreatedAt(\DateTimeImmutable $createdAt): static
     {
-        $this->createAt = $createAt;
+        $this->createdAt = $createdAt;
+
         return $this;
+    }
+
+    public function getCompletedAt(): ?\DateTimeImmutable
+    {
+        return $this->completedAt;
+    }
+
+    public function setCompletedAt(?\DateTimeImmutable $completedAt): static
+    {
+        $this->completedAt = $completedAt;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Intervention>
+     */
+    public function getInterventions(): Collection
+    {
+        return $this->interventions;
+    }
+
+    public function addIntervention(Intervention $intervention): static
+    {
+        if (!$this->interventions->contains($intervention)) {
+            $this->interventions->add($intervention);
+            $intervention->setDistribution($this);
+        }
+
+        return $this;
+    }
+
+    public function removeIntervention(Intervention $intervention): static
+    {
+        if ($this->interventions->removeElement($intervention)) {
+            if ($intervention->getDistribution() === $this) {
+                $intervention->setDistribution(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * Vérifie si la distribution est terminée
+     */
+    public function isCompleted(): bool
+    {
+        return $this->status === self::STATUS_DELIVERED;
+    }
+
+    /**
+     * Vérifie si la distribution est en cours
+     */
+    public function isInProgress(): bool
+    {
+        return $this->status === self::STATUS_IN_PROGRESS;
+    }
+
+    /**
+     * Marque la distribution comme terminée
+     */
+    public function markAsCompleted(): static
+    {
+        $this->status = self::STATUS_DELIVERED;
+        $this->completedAt = new \DateTimeImmutable();
+
+        return $this;
+    }
+
+    /**
+     * Calcule la quantité restante non distribuée
+     */
+    public function getRemainingQuantity(): int
+    {
+        $distributed = 0;
+        foreach ($this->interventions as $intervention) {
+            $distributed += $intervention->getQuantityAdded();
+        }
+
+        return $this->quantity - $distributed;
     }
 }

@@ -30,6 +30,24 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: 'boolean', options: ['default' => true])]
     private bool $isActive = true;
 
+    #[ORM\Column(type: 'string', length: 255)]
+    private ?string $password = null;
+
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
+    private ?string $avatar = null;
+
+    #[ORM\Column(type: 'string', length: 255)]
+    private ?string $name = null;
+
+    #[ORM\Column(type: 'datetime_immutable')]
+    private ?\DateTimeImmutable $createdAt = null;
+
+    /**
+     * @var Collection<int, Distribution>
+     */
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Distribution::class)]
+    private Collection $distributions;
+
     public function getRoles(): array
     {
         $roles = $this->roles;
@@ -43,6 +61,23 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $roles[] = 'ROLE_USER';
 
         return array_unique($roles);
+    }
+
+
+    /**
+     * @param \DateTimeImmutable|null $createdAt
+     */
+    public function setCreatedAt(?\DateTimeImmutable $createdAt): void
+    {
+        $this->createdAt = $createdAt;
+    }
+
+    /**
+     * @return \DateTimeImmutable|null
+     */
+    public function getCreatedAt(): ?\DateTimeImmutable
+    {
+        return $this->createdAt;
     }
 
     public function setRoles(array $roles): static
@@ -69,24 +104,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    /**
-     * @var string The hashed password
-     */
-    #[ORM\Column]
-    private ?string $password = null;
-
-    #[ORM\Column(length: 255)]
-    private ?string $name = null;
-
-    /**
-     * @var Collection<int, Distribution>
-     */
-    #[ORM\OneToMany(targetEntity: Distribution::class, mappedBy: 'user')]
-    private Collection $distributions;
-
     public function __construct()
     {
         $this->distributions = new ArrayCollection();
+        $this->createdAt = new \DateTimeImmutable();
         $this->isActive = true;
     }
 
@@ -118,8 +139,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    #[ORM\Column(length: 255, nullable: true)]
-    private ?string $avatar = null;
 
 
     public function getAvatar(): ?string
@@ -142,9 +161,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         return (string) $this->email;
     }
-
-
-
 
     /**
      * @see PasswordAuthenticatedUserInterface

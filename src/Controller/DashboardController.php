@@ -1,145 +1,92 @@
 <?php
+// src/Controller/DashboardController.php
 
 namespace App\Controller;
 
-use App\Entity\Distribution;
-use App\Entity\Product;
-use App\Entity\Rack;
-use App\Entity\Stock;
-use App\Entity\User;
-use App\Entity\Warehouse;
-use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 class DashboardController extends AbstractController
 {
     #[Route('/', name: 'app_dashboard')]
-    public function index(EntityManagerInterface $entityManager): Response
+    public function index(): Response
     {
-        // Statistiques des stocks
-        $totalStock = $entityManager->getRepository(Stock::class)
-            ->createQueryBuilder('s')
-            ->select('SUM(s.quantity)')
-            ->getQuery()
-            ->getSingleScalarResult() ?? 0;
-
-        $totalProducts = $entityManager->getRepository(Product::class)->count([]);
-        $totalRacks = $entityManager->getRepository(Rack::class)->count([]);
-        $totalWarehouses = $entityManager->getRepository(Warehouse::class)->count([]);
-
-        // Statistiques des distributions
-        $totalDistributions = $entityManager->getRepository(Distribution::class)->count([]);
-
-        $totalDistributedQuantity = $entityManager->getRepository(Distribution::class)
-            ->createQueryBuilder('d')
-            ->select('SUM(d.quantity)')
-            ->where('d.status = :status')
-            ->setParameter('status', Distribution::STATUS_DELIVERED)
-            ->getQuery()
-            ->getSingleScalarResult() ?? 0;
-
-        $distributionsInProgress = $entityManager->getRepository(Distribution::class)
-            ->count(['status' => Distribution::STATUS_IN_PROGRESS]);
-
-        $distributionsPreparing = $entityManager->getRepository(Distribution::class)
-            ->count(['status' => Distribution::STATUS_PREPARING]);
-
-        // Statistiques des utilisateurs par rôle
-        $adminCount = $entityManager->getRepository(User::class)
-            ->count(['role' => 'ROLE_ADMIN']);
-
-        $driverCount = $entityManager->getRepository(User::class)
-            ->count(['role' => 'ROLE_DRIVER']);
-
-        $statisticsCount = $entityManager->getRepository(User::class)
-            ->count(['role' => 'ROLE_STATISTICS']);
-
-        $totalUsers = $adminCount + $driverCount + $statisticsCount;
-
-        // Distributions mensuelles pour le graphique (année en cours)
-        $currentYear = date('Y');
-        $monthlyDistributions = [];
-
-        for ($month = 1; $month <= 12; $month++) {
-            // Créer les dates de début et fin du mois
-            $startDate = new \DateTime("$currentYear-$month-01 00:00:00");
-            $endDate = (clone $startDate)->modify('last day of this month')->setTime(23, 59, 59);
-
-            $count = $entityManager->getRepository(Distribution::class)
-                ->createQueryBuilder('d')
-                ->select('SUM(d.quantity)')
-                ->where('d.createAt >= :startDate')
-                ->andWhere('d.createAt <= :endDate')
-                ->setParameter('startDate', $startDate)
-                ->setParameter('endDate', $endDate)
-                ->getQuery()
-                ->getSingleScalarResult() ?? 0;
-
-            $monthlyDistributions[] = (int) $count;
-        }
-
-        // Activités récentes (10 dernières distributions)
-        $recentActivities = $entityManager->getRepository(Distribution::class)
-            ->createQueryBuilder('d')
-            ->leftJoin('d.user', 'u')
-            ->addSelect('u')
-            ->leftJoin('d.product', 'p')
-            ->addSelect('p')
-            ->orderBy('d.createAt', 'DESC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult();
-
-        // Calcul des pourcentages
-        $stockCapacity = 10000; // Capacité totale estimée (à ajuster selon tes besoins)
-        $stockPercentage = $stockCapacity > 0 ? round(($totalStock / $stockCapacity) * 100) : 0;
-
-        $distributionPercentage = $totalStock > 0 ? round(($totalDistributedQuantity / ($totalStock + $totalDistributedQuantity)) * 100) : 0;
-
-        $activeRacksPercentage = $totalRacks > 0 ? round((count($this->getActiveRacks($entityManager)) / $totalRacks) * 100) : 0;
-
         return $this->render('dashboard/index.html.twig', [
-            // Statistiques principales
-            'total_stock' => $totalStock,
-            'total_products' => $totalProducts,
-            'total_racks' => $totalRacks,
-            'total_warehouses' => $totalWarehouses,
-            'total_distributions' => $totalDistributions,
-            'total_distributed_quantity' => $totalDistributedQuantity,
-            'distributions_in_progress' => $distributionsInProgress,
-            'distributions_preparing' => $distributionsPreparing,
+            // ============ STATISTIQUES PRINCIPALES ============
+            'total_stock' => 15750,
+            'total_products' => 45,
+            'total_racks' => 120,
+            'total_warehouses' => 5,
+            'total_distributed_quantity' => 8420,
+            'total_distributions' => 87,
 
-            // Statistiques utilisateurs
-            'admin_count' => $adminCount,
-            'driver_count' => $driverCount,
-            'statistics_count' => $statisticsCount,
-            'total_users' => $totalUsers,
+            // ============ DISTRIBUTIONS PAR STATUT ============
+            'distributions_preparing' => 12,
+            'distributions_in_progress' => 8,
+            'distributions_delivered' => 67,
 
-            // Données pour le graphique
-            'monthly_distributions' => $monthlyDistributions,
+            // ============ UTILISATEURS PAR RÔLE ============
+            'admin_count' => 3,
+            'driver_count' => 15,
+            'statistics_count' => 5,
 
-            // Activités récentes
-            'recent_activities' => $recentActivities,
+            // ============ POURCENTAGES POUR BARRES DE PROGRESSION ============
+            'stock_percentage' => 75,
+            'distribution_percentage' => 85,
+            'active_racks_percentage' => 92,
 
-            // Pourcentages
-            'stock_percentage' => min($stockPercentage, 100),
-            'distribution_percentage' => $distributionPercentage,
-            'active_racks_percentage' => $activeRacksPercentage,
+            // ============ DONNÉES POUR LE GRAPHIQUE (12 mois) ============
+            'monthly_distributions' => [450, 520, 680, 720, 890, 950, 1020, 980, 1150, 1200, 1100, 950],
+
+            // ============ ACTIVITÉS RÉCENTES ============
+            'recent_activities' => [
+                (object) [
+                    'product' => (object) ['name' => 'Paris Match'],
+                    'quantity' => 50,
+                    'user' => (object) ['name' => 'Jean Dupont'],
+                    'destination' => 'Hôtel Marriott, Hôtel Hilton',
+                    'createAt' => new \DateTime('2025-01-22 14:30:00'),
+                    'statusLabel' => 'distribution.status.delivered',
+                    'statusBadgeClass' => 'bg-success'
+                ],
+                (object) [
+                    'product' => (object) ['name' => 'Elle Magazine'],
+                    'quantity' => 35,
+                    'user' => (object) ['name' => 'Marie Martin'],
+                    'destination' => 'Hôtel Sofitel, Hôtel Novotel',
+                    'createAt' => new \DateTime('2025-01-22 11:15:00'),
+                    'statusLabel' => 'distribution.status.in_progress',
+                    'statusBadgeClass' => 'bg-primary'
+                ],
+                (object) [
+                    'product' => (object) ['name' => 'Geo Magazine'],
+                    'quantity' => 28,
+                    'user' => (object) ['name' => 'Pierre Leroux'],
+                    'destination' => 'Hôtel Ibis, Hôtel Mercure',
+                    'createAt' => new \DateTime('2025-01-22 09:45:00'),
+                    'statusLabel' => 'distribution.status.delivered',
+                    'statusBadgeClass' => 'bg-success'
+                ],
+                (object) [
+                    'product' => (object) ['name' => 'Le Point'],
+                    'quantity' => 42,
+                    'user' => (object) ['name' => 'Sophie Bernard'],
+                    'destination' => 'Hôtel Pullman, Hôtel Accor',
+                    'createAt' => new \DateTime('2025-01-21 16:20:00'),
+                    'statusLabel' => 'distribution.status.preparing',
+                    'statusBadgeClass' => 'bg-warning'
+                ],
+                (object) [
+                    'product' => (object) ['name' => 'L\'Express'],
+                    'quantity' => 60,
+                    'user' => (object) ['name' => 'Thomas Petit'],
+                    'destination' => 'Hôtel Renaissance Paris',
+                    'createAt' => new \DateTime('2025-01-21 14:00:00'),
+                    'statusLabel' => 'distribution.status.delivered',
+                    'statusBadgeClass' => 'bg-success'
+                ],
+            ],
         ]);
-    }
-
-    /**
-     * Récupère les racks qui ont du stock
-     */
-    private function getActiveRacks(EntityManagerInterface $entityManager): array
-    {
-        return $entityManager->getRepository(Stock::class)
-            ->createQueryBuilder('s')
-            ->select('DISTINCT IDENTITY(s.rack)')
-            ->where('s.quantity > 0')
-            ->getQuery()
-            ->getResult();
     }
 }

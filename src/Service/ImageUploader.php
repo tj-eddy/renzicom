@@ -9,45 +9,15 @@ use Symfony\Component\String\Slugger\SluggerInterface;
 
 class ImageUploader
 {
-    private string $warehouseImagesDirectory;
-    private string $productImagesDirectory;
     private string $avatarImagesDirectory;
     private SluggerInterface $slugger;
 
     public function __construct(
-        string $warehouseImagesDirectory,
-        string $productImagesDirectory,
         string $avatarImagesDirectory,
         SluggerInterface $slugger
     ) {
-        $this->warehouseImagesDirectory = $warehouseImagesDirectory;
-        $this->productImagesDirectory = $productImagesDirectory;
         $this->avatarImagesDirectory = $avatarImagesDirectory;
         $this->slugger = $slugger;
-    }
-
-    /**
-     * @throws Exception
-     */
-    public function upload(UploadedFile $file): string
-    {
-        return $this->uploadWarehouse($file);
-    }
-
-    /**
-     * @throws Exception
-     */
-    public function uploadWarehouse(UploadedFile $file): string
-    {
-        return $this->uploadFile($file, $this->warehouseImagesDirectory);
-    }
-
-    /**
-     * @throws Exception
-     */
-    public function uploadProduct(UploadedFile $file): string
-    {
-        return $this->uploadFile($file, $this->productImagesDirectory);
     }
 
     /**
@@ -73,20 +43,6 @@ class ImageUploader
         return $fileName;
     }
 
-    public function remove(string $filename): void
-    {
-        $this->removeWarehouse($filename);
-    }
-
-    public function removeWarehouse(string $filename): void
-    {
-        $this->removeFile($filename, $this->warehouseImagesDirectory);
-    }
-
-    public function removeProduct(string $filename): void
-    {
-        $this->removeFile($filename, $this->productImagesDirectory);
-    }
 
     public function removeAvatar(string $filename): void
     {

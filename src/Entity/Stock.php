@@ -2,40 +2,41 @@
 
 namespace App\Entity;
 
-use AllowDynamicProperties;
 use App\Repository\StockRepository;
-use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
-#[AllowDynamicProperties] #[ORM\Entity(repositoryClass: StockRepository::class)]
+/**
+ * Représente le stock d'un produit dans un entrepôt
+ */
+#[ORM\Entity(repositoryClass: StockRepository::class)]
+#[ORM\Table(name: 'stock')]
 class Stock
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column]
+    #[ORM\Column(type: 'integer')]
     private ?int $id = null;
 
-    #[ORM\Column(nullable: true)]
-    private ?int $quantity = null;
+    #[ORM\Column(type: 'integer', options: ['default' => 0])]
+    private int $quantity = 0;
 
-    #[ORM\ManyToOne(inversedBy: 'stocks')]
-    private ?Rack $rack = null;
+    #[ORM\ManyToOne(targetEntity: Warehouse::class, inversedBy: 'stocks')]
+    #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
+    private ?Warehouse $warehouse = null;
 
-    #[ORM\ManyToOne(inversedBy: 'stocks')]
+    #[ORM\ManyToOne(targetEntity: Product::class, inversedBy: 'stocks')]
+    #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
     private ?Product $product = null;
 
-    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    #[ORM\Column(type: 'datetime_immutable')]
+    private ?\DateTimeImmutable $createdAt = null;
+
+    #[ORM\Column(type: 'text', nullable: true)]
     private ?string $note = null;
 
-    #[ORM\Column]
-    private ?\DateTimeImmutable $create_at;
-
-    /**
-     * Constructeur - initialise la date de création
-     */
     public function __construct()
     {
-        $this->create_at = new \DateTimeImmutable();
+        $this->createdAt = new \DateTimeImmutable();
     }
 
     public function getId(): ?int
@@ -43,26 +44,26 @@ class Stock
         return $this->id;
     }
 
-    public function getQuantity(): ?int
+    public function getQuantity(): int
     {
         return $this->quantity;
     }
 
-    public function setQuantity(?int $quantity): static
+    public function setQuantity(int $quantity): static
     {
         $this->quantity = $quantity;
 
         return $this;
     }
 
-    public function getRack(): ?Rack
+    public function getWarehouse(): ?Warehouse
     {
-        return $this->rack;
+        return $this->warehouse;
     }
 
-    public function setRack(?Rack $rack): static
+    public function setWarehouse(?Warehouse $warehouse): static
     {
-        $this->rack = $rack;
+        $this->warehouse = $warehouse;
 
         return $this;
     }
@@ -79,14 +80,14 @@ class Stock
         return $this;
     }
 
-    public function getCreateAt(): ?\DateTimeImmutable
+    public function getCreatedAt(): ?\DateTimeImmutable
     {
-        return $this->create_at;
+        return $this->createdAt;
     }
 
-    public function setCreateAt(\DateTimeImmutable $create_at): static
+    public function setCreatedAt(\DateTimeImmutable $createdAt): static
     {
-        $this->create_at = $create_at;
+        $this->createdAt = $createdAt;
 
         return $this;
     }
