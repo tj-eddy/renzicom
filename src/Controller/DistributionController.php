@@ -245,7 +245,7 @@ class DistributionController extends AbstractController
         EntityManagerInterface $entityManager,
         StockRepository $stockRepository
     ): Response {
-        if (!$this->isGranted(['ROLE_ADMIN','ROLE_DRIVER'])) {
+        if (!$this->isGranted('ROLE_ADMIN')) {
             $this->addFlash('error', $this->translator->trans('error.access_denied.change_status'));
             return $this->redirectToRoute('app_distribution_index');
         }
