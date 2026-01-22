@@ -434,4 +434,15 @@ user.status.active: "Actif"
 user.status.inactive: "Inactif"
 
 error.access_denied: "Vous n'êtes pas autorisé à accéder à cette page."
-error.access_denied.change_status: Vous n’êtes pas autorisé à changer le statut.
+error.access_denied.change_status: 'Vous n’êtes pas autorisé à changer le statut.'
+
+distribution.status.cancelled_stock_restored: "Distribution annulée. Le stock a été réajusté (+{quantity})"
+distribution.status.reactivated_stock_deducted: "Distribution réactivée. Le stock a été déduit (-{quantity})"
+distribution.status.updated_success: "Statut mis à jour avec succès"
+distribution.error.insufficient_stock: "Stock insuffisant pour réactiver cette distribution"
+distribution.error.stock_deduction_failed: "Erreur lors de la déduction du stock"
+distribution.error.invalid_status: "Statut invalide"
+distribution.error.csrf_token_invalid: "Token CSRF invalide"
+distribution.delete.success: "Distribution supprimée avec succès"
+distribution.delete.success_with_stock: "Distribution supprimée. Le stock a été restauré (+{quantity})"
+distribution.delete.error_csrf: "Token CSRF invalide"

@@ -181,7 +181,7 @@ class DistributionController extends AbstractController
         }
         $token = $request->request->get('_token');
         if (!$this->isCsrfTokenValid('change-status' . $distribution->getId(), $token)) {
-            $this->addFlash('error', 'Token CSRF invalide');
+            $this->addFlash('error', $this->translator->trans('distribution.error.csrf_token_invalid'));
             return $this->redirectToRoute('app_distribution_index');
         }
 
@@ -192,19 +192,46 @@ class DistributionController extends AbstractController
             Distribution::STATUS_DELIVERED,
             Distribution::STATUS_CANCELLED
         ], true)) {
-            $this->addFlash('error', 'Statut invalide');
+            $this->addFlash('error', $this->translator->trans('distribution.error.invalid_status'));
             return $this->redirectToRoute('app_distribution_index');
         }
 
-        // Gérer l'annulation : réajuster le stock
-        if ($status === Distribution::STATUS_CANCELLED && $distribution->getStatus() !== Distribution::STATUS_CANCELLED) {
+        $oldStatus = $distribution->getStatus();
+
+
+
+        // CAS 1 : Passage vers CANCELLED - Restaurer le stock
+        if ($status === Distribution::STATUS_CANCELLED && $oldStatus !== Distribution::STATUS_CANCELLED) {
             $stockRepository->restoreFromCancelledDistribution($distribution);
+            $this->addFlash('success', $this->translator->trans('distribution.status.cancelled_stock_restored', [
+                '{quantity}' => $distribution->getQuantity()
+            ]));
         }
+
+        // CAS 2 : Réactivation depuis CANCELLED - Déduire le stock
+        elseif ($oldStatus === Distribution::STATUS_CANCELLED && $status !== Distribution::STATUS_CANCELLED) {
+            if (!$stockRepository->hasEnoughStock($distribution)) {
+                $this->addFlash('error', $this->translator->trans('distribution.error.insufficient_stock'));
+                return $this->redirectToRoute('app_distribution_index');
+            }
+
+            if ($stockRepository->deductFromReactivatedDistribution($distribution)) {
+                $this->addFlash('success', $this->translator->trans('distribution.status.reactivated_stock_deducted', [
+                    '{quantity}' => $distribution->getQuantity()
+                ]));
+            } else {
+                $this->addFlash('error', $this->translator->trans('distribution.error.stock_deduction_failed'));
+                return $this->redirectToRoute('app_distribution_index');
+            }
+        }
+
+        // CAS 3 : Changement de statut normal
+        else {
+            $this->addFlash('success', $this->translator->trans('distribution.status.updated_success'));
+        }
+
         $distribution->setStatus($status);
-
         $entityManager->flush();
-
-        $this->addFlash('success', 'Statut mis à jour avec succès');
         return $this->redirectToRoute('app_distribution_index');
     }
 
@@ -215,25 +242,34 @@ class DistributionController extends AbstractController
     public function delete(
         Request $request,
         Distribution $distribution,
-        EntityManagerInterface $entityManager
+        EntityManagerInterface $entityManager,
+        StockRepository $stockRepository
     ): Response {
         if (!$this->isGranted(['ROLE_ADMIN','ROLE_DRIVER'])) {
             $this->addFlash('error', $this->translator->trans('error.access_denied.change_status'));
             return $this->redirectToRoute('app_distribution_index');
         }
-        if ($this->isCsrfTokenValid('delete' . $distribution->getId(), $request->request->get('_token'))) {
-            // Si la distribution n'est pas encore livrée, on peut remettre le stock
-            if ($distribution->getStatus() !== Distribution::STATUS_DELIVERED) {
-                // Optionnel : remettre le stock
-                // À implémenter selon tes besoins
-            }
 
+        if ($this->isCsrfTokenValid('delete' . $distribution->getId(), $request->request->get('_token'))) {
+            $shouldRestoreStock = false;
+            $quantity = $distribution->getQuantity();
+
+            // Si la distribution n'est pas annulée, on doit remettre le stock
+            if ($distribution->getStatus() !== Distribution::STATUS_CANCELLED) {
+                $stockRepository->restoreFromCancelledDistribution($distribution);
+                $shouldRestoreStock = true;
+            }
             $entityManager->remove($distribution);
             $entityManager->flush();
-
-            $this->addFlash('success', 'Distribution supprimée avec succès');
+            if ($shouldRestoreStock) {
+                $this->addFlash('success', $this->translator->trans('distribution.delete.success_with_stock', [
+                    '{quantity}' => $quantity
+                ]));
+            } else {
+                $this->addFlash('success', $this->translator->trans('distribution.delete.success'));
+            }
         } else {
-            $this->addFlash('error', 'Token CSRF invalide');
+            $this->addFlash('error', $this->translator->trans('distribution.delete.error_csrf'));
         }
 
         return $this->redirectToRoute('app_distribution_index');

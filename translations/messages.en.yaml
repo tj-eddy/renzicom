@@ -419,3 +419,14 @@ user.status.inactive: "Inactive"
 
 error.access_denied: "You are not authorized to access this page."
 error.access_denied.change_status: 'You are not authorized to change the status.'
+
+distribution.status.cancelled_stock_restored: "Distribution cancelled. Stock has been adjusted (+{quantity})"
+distribution.status.reactivated_stock_deducted: "Distribution reactivated. Stock has been deducted (-{quantity})"
+distribution.status.updated_success: "Status updated successfully"
+distribution.error.insufficient_stock: "Insufficient stock to reactivate this distribution"
+distribution.error.stock_deduction_failed: "Error while deducting stock"
+distribution.error.invalid_status: "Invalid status"
+distribution.error.csrf_token_invalid: "Invalid CSRF token"
+distribution.delete.success: "Distribution deleted successfully"
+distribution.delete.success_with_stock: "Distribution deleted. Stock has been restored (+{quantity})"
+distribution.delete.error_csrf: "Invalid CSRF token"
