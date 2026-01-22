@@ -1,14 +1,13 @@
 <?php
 
+// src/Repository/StockRepository.php
 namespace App\Repository;
 
 use App\Entity\Stock;
+use App\Entity\Distribution;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
-/**
- * @extends ServiceEntityRepository<Stock>
- */
 class StockRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
@@ -16,28 +15,43 @@ class StockRepository extends ServiceEntityRepository
         parent::__construct($registry, Stock::class);
     }
 
-    //    /**
-    //     * @return Stock[] Returns an array of Stock objects
-    //     */
-    //    public function findByExampleField($value): array
-    //    {
-    //        return $this->createQueryBuilder('s')
-    //            ->andWhere('s.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->orderBy('s.id', 'ASC')
-    //            ->setMaxResults(10)
-    //            ->getQuery()
-    //            ->getResult()
-    //        ;
-    //    }
+    public function restoreFromCancelledDistribution(Distribution $distribution): void
+    {
+        $product = $distribution->getProduct();
+        $quantity = $distribution->getQuantity();
 
-    //    public function findOneBySomeField($value): ?Stock
-    //    {
-    //        return $this->createQueryBuilder('s')
-    //            ->andWhere('s.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->getQuery()
-    //            ->getOneOrNullResult()
-    //        ;
-    //    }
+        if (!$product || $quantity <= 0) {
+            return;
+        }
+
+        $entityManager = $this->getEntityManager();
+
+        // Rechercher le stock existant pour ce produit
+        $stock = $this->findOneBy(['product' => $product]);
+
+        if ($stock) {
+            // Réajuster la quantité
+            $stock->setQuantity($stock->getQuantity() + $quantity);
+            $stock->setNote(
+                sprintf(
+                    'Réajustement suite à annulation de distribution #%d (ancienne note: %s)',
+                    $distribution->getId(),
+                    $stock->getNote()
+                )
+            );
+        } else {
+            // Créer un nouveau stock si aucun n'existe
+            $stock = new Stock();
+            $stock->setProduct($product);
+            $stock->setQuantity($quantity);
+            $stock->setNote(
+                sprintf('Stock créé suite à annulation de distribution #%d', $distribution->getId())
+            );
+            $stock->setCreatedAt(new \DateTimeImmutable());
+
+            $entityManager->persist($stock);
+        }
+
+        $entityManager->flush();
+    }
 }

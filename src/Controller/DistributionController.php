@@ -167,8 +167,9 @@ class DistributionController extends AbstractController
      */
     #[Route('/{id}/change-status/{status}', name: 'app_distribution_change_status', methods: ['POST'])]
     public function changeStatus(
+        StockRepository $stockRepository,
         Distribution $distribution,
-        string $status,  // ← Changé de int à string
+        string $status,
         Request $request,
         EntityManagerInterface $entityManager
     ): Response {
@@ -195,9 +196,9 @@ class DistributionController extends AbstractController
             return $this->redirectToRoute('app_distribution_index');
         }
 
-        if ($status == Distribution::STATUS_CANCELLED){
-
-
+        // Gérer l'annulation : réajuster le stock
+        if ($status === Distribution::STATUS_CANCELLED && $distribution->getStatus() !== Distribution::STATUS_CANCELLED) {
+            $stockRepository->restoreFromCancelledDistribution($distribution);
         }
         $distribution->setStatus($status);
 
@@ -237,4 +238,6 @@ class DistributionController extends AbstractController
 
         return $this->redirectToRoute('app_distribution_index');
     }
+
+
 }
