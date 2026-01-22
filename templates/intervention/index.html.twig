@@ -1,43 +1,145 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Intervention index{% endblock %}
+{% block stylesheets %}
+    {{ parent() }}
+{% endblock %}
+
+{% block title %}{{ 'intervention.list.title'|trans }}{% endblock %}
+
+{% block page_title %}
+    <div class="page-title">
+        <div class="row">
+            <div class="col-12 col-md-6 order-md-1 order-last">
+                <h3>{{ 'intervention.list.title'|trans }}</h3>
+            </div>
+            <div class="col-12 col-md-6 order-md-2 order-first">
+                <nav aria-label="breadcrumb" class="breadcrumb-header float-start float-lg-end">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item">
+                            <a href="{{ path('app_dashboard') }}">{{ 'breadcrumb.home'|trans }}</a>
+                        </li>
+                        <li class="breadcrumb-item active" aria-current="page">{{ 'breadcrumb.interventions'|trans }}</li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+    </div>
+{% endblock %}
 
 {% block body %}
-    <h1>Intervention index</h1>
+    <section class="section">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h4 class="mb-0">{{ 'intervention.list.title'|trans }}</h4>
+                <a href="{{ path('app_intervention_new') }}" class="btn btn-dark">
+                    <i class="bi bi-plus-circle"></i> {{ 'intervention.actions.new'|trans }}
+                </a>
+            </div>
+            <div class="card-body">
+                <table class="table table-striped" id="interventions-table">
+                    <thead>
+                    <tr>
+                        <th>{{ 'intervention.table.id'|trans }}</th>
+                        <th>{{ 'intervention.table.distribution'|trans }}</th>
+                        <th>{{ 'intervention.table.rack'|trans }}</th>
+                        <th>{{ 'intervention.table.quantity_added'|trans }}</th>
+                        <th>{{ 'intervention.table.notes'|trans }}</th>
+                        <th>{{ 'intervention.table.created_at'|trans }}</th>
+                        <th>{{ 'intervention.table.actions'|trans }}</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for intervention in interventions %}
+                        <tr>
+                            <td>{{ intervention.id }}</td>
+                            <td>
+                                {% if intervention.distribution %}
+                                    <i class="bi bi-truck text-primary"></i>
+                                    <a href="{{ path('app_distribution_edit', {'id': intervention.distribution.id}) }}"
+                                       class="text-decoration-none">
+                                        #{{ intervention.distribution.id }}
+                                    </a>
+                                    {% if intervention.distribution.product %}
+                                        <br><small class="text-muted">{{ intervention.distribution.product.name }}</small>
+                                    {% endif %}
+                                {% else %}
+                                    <span class="text-muted">-</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if intervention.rack %}
+                                    <i class="bi bi-bookshelf text-info"></i>
+                                    {{ intervention.rack.name }}
+                                    {% if intervention.rack.display %}
+                                        <br><small class="text-muted">
+                                        <i class="bi bi-shop"></i> {{ intervention.rack.display.name }}
+                                        {% if intervention.rack.display.hotel %}
+                                            <br><i class="bi bi-building"></i> {{ intervention.rack.display.hotel.name }}
+                                        {% endif %}
+                                    </small>
+                                    {% endif %}
+                                {% else %}
+                                    <span class="text-muted">-</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                <span class="badge bg-success">
+                                    <i class="bi bi-plus-circle"></i> {{ intervention.quantityAdded }}
+                                </span>
+                            </td>
+                            <td>
+                                {% if intervention.notes %}
+                                    <i class="bi bi-journal-text text-muted"></i>
+                                    {{ intervention.notes|length > 30 ? intervention.notes|slice(0, 30) ~ '...' : intervention.notes }}
+                                {% else %}
+                                    <span class="text-muted">-</span>
+                                {% endif %}
+                            </td>
+                            <td>{{ intervention.createdAt ? intervention.createdAt|date('d/m/Y H:i') : '' }}</td>
+                            <td>
+                                <div class="btn-group" role="group">
+                                    <a href="{{ path('app_intervention_show', {'id': intervention.id}) }}"
+                                       class="btn btn-sm btn-info"
+                                       title="{{ 'intervention.actions.show'|trans }}">
+                                        <i class="bi bi-eye"></i>
+                                    </a>
+                                    <a href="{{ path('app_intervention_edit', {'id': intervention.id}) }}"
+                                       class="btn btn-sm btn-dark"
+                                       title="{{ 'intervention.actions.edit'|trans }}">
+                                        <i class="bi bi-pencil"></i>
+                                    </a>
+                                    <button type="button"
+                                            class="btn btn-sm btn-danger"
+                                            onclick="confirmDelete({{ intervention.id }})"
+                                            title="{{ 'intervention.actions.delete'|trans }}">
+                                        <i class="bi bi-trash"></i>
+                                    </button>
+                                </div>
 
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>QuantityAdded</th>
-                <th>PhotoBefore</th>
-                <th>PhotoAfter</th>
-                <th>Notes</th>
-                <th>CreatedAt</th>
-                <th>actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for intervention in interventions %}
-            <tr>
-                <td>{{ intervention.id }}</td>
-                <td>{{ intervention.quantityAdded }}</td>
-                <td>{{ intervention.photoBefore }}</td>
-                <td>{{ intervention.photoAfter }}</td>
-                <td>{{ intervention.notes }}</td>
-                <td>{{ intervention.createdAt ? intervention.createdAt|date('Y-m-d H:i:s') : '' }}</td>
-                <td>
-                    <a href="{{ path('app_intervention_show', {'id': intervention.id}) }}">show</a>
-                    <a href="{{ path('app_intervention_edit', {'id': intervention.id}) }}">edit</a>
-                </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="7">no records found</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+                                {# Formulaire de suppression caché #}
+                                <form id="delete-form-{{ intervention.id }}"
+                                      action="{{ path('app_intervention_delete', {'id': intervention.id}) }}"
+                                      method="post"
+                                      style="display: none;">
+                                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ intervention.id) }}">
+                                </form>
+                            </td>
+                        </tr>
+                    {% else %}
+                        <tr>
+                            <td colspan="8" class="text-center">{{ 'intervention.list.no_interventions'|trans }}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+{% endblock %}
 
-    <a href="{{ path('app_intervention_new') }}">Create new</a>
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        initDataTable('#interventions-table');
+    </script>
 {% endblock %}

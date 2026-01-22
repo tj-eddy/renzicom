@@ -427,6 +427,7 @@ intervention:
         notes:
             label: "Notes"
             placeholder: "Observations..."
+
     confirm_delete: "Êtes-vous sûr de vouloir supprimer cette intervention ?"
 
 # ========================================

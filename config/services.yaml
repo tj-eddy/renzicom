@@ -10,6 +10,8 @@ parameters:
     locale: fr
     avatar_images_directory: '%kernel.project_dir%/public/uploads/avatars'
     product_images_directory: '%kernel.project_dir%/public/uploads/products'
+    intervention_images_directory: '%kernel.project_dir%/public/uploads/interventions'
+
 
 services:
     # default configuration for services in *this* file
@@ -29,5 +31,4 @@ services:
         arguments:
             $avatarImagesDirectory: '%avatar_images_directory%'
             $productImagesDirectory: '%product_images_directory%'
-
-
+            $interventionImagesDirectory: '%intervention_images_directory%'

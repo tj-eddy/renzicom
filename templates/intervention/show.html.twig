@@ -1,42 +1,159 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Intervention{% endblock %}
+{% block title %}{{ 'intervention.actions.show'|trans }}{% endblock %}
+
+{% block page_title %}
+    <div class="page-title">
+        <div class="row">
+            <div class="col-12 col-md-6 order-md-1 order-last">
+                <h3>{{ 'intervention.actions.show'|trans }}</h3>
+            </div>
+            <div class="col-12 col-md-6 order-md-2 order-first">
+                <nav aria-label="breadcrumb" class="breadcrumb-header float-start float-lg-end">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item">
+                            <a href="{{ path('app_dashboard') }}">{{ 'breadcrumb.home'|trans }}</a>
+                        </li>
+                        <li class="breadcrumb-item">
+                            <a href="{{ path('app_intervention_index') }}">{{ 'intervention.list.title'|trans }}</a>
+                        </li>
+                        <li class="breadcrumb-item active" aria-current="page">{{ 'breadcrumb.show'|trans }}</li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+    </div>
+{% endblock %}
 
 {% block body %}
-    <h1>Intervention</h1>
+<div class="row">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header">
+                <h4 class="card-title">{{ 'intervention.show.details'|trans }}</h4>
+            </div>
+            <div class="card-body">
+                <table class="table table-borderless">
+                    <tbody>
+                    <tr>
+                        <th width="30%">{{ 'intervention.table.id'|trans }}</th>
+                        <td>{{ intervention.id }}</td>
+                    </tr>
+                    <tr>
+                        <th>{{ 'intervention.table.distribution'|trans }}</th>
+                        <td>
+                            {% if intervention.distribution %}
+                                <a href="{{ path('app_distribution_edit', {'id': intervention.distribution.id}) }}">
+                                    #{{ intervention.distribution.id }}
+                                </a>
+                                {% if intervention.distribution.product %}
+                                    - {{ intervention.distribution.product.name }}
+                                {% endif %}
+                            {% else %}
+                                -
+                            {% endif %}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>{{ 'intervention.table.rack'|trans }}</th>
+                        <td>
+                            {% if intervention.rack %}
+                                {{ intervention.rack.name }}
+                                {% if intervention.rack.warehouse %}
+                                    ({{ intervention.rack.warehouse.name }})
+                                {% endif %}
+                            {% else %}
+                                -
+                            {% endif %}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>{{ 'intervention.table.quantity_added'|trans }}</th>
+                        <td>
+                                <span class="badge bg-success fs-6">
+                                    <i class="bi bi-plus-circle"></i> {{ intervention.quantityAdded }}
+                                </span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>{{ 'intervention.table.notes'|trans }}</th>
+                        <td>{{ intervention.notes ?? '-' }}</td>
+                    </tr>
+                    <tr>
+                        <th>{{ 'intervention.table.created_at'|trans }}</th>
+                        <td>{{ intervention.createdAt ? intervention.createdAt|date('d/m/Y H:i') : '' }}</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
 
-    <table class="table">
-        <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ intervention.id }}</td>
-            </tr>
-            <tr>
-                <th>QuantityAdded</th>
-                <td>{{ intervention.quantityAdded }}</td>
-            </tr>
-            <tr>
-                <th>PhotoBefore</th>
-                <td>{{ intervention.photoBefore }}</td>
-            </tr>
-            <tr>
-                <th>PhotoAfter</th>
-                <td>{{ intervention.photoAfter }}</td>
-            </tr>
-            <tr>
-                <th>Notes</th>
-                <td>{{ intervention.notes }}</td>
-            </tr>
-            <tr>
-                <th>CreatedAt</th>
-                <td>{{ intervention.createdAt ? intervention.createdAt|date('Y-m-d H:i:s') : '' }}</td>
-            </tr>
-        </tbody>
-    </table>
+        {# Photos #}
+        <div class="card">
+            <div class="card-header">
+                <h4 class="card-title">
+                    <i class="bi bi-camera"></i> {{ 'intervention.show.photos'|trans }}
+                </h4>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    {% if intervention.photoBefore %}
+                        <div class="col-md-6 mb-3">
+                            <h6 class="text-muted">{{ 'intervention.table.photo_before'|trans }}</h6>
+                            <img src="{{ asset('uploads/interventions/' ~ intervention.photoBefore) }}"
+                                 alt="Photo avant"
+                                 class="img-fluid rounded">
+                        </div>
+                    {% endif %}
+                    {% if intervention.photoAfter %}
+                        <div class="col-md-6 mb-3">
+                            <h6 class="text-muted">{{ 'intervention.table.photo_after'|trans }}</h6>
+                            <img src="{{ asset('uploads/interventions/' ~ intervention.photoAfter) }}"
+                                 alt="Photo après"
+                                 class="img-fluid rounded">
+                        </div>
+                    {% endif %}
+                    {% if not intervention.photoBefore and not intervention.photoAfter %}
+                        <div class="col-12 text-center text-muted">
+                            <i class="bi bi-camera-slash fs-1"></i>
+                            <p>{{ 'intervention.show.no_photos'|trans }}</p>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
 
-    <a href="{{ path('app_intervention_index') }}">back to list</a>
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-header">
+                <h4 class="card-title">{{ 'intervention.show.actions'|trans }}</h4>
+            </div>
+            <div class="card-body">
+                <div class="d-grid gap-2">
+                    <a href="{{ path('app_intervention_edit', {'id': intervention.id}) }}"
+                       class="btn btn-dark">
+                        <i class="bi bi-pencil"></i> {{ 'intervention.actions.edit'|trans }}
+                    </a>
+                    <a href="{{ path('app_intervention_index') }}"
+                       class="btn btn-light-secondary">
+                        <i class="bi bi-arrow-left"></i> {{ 'form.button.back'|trans }}
+                    </a>
+                    <button type="button"
+                            class="btn btn-danger"
+                            onclick="confirmDelete({{ intervention.id }})">
+                        <i class="bi bi-trash"></i> {{ 'intervention.actions.delete'|trans }}
+                    </button>
+                </div>
 
-    <a href="{{ path('app_intervention_edit', {'id': intervention.id}) }}">edit</a>
-
-    {{ include('intervention/_delete_form.html.twig') }}
+                <form id="delete-form-{{ intervention.id }}"
+                      action="{{ path('app_intervention_delete', {'id': intervention.id}) }}"
+                      method="post"
+                      style="display: none;">
+                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ intervention.id) }}">
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}

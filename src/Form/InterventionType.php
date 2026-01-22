@@ -7,28 +7,122 @@ use App\Entity\Intervention;
 use App\Entity\Rack;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
+use Symfony\Component\Form\Extension\Core\Type\IntegerType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\File;
 
 class InterventionType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('quantityAdded')
-            ->add('photoBefore')
-            ->add('photoAfter')
-            ->add('notes')
-            ->add('createdAt', null, [
-                'widget' => 'single_text',
-            ])
             ->add('distribution', EntityType::class, [
                 'class' => Distribution::class,
-                'choice_label' => 'id',
+                'choice_label' => function (Distribution $distribution) {
+                    return sprintf(
+                        '#%d - %s - %s',
+                        $distribution->getId(),
+                        $distribution->getProduct() ? $distribution->getProduct()->getName() : 'N/A',
+                        $distribution->getUser() ? $distribution->getUser()->getName() : 'N/A'
+                    );
+                },
+                'label' => 'intervention.form.distribution.label',
+                'required' => true,
+                'placeholder' => 'intervention.form.distribution.placeholder',
+                'attr' => [
+                    'class' => 'form-select',
+                ],
+                'query_builder' => function ($repository) {
+                    return $repository->createQueryBuilder('d')
+                        ->where('d.status IN (:statuses)')
+                        ->setParameter('statuses', ['preparing', 'in_progress'])
+                        ->orderBy('d.createdAt', 'DESC');
+                },
             ])
             ->add('rack', EntityType::class, [
                 'class' => Rack::class,
-                'choice_label' => 'id',
+                'choice_label' => function (Rack $rack) {
+                    $label = $rack->getName();
+
+                    if ($rack->getDisplay()) {
+                        $label .= ' - ' . $rack->getDisplay()->getName();
+
+                        if ($rack->getDisplay()->getHotel()) {
+                            $label .= ' (' . $rack->getDisplay()->getHotel()->getName() . ')';
+                        }
+                    }
+
+                    if ($rack->getProduct()) {
+                        $label .= ' - ' . $rack->getProduct()->getName();
+                    }
+
+                    return $label;
+                },
+                'label' => 'intervention.form.rack.label',
+                'required' => true,
+                'placeholder' => 'intervention.form.rack.placeholder',
+                'attr' => [
+                    'class' => 'form-select',
+                ],
+                'group_by' => function(Rack $rack) {
+                    if ($rack->getDisplay() && $rack->getDisplay()->getHotel()) {
+                        return $rack->getDisplay()->getHotel()->getName();
+                    }
+                    return 'Autres';
+                },
+            ])
+            ->add('quantityAdded', IntegerType::class, [
+                'label' => 'intervention.form.quantity_added.label',
+                'required' => true,
+                'attr' => [
+                    'placeholder' => 'intervention.form.quantity_added.placeholder',
+                    'min' => 1,
+                    'class' => 'form-control',
+                ],
+            ])
+            ->add('photoBefore', FileType::class, [
+                'label' => 'intervention.form.photo_before.label',
+                'required' => false,
+                'mapped' => false,
+                'attr' => [
+                    'class' => 'form-control',
+                    'accept' => 'image/*',
+                ],
+                'constraints' => [
+                    new File(maxSize: '5M', mimeTypes: [
+                        'image/jpeg',
+                        'image/png',
+                        'image/jpg',
+                    ], mimeTypesMessage: 'intervention.form.photo_before.invalid')
+                ],
+            ])
+            ->add('photoAfter', FileType::class, [
+                'label' => 'intervention.form.photo_after.label',
+                'required' => false,
+                'mapped' => false,
+                'attr' => [
+                    'class' => 'form-control',
+                    'accept' => 'image/*',
+                ],
+                'constraints' => [
+                    new File(maxSize: '5M', mimeTypes: [
+                        'image/jpeg',
+                        'image/png',
+                        'image/jpg',
+                    ], mimeTypesMessage: 'intervention.form.photo_after.invalid')
+                ],
+            ])
+            ->add('notes', TextareaType::class, [
+                'label' => 'intervention.form.notes.label',
+                'required' => false,
+                'attr' => [
+                    'placeholder' => 'intervention.form.notes.placeholder',
+                    'rows' => 4,
+                    'class' => 'form-control',
+                ],
             ])
         ;
     }
