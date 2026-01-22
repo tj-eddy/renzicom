@@ -11,7 +11,11 @@
     <link rel="stylesheet" href="{{ asset('assets/css/app.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/css/pages/auth.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/css/login.css') }}">
-
+    <style>
+        html {
+            font-size: 80%;
+        }
+    </style>
 </head>
 
 <body>
@@ -28,7 +32,7 @@
                         </h4>
                     </div>
                 <h1 class="auth-title">{{ 'login.title'|trans }}</h1>
-                <p class="auth-subtitle mb-5">{{ 'login.subtitle'|trans }}</p>
+                <span class="auth-subtitle mb-5">{{ 'login.subtitle'|trans }}</span>
 
                 {% if error %}
                     <div class="alert alert-danger alert-dismissible fade show" role="alert">
