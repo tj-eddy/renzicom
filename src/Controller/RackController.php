@@ -7,6 +7,7 @@ use App\Form\RackType;
 use App\Repository\RackRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -15,9 +16,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 #[Route('/rack')]
 final class RackController extends AbstractController
 {
-    public function __construct(private readonly TranslatorInterface $translator)
-    {
-    }
+    public function __construct(private readonly TranslatorInterface $translator){}
     #[Route(name: 'app_rack_index', methods: ['GET'])]
     public function index(RackRepository $rackRepository): Response
     {
@@ -53,13 +52,10 @@ final class RackController extends AbstractController
 
 
     #[Route('/rack/{id}/products', name: 'app_rack_products', methods: ['GET'])]
-    public function getRackProducts(Rack $rack): \Symfony\Component\HttpFoundation\JsonResponse
+    public function getRackProducts(Rack $rack): JsonResponse
     {
         $products = [];
-
-
         foreach ($rack->getStocks() as $stock) {
-
             $product = $stock->getProduct();
             $images = $product->getImages();
             $products[] = [

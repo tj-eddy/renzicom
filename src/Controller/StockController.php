@@ -52,8 +52,6 @@ final class StockController extends AbstractController
 
         return $this->json(['quantity' => 0, 'exists' => false]);
     }
-
-
     #[Route(name: 'app_stock_index', methods: ['GET'])]
     public function index(StockRepository $stockRepository): Response
     {

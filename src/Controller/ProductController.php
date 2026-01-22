@@ -16,15 +16,12 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 #[Route('/product')]
 class ProductController extends AbstractController
 {
-    public function __construct(private TranslatorInterface $translator)
-    {
-    }
+    public function __construct(private readonly TranslatorInterface $translator){}
 
     #[Route('/', name: 'app_product_index', methods: ['GET'])]
     public function index(EntityManagerInterface $entityManager): Response
     {
         $products = $entityManager->getRepository(Product::class)->findBy([], ['id' => 'DESC']);
-
         return $this->render('product/index.html.twig', [
             'products' => $products,
         ]);

@@ -28,6 +28,7 @@ final class WarehouseController extends AbstractController
             'warehouses' => $warehouseRepository->findBy([], ['id' => 'DESC']),
         ]);
     }
+
     #[Route('/new', name: 'app_warehouse_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
@@ -101,11 +102,12 @@ final class WarehouseController extends AbstractController
             'form' => $form,
         ]);
     }
+
     #[IsGranted("ROLE_ADMIN")]
     #[Route('/{id}', name: 'app_warehouse_delete', methods: ['POST'])]
     public function delete(Request $request, Warehouse $warehouse, EntityManagerInterface $entityManager): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$warehouse->getId(), $request->getPayload()->getString('_token'))) {
+        if ($this->isCsrfTokenValid('delete' . $warehouse->getId(), $request->getPayload()->getString('_token'))) {
             $entityManager->remove($warehouse);
             $entityManager->flush();
         }
@@ -122,7 +124,7 @@ final class WarehouseController extends AbstractController
     {
         $warehouseId = $image->getWarehouse()->getId();
 
-        if ($this->isCsrfTokenValid('delete'.$image->getId(), $request->request->get('_token'))) {
+        if ($this->isCsrfTokenValid('delete' . $image->getId(), $request->request->get('_token'))) {
             $entityManager->remove($image);
             $entityManager->flush();
 
