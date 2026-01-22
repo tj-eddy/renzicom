@@ -110,6 +110,13 @@
                             <span>{{ 'nav.products'|trans }}</span>
                         </a>
                     </li>
+                    <li class="sidebar-item {% if app.request.get('_route') starts with 'app_stock' %}active{% endif %}">
+                        <a href="{{ path('app_stock_index') }}"
+                           class='sidebar-link  {% if app.request.get('_route') starts with 'app_stock' %}bg-dark{% endif %}'>
+                            <i class="bi bi-sort-numeric-up"></i>
+                            <span>{{ 'nav.stocks'|trans }}</span>
+                        </a>
+                    </li>
                     <li class="sidebar-item {% if app.request.get('_route') starts with 'app_warehouse' %}active{% endif %}">
                         <a href="{{ path('app_warehouse_index') }}"
                            class='sidebar-link  {% if app.request.get('_route') starts with 'app_warehouse' %}bg-dark{% endif %}'>
