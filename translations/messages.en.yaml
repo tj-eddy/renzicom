@@ -1,0 +1,202 @@
+# Navigation
+nav:
+    dashboard: "Dashboard"
+    users: "Users"
+    products: "Products"
+    warehouses: "Warehouses"
+    racks: "Racks"
+    displays: "Displays"
+    hotels: "Hotels"
+    interventions: "Interventions"
+    distributions: "Distributions"
+    my:
+        profile: "My Profile"
+    logout: "Logout"
+    confirm_logout_title: "Confirm Logout"
+    confirm_logout_message: "Are you sure you want to logout?"
+
+# Dashboard
+dashboard:
+    title: "Dashboard"
+    welcome: "Welcome"
+    statistics: "Statistics"
+
+# Actions
+actions:
+    add: "Add"
+    edit: "Edit"
+    delete: "Delete"
+    cancel: "Cancel"
+    save: "Save"
+    confirm: "Confirm"
+    back: "Back"
+    search: "Search"
+    export: "Export"
+    import: "Import"
+    view: "View"
+    close: "Close"
+    confirm_delete_title: "Confirm Deletion"
+    confirm_export_title: "Confirm Export"
+    export_in_progress: "Export in progress..."
+
+# User
+user:
+    title: "Users"
+    add: "Add User"
+    edit: "Edit User"
+    delete: "Delete User"
+    confirm_delete: "Are you sure you want to delete this user?"
+    name: "Name"
+    email: "Email"
+    role: "Role"
+    is_active: "Active"
+    avatar: "Avatar"
+    created_at: "Created At"
+    password: "Password"
+    roles:
+        admin: "Administrator"
+        driver: "Driver"
+        statistics: "Statistics"
+
+# Product
+product:
+    title: "Products"
+    add: "Add Product"
+    edit: "Edit Product"
+    delete: "Delete Product"
+    confirm_delete: "Are you sure you want to delete this product?"
+    name: "Name"
+    image: "Image"
+    year_edition: "Edition Year"
+    language: "Language"
+    variant: "Variant"
+    created_at: "Created At"
+
+# Warehouse
+warehouse:
+    title: "Warehouses"
+    add: "Add Warehouse"
+    edit: "Edit Warehouse"
+    delete: "Delete Warehouse"
+    confirm_delete: "Are you sure you want to delete this warehouse?"
+    name: "Name"
+    address: "Address"
+    created_at: "Created At"
+
+# Stock
+stock:
+    title: "Stock"
+    add: "Add Stock"
+    edit: "Edit Stock"
+    delete: "Delete Stock"
+    confirm_delete: "Are you sure you want to delete this stock?"
+    quantity: "Quantity"
+    warehouse: "Warehouse"
+    product: "Product"
+    note: "Note"
+    created_at: "Created At"
+
+# Hotel
+hotel:
+    title: "Hotels"
+    add: "Add Hotel"
+    edit: "Edit Hotel"
+    delete: "Delete Hotel"
+    confirm_delete: "Are you sure you want to delete this hotel?"
+    name: "Name"
+    address: "Address"
+    contact_name: "Contact Name"
+    contact_email: "Contact Email"
+    contact_phone: "Contact Phone"
+    created_at: "Created At"
+
+# Display
+display:
+    title: "Displays"
+    add: "Add Display"
+    edit: "Edit Display"
+    delete: "Delete Display"
+    confirm_delete: "Are you sure you want to delete this display?"
+    name: "Name"
+    location: "Location"
+    hotel: "Hotel"
+    created_at: "Created At"
+
+# Rack
+rack:
+    title: "Racks"
+    add: "Add Rack"
+    edit: "Edit Rack"
+    delete: "Delete Rack"
+    confirm_delete: "Are you sure you want to delete this rack?"
+    name: "Name"
+    position: "Position"
+    required_quantity: "Required Quantity"
+    current_quantity: "Current Quantity"
+    display: "Display"
+    product: "Product"
+    created_at: "Created At"
+    fill_rate: "Fill Rate"
+    needs_refill: "Needs Refill"
+
+# Distribution
+distribution:
+    title: "Distributions"
+    add: "Add Distribution"
+    edit: "Edit Distribution"
+    delete: "Delete Distribution"
+    confirm_delete: "Are you sure you want to delete this distribution?"
+    user: "Driver"
+    product: "Product"
+    quantity: "Quantity"
+    status: "Status"
+    destination: "Destination"
+    created_at: "Created At"
+    completed_at: "Completed At"
+    statuses:
+        preparing: "Preparing"
+        in_progress: "In Progress"
+        delivered: "Delivered"
+        cancelled: "Cancelled"
+
+# Intervention
+intervention:
+    title: "Interventions"
+    add: "Add Intervention"
+    edit: "Edit Intervention"
+    delete: "Delete Intervention"
+    confirm_delete: "Are you sure you want to delete this intervention?"
+    distribution: "Distribution"
+    rack: "Rack"
+    quantity_added: "Quantity Added"
+    photo_before: "Photo Before"
+    photo_after: "Photo After"
+    notes: "Notes"
+    created_at: "Created At"
+
+# DataTable
+datatable:
+    search: "Search..."
+    no_data: "No data available"
+    info: "Showing {start} to {end} of {rows} entries"
+    per_page: "Rows per page"
+
+# Messages
+messages:
+    success:
+        created: "Item created successfully"
+        updated: "Item updated successfully"
+        deleted: "Item deleted successfully"
+        exported: "Export completed successfully"
+    error:
+        general: "An error occurred"
+        not_found: "Item not found"
+        validation: "Please check the entered data"
+
+# Form
+form:
+    required: "Required field"
+    invalid_email: "Invalid email"
+    invalid_format: "Invalid format"
+    min_length: "Minimum {count} characters"
+    max_length: "Maximum {count} characters"
