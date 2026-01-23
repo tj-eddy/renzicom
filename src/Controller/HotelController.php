@@ -7,6 +7,7 @@ use App\Form\HotelType;
 use App\Repository\HotelRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -50,6 +51,76 @@ class HotelController extends AbstractController
             'hotel' => $hotel,
             'form' => $form,
         ]);
+    }
+
+    #[Route('/{id}/show', name: 'app_hotel_show', methods: ['GET'])]
+    public function show(Hotel $hotel): JsonResponse
+    {
+        $data = [
+            'id' => $hotel->getId(),
+            'name' => $hotel->getName(),
+            'address' => $hotel->getAddress(),
+            'contact' => [
+                'name' => $hotel->getContactName(),
+                'email' => $hotel->getContactEmail(),
+                'phone' => $hotel->getContactPhone(),
+            ],
+            'displays' => []
+        ];
+
+        foreach ($hotel->getDisplays() as $display) {
+            $displayData = [
+                'id' => $display->getId(),
+                'name' => $display->getName(),
+                'location' => $display->getLocation(),
+                'racks' => []
+            ];
+
+            foreach ($display->getRacks() as $rack) {
+                $product = $rack->getProduct();
+
+                $rackData = [
+                    'id' => $rack->getId(),
+                    'name' => $rack->getName(),
+                    'position' => $rack->getPosition(),
+                    'current_quantity' => $rack->getCurrentQuantity(),
+                    'required_quantity' => $rack->getRequiredQuantity(),
+                    'fill_percentage' => $rack->getRequiredQuantity() > 0
+                        ? round(($rack->getCurrentQuantity() / $rack->getRequiredQuantity()) * 100)
+                        : 0,
+                    'status' => $this->getRackStatus($rack->getCurrentQuantity(), $rack->getRequiredQuantity()),
+                    'product' => $product ? [
+                        'id' => $product->getId(),
+                        'name' => $product->getName(),
+                        'image' => $product->getImage(),
+                        'language' => $product->getLanguage(),
+                        'year_edition' => $product->getYearEdition(),
+                    ] : null
+                ];
+
+                $displayData['racks'][] = $rackData;
+            }
+
+            // Trier les racks par position
+            usort($displayData['racks'], fn($a, $b) => $a['position'] <=> $b['position']);
+
+            $data['displays'][] = $displayData;
+        }
+
+        return $this->json($data);
+    }
+
+    private function getRackStatus(int $current, int $required): string
+    {
+        if ($required === 0) return 'empty';
+
+        $percentage = ($current / $required) * 100;
+
+        if ($percentage >= 100) return 'full';
+        if ($percentage >= 50) return 'medium';
+        if ($percentage > 0) return 'low';
+
+        return 'empty';
     }
 
     #[Route('/{id}/edit', name: 'app_hotel_edit', methods: ['GET', 'POST'])]

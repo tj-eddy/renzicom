@@ -86,6 +86,12 @@
                             <td>{{ hotel.createdAt ? hotel.createdAt|date('d/m/Y H:i') : '' }}</td>
                             <td>
                                 <div class="btn-group" role="group">
+                                    <button type="button"
+                                            class="btn btn-sm btn-info"
+                                            onclick="showHotelDetails({{ hotel.id }})"
+                                            title="Voir les détails">
+                                        <i class="bi bi-eye"></i>
+                                    </button>
                                     <a href="{{ path('app_hotel_edit', {'id': hotel.id}) }}"
                                        class="btn btn-sm btn-dark"
                                        title="{{ 'hotel.actions.edit'|trans }}">
@@ -118,11 +124,253 @@
             </div>
         </div>
     </section>
+
+    {# Modal pour afficher les détails de l'hôtel #}
+    <div class="modal fade" id="hotelDetailsModal" tabindex="-1" aria-labelledby="hotelDetailsModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="hotelDetailsModalLabel">
+                        <i class="bi bi-building"></i> <span id="hotelName"></span>
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    {# Info Hôtel #}
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <p class="mb-2"><strong><i class="bi bi-geo-alt"></i> Adresse:</strong></p>
+                                    <p id="hotelAddress" class="text-muted ms-4"></p>
+                                </div>
+                                <div class="col-md-6">
+                                    <p class="mb-2"><strong><i class="bi bi-person-circle"></i> Contact:</strong></p>
+                                    <p id="hotelContact" class="text-muted ms-4"></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {# Loading spinner #}
+                    <div id="loadingSpinner" class="text-center py-5">
+                        <div class="spinner-border text-primary" role="status">
+                            <span class="visually-hidden">Chargement...</span>
+                        </div>
+                    </div>
+
+                    {# Contenu des displays #}
+                    <div id="displaysContent" style="display: none;"></div>
+
+                    {# Message si aucun display #}
+                    <div id="noDisplays" style="display: none;" class="alert alert-info">
+                        <i class="bi bi-info-circle"></i> Aucun présentoir configuré pour cet hôtel.
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
 {% endblock %}
 
 {% block javascripts %}
     {{ parent() }}
     <script>
         initDataTable('#hotels-table');
+
+    </script>
+    <script>
+        /**
+         * Affiche le modal avec les détails de l'hôtel
+         */
+        function showHotelDetails(hotelId) {
+            // Afficher le modal
+            $('#hotelDetailsModal').modal('show');
+
+            // Afficher le spinner
+            $('#loadingSpinner').show();
+            $('#displaysContent').hide();
+            $('#noDisplays').hide();
+
+            // Récupérer le préfixe de langue depuis l'URL actuelle (ex: /fr/)
+            const currentPath = window.location.pathname;
+            const localeMatch = currentPath.match(/^\/([a-z]{2})\//);
+            const localePrefix = localeMatch ? `/${localeMatch[1]}` : '';
+
+            // Charger les données via AJAX
+            $.ajax({
+                url: `${localePrefix}/hotel/${hotelId}/show`,
+                method: 'GET',
+                dataType: 'json',
+                success: function(data) {
+                    // Remplir les infos de l'hôtel
+                    $('#hotelName').text(data.name);
+                    $('#hotelAddress').text(data.address || 'Non renseignée');
+
+                    let contactHtml = data.contact.name || '-';
+                    contactHtml += '<br>';
+                    if (data.contact.email) {
+                        contactHtml += `<a href="mailto:${data.contact.email}">${data.contact.email}</a><br>`;
+                    }
+                    if (data.contact.phone) {
+                        contactHtml += `<a href="tel:${data.contact.phone}">${data.contact.phone}</a>`;
+                    }
+                    $('#hotelContact').html(contactHtml);
+
+                    // Masquer le spinner
+                    $('#loadingSpinner').hide();
+
+                    // Afficher les displays
+                    if (data.displays && data.displays.length > 0) {
+                        $('#displaysContent').show();
+                        renderDisplays(data.displays);
+                    } else {
+                        $('#noDisplays').show();
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.error('Erreur:', error);
+                    $('#loadingSpinner').hide();
+                    alert('Erreur lors du chargement des données');
+                }
+            });
+        }
+
+        /**
+         * Affiche la liste des displays et leurs racks
+         */
+        function renderDisplays(displays) {
+            let html = '';
+
+            $.each(displays, function(index, display) {
+                const totalRacks = display.racks.length;
+                const fullRacks = display.racks.filter(r => r.status === 'full').length;
+
+                html += `
+            <div class="card mb-3 border-start border-4 border-primary">
+                <div class="card-header bg-light">
+                    <h5 class="mb-0">
+                        <i class="bi bi-display"></i> ${display.name}
+                        <span class="badge bg-secondary float-end">${totalRacks} rack(s)</span>
+                    </h5>
+                    ${display.location ? `<small class="text-muted"><i class="bi bi-pin-map"></i> ${display.location}</small>` : ''}
+                </div>
+                <div class="card-body">
+        `;
+
+                if (display.racks.length === 0) {
+                    html += '<p class="text-muted mb-0"><i class="bi bi-inbox"></i> Aucun rack configuré</p>';
+                } else {
+                    html += '<div class="row">';
+
+                    $.each(display.racks, function(rackIndex, rack) {
+                        const statusConfig = getStatusConfig(rack.status);
+
+                        html += `
+                    <div class="col-md-6 mb-3">
+                        <div class="card h-100 border-3 ${statusConfig.cardClass} shadow-sm">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between align-items-start mb-3">
+                                    <h6 class="mb-0">
+                                        <i class="bi bi-folder"></i> ${rack.name}
+                                        <span class="badge ${statusConfig.badgeClass} ms-2">${statusConfig.label}</span>
+                                    </h6>
+                                    <span class="badge bg-light text-dark">Pos. ${rack.position}</span>
+                                </div>
+
+                                ${rack.product ? `
+                                    <div class="d-flex align-items-center mb-3 p-2 bg-light rounded">
+                                        ${rack.product.image ?
+                            `<img src="/uploads/products/${rack.product.image}"
+                                                  alt="${rack.product.name}"
+                                                  class="me-3 border border-2 border-secondary"
+                                                  style="width: 80px; height: 80px; object-fit: cover; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">`
+                            : '<i class="bi bi-box-seam fs-2 me-3 text-muted"></i>'}
+                                        <div class="flex-grow-1">
+                                            <strong class="d-block mb-1">${rack.product.name}</strong>
+                                            <div>
+                                                ${rack.product.language ? `<span class="badge bg-secondary me-1">${rack.product.language}</span>` : ''}
+                                                ${rack.product.year_edition ? `<span class="badge bg-info">${rack.product.year_edition}</span>` : ''}
+                                            </div>
+                                        </div>
+                                    </div>
+                                ` : '<p class="text-muted mb-3"><i class="bi bi-exclamation-triangle"></i> Aucun produit assigné</p>'}
+
+                                <div class="mb-2">
+                                    <div class="d-flex justify-content-between mb-1">
+                                        <span>Stock: ${rack.current_quantity} / ${rack.required_quantity}</span>
+                                        <span class="fw-bold">${rack.fill_percentage}%</span>
+                                    </div>
+                                    <div class="progress" style="height: 20px;">
+                                        <div class="progress-bar ${statusConfig.progressClass}"
+                                             role="progressbar"
+                                             style="width: ${rack.fill_percentage}%"
+                                             aria-valuenow="${rack.fill_percentage}"
+                                             aria-valuemin="0"
+                                             aria-valuemax="100">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                ${rack.required_quantity - rack.current_quantity > 0 ?
+                            `<small class="text-danger">
+                                        <i class="bi bi-exclamation-circle"></i>
+                                        Manque: ${rack.required_quantity - rack.current_quantity} unité(s)
+                                    </small>`
+                            : '<small class="text-success"><i class="bi bi-check-circle"></i> Complet</small>'}
+                            </div>
+                        </div>
+                    </div>
+                `;
+                    });
+
+                    html += '</div>'; // end row
+                }
+
+                html += `
+                </div>
+            </div>
+        `;
+            });
+
+            $('#displaysContent').html(html);
+        }
+
+        /**
+         * Retourne la configuration visuelle selon le statut du rack
+         */
+        function getStatusConfig(status) {
+            const configs = {
+                'full': {
+                    label: 'Complet',
+                    badgeClass: 'bg-success',
+                    cardClass: 'border-success',
+                    progressClass: 'bg-success'
+                },
+                'medium': {
+                    label: 'Moyen',
+                    badgeClass: 'bg-warning',
+                    cardClass: 'border-warning',
+                    progressClass: 'bg-warning'
+                },
+                'low': {
+                    label: 'Faible',
+                    badgeClass: 'bg-danger',
+                    cardClass: 'border-danger',
+                    progressClass: 'bg-danger'
+                },
+                'empty': {
+                    label: 'Vide',
+                    badgeClass: 'bg-secondary',
+                    cardClass: 'border-secondary',
+                    progressClass: 'bg-secondary'
+                }
+            };
+
+            return configs[status] || configs['empty'];
+        }
     </script>
 {% endblock %}
