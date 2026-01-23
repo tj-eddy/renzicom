@@ -217,4 +217,49 @@ class Distribution
 
         return $this->quantity - $distributed;
     }
+
+
+    /**
+     * Calcule la quantité totale distribuée via les interventions
+     */
+    public function getQuantityDistributed(): int
+    {
+        $total = 0;
+        foreach ($this->interventions as $intervention) {
+            $total += $intervention->getQuantityAdded();
+        }
+        return $total;
+    }
+
+    /**
+     * Calcule la quantité restante dans la voiture du livreur
+     */
+    public function getQuantityRemaining(): int
+    {
+        return max(0, $this->quantity - $this->getQuantityDistributed());
+    }
+
+    /**
+     * Vérifie si la distribution est complète
+     */
+    public function isFullyDistributed(): bool
+    {
+        return $this->getQuantityRemaining() === 0;
+    }
+
+    /**
+     * Calcule le pourcentage de distribution
+     */
+    public function getDistributionPercentage(): float
+    {
+        if ($this->quantity === 0) {
+            return 0;
+        }
+        return ($this->getQuantityDistributed() / $this->quantity) * 100;
+    }
+
+    public function __toString(): string
+    {
+        return sprintf('#%d - %s', $this->id ?? 0, $this->product?->getName() ?? 'N/A');
+    }
 }

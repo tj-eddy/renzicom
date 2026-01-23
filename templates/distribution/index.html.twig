@@ -45,6 +45,7 @@
                         <th>{{ 'distribution.table.quantity'|trans }}</th>
                         <th>{{ 'distribution.table.status'|trans }}</th>
                         <th>{{ 'distribution.table.destination'|trans }}</th>
+                        <th>{{ 'distribution.table.progress'|trans }}</th>
                         <th>{{ 'distribution.table.created_at'|trans }}</th>
                         <th>{{ 'distribution.table.completed_at'|trans }}</th>
                         <th>{{ 'distribution.table.actions'|trans }}</th>
@@ -109,6 +110,19 @@
                                 {% else %}
                                     <span class="text-muted">-</span>
                                 {% endif %}
+                            </td>
+                            <td>
+                                <div class="progress" style="height: 25px;">
+                                    <div class="progress-bar {% if distribution.distributionPercentage >= 100 %}bg-success{% elseif distribution.distributionPercentage >= 50 %}bg-primary{% else %}bg-warning{% endif %}"
+                                         role="progressbar"
+                                         style="width: {{ distribution.distributionPercentage }}%"
+                                         aria-valuenow="{{ distribution.distributionPercentage }}"
+                                         aria-valuemin="0"
+                                         aria-valuemax="100">
+                                        {{ distribution.quantityDistributed }} / {{ distribution.quantity }}
+                                    </div>
+                                </div>
+                                <small class="text-muted">Restant: {{ distribution.quantityRemaining }}</small>
                             </td>
                             <td>{{ distribution.createdAt ? distribution.createdAt|date('d/m/Y H:i') : '' }}</td>
                             <td>
