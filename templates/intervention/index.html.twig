@@ -124,48 +124,7 @@
                                     <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ intervention.id) }}">
                                 </form>
                             </td>
-                            <td>
-                                <div class="btn-group" role="group">
-                                    {% if intervention.distribution.status != 'delivered' %}
-                                        {# Bouton Terminer la tournée #}
-                                        <button type="button"
-                                                class="btn btn-sm btn-success"
-                                                onclick="confirmComplete({{ intervention.distribution.id }})"
-                                                title="Terminer la tournée">
-                                            <i class="bi bi-check-circle"></i>
-                                        </button>
-                                    {% endif %}
 
-                                    <a href="{{ path('app_distribution_edit', {'id': intervention.distribution.id}) }}"
-                                       class="btn btn-sm btn-dark"
-                                       title="{{ 'distribution.actions.edit'|trans }}">
-                                        <i class="bi bi-pencil"></i>
-                                    </a>
-
-                                    <button type="button"
-                                            class="btn btn-sm btn-danger"
-                                            onclick="confirmDelete({{ intervention.distribution.id }})"
-                                            title="{{ 'distribution.actions.delete'|trans }}">
-                                        <i class="bi bi-trash"></i>
-                                    </button>
-                                </div>
-
-                                {# Formulaire de complétion caché #}
-                                <form id="complete-form-{{ intervention.distribution.id }}"
-                                      action="{{ path('app_distribution_complete', {'id': intervention.distribution.id}) }}"
-                                      method="post"
-                                      style="display: none;">
-                                    <input type="hidden" name="_token" value="{{ csrf_token('complete' ~ intervention.distribution.id) }}">
-                                </form>
-
-                                {# Formulaire de suppression caché #}
-                                <form id="delete-form-{{ intervention.distribution.id }}"
-                                      action="{{ path('app_distribution_delete', {'id': intervention.distribution.id}) }}"
-                                      method="post"
-                                      style="display: none;">
-                                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ intervention.distribution.id) }}">
-                                </form>
-                            </td>
                         </tr>
                     {% else %}
                         <tr>
@@ -183,10 +142,5 @@
     {{ parent() }}
     <script>
         initDataTable('#interventions-table');
-        function confirmComplete(id) {
-            if (confirm('Terminer la tournée ?\n\nLes magazines non distribués seront retournés à l\'entrepôt.\nCette action mettra à jour le stock.')) {
-                document.getElementById('complete-form-' + id).submit();
-            }
-        }
     </script>
 {% endblock %}

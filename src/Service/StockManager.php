@@ -138,7 +138,7 @@ class StockManager
         ]);
 
         if ($stock) {
-            $stock->setQuantity($stock->getQuantity() + $remainingQuantity - $distribution->getQuantity());
+            $stock->setQuantity($stock->getQuantity() + $remainingQuantity);
         } else {
             $stock = new Stock();
             $stock->setProduct($product);

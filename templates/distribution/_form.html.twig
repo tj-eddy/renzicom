@@ -10,7 +10,7 @@
                 <div class="position-relative">
                     {{ form_widget(form.user, {
                         'attr': {
-                            'class': 'form-select',
+                            'class': 'form-select select2-user',
                             'data-placeholder': 'distribution.form.user.placeholder'|trans
                         }
                     }) }}
@@ -28,7 +28,7 @@
                 <div class="position-relative">
                     {{ form_widget(form.product, {
                         'attr': {
-                            'class': 'form-select',
+                            'class': 'form-select select2-product',
                             'data-placeholder': 'distribution.form.product.placeholder'|trans
                         }
                     }) }}
@@ -113,3 +113,12 @@
     </div>
 </div>
 {{ form_end(form) }}
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function() {
+        // Initialiser Select2 sur tous les selects
+        initSelect2('.select2-user');
+        initSelect2('.select2-product');
+    });
+</script>
