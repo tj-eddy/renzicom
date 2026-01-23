@@ -1,12 +1,12 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}{{ 'intervention.actions.show'|trans }}{% endblock %}
+{% block title %}{{ 'intervention.title'|trans }} #{{ intervention.id }}{% endblock %}
 
 {% block page_title %}
     <div class="page-title">
         <div class="row">
             <div class="col-12 col-md-6 order-md-1 order-last">
-                <h3>{{ 'intervention.actions.show'|trans }}</h3>
+                <h3>{{ 'intervention.title'|trans }} #{{ intervention.id }}</h3>
             </div>
             <div class="col-12 col-md-6 order-md-2 order-first">
                 <nav aria-label="breadcrumb" class="breadcrumb-header float-start float-lg-end">
@@ -15,9 +15,9 @@
                             <a href="{{ path('app_dashboard') }}">{{ 'breadcrumb.home'|trans }}</a>
                         </li>
                         <li class="breadcrumb-item">
-                            <a href="{{ path('app_intervention_index') }}">{{ 'intervention.list.title'|trans }}</a>
+                            <a href="{{ path('app_intervention_index') }}">{{ 'breadcrumb.interventions'|trans }}</a>
                         </li>
-                        <li class="breadcrumb-item active" aria-current="page">{{ 'breadcrumb.show'|trans }}</li>
+                        <li class="breadcrumb-item active" aria-current="page">#{{ intervention.id }}</li>
                     </ol>
                 </nav>
             </div>
@@ -26,134 +26,295 @@
 {% endblock %}
 
 {% block body %}
-<div class="row">
-    <div class="col-md-8">
-        <div class="card">
-            <div class="card-header">
-                <h4 class="card-title">{{ 'intervention.show.details'|trans }}</h4>
-            </div>
+    <section class="section">
+        {# Actions #}
+        <div class="card mb-3">
             <div class="card-body">
-                <table class="table table-borderless">
-                    <tbody>
-                    <tr>
-                        <th width="30%">{{ 'intervention.table.id'|trans }}</th>
-                        <td>{{ intervention.id }}</td>
-                    </tr>
-                    <tr>
-                        <th>{{ 'intervention.table.distribution'|trans }}</th>
-                        <td>
-                            {% if intervention.distribution %}
-                                <a href="{{ path('app_distribution_edit', {'id': intervention.distribution.id}) }}">
-                                    #{{ intervention.distribution.id }}
-                                </a>
-                                {% if intervention.distribution.product %}
-                                    - {{ intervention.distribution.product.name }}
-                                {% endif %}
-                            {% else %}
-                                -
-                            {% endif %}
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>{{ 'intervention.table.rack'|trans }}</th>
-                        <td>
-                            {% if intervention.rack %}
-                                {{ intervention.rack.name }}
-                                {% if intervention.rack.warehouse %}
-                                    ({{ intervention.rack.warehouse.name }})
-                                {% endif %}
-                            {% else %}
-                                -
-                            {% endif %}
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>{{ 'intervention.table.quantity_added'|trans }}</th>
-                        <td>
-                                <span class="badge bg-success fs-6">
-                                    <i class="bi bi-plus-circle"></i> {{ intervention.quantityAdded }}
-                                </span>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>{{ 'intervention.table.notes'|trans }}</th>
-                        <td>{{ intervention.notes ?? '-' }}</td>
-                    </tr>
-                    <tr>
-                        <th>{{ 'intervention.table.created_at'|trans }}</th>
-                        <td>{{ intervention.createdAt ? intervention.createdAt|date('d/m/Y H:i') : '' }}</td>
-                    </tr>
-                    </tbody>
-                </table>
+                <div class="d-flex justify-content-between align-items-center">
+                    <a href="{{ path('app_intervention_index') }}" class="btn btn-secondary">
+                        <i class="bi bi-arrow-left"></i> {{ 'actions.back'|trans }}
+                    </a>
+                    <div>
+                        {% if is_granted('ROLE_ADMIN') or intervention.distribution.user == app.user %}
+                            <a href="{{ path('app_intervention_edit', {'id': intervention.id}) }}" class="btn btn-dark">
+                                <i class="bi bi-pencil"></i> {{ 'actions.edit'|trans }}
+                            </a>
+                            <button type="button" class="btn btn-danger" onclick="confirmDelete({{ intervention.id }})">
+                                <i class="bi bi-trash"></i> {{ 'actions.delete'|trans }}
+                            </button>
+                            <form id="delete-form-{{ intervention.id }}"
+                                  action="{{ path('app_intervention_delete', {'id': intervention.id}) }}"
+                                  method="post"
+                                  style="display: none;">
+                                <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ intervention.id) }}">
+                            </form>
+                        {% endif %}
+                    </div>
+                </div>
             </div>
         </div>
 
-        {# Photos #}
-        <div class="card">
-            <div class="card-header">
-                <h4 class="card-title">
-                    <i class="bi bi-camera"></i> {{ 'intervention.show.photos'|trans }}
-                </h4>
+        <div class="row">
+            {# Informations générales #}
+            <div class="col-lg-6">
+                <div class="card mb-3">
+                    <div class="card-header bg-light-secondary ">
+                        <h5 class="mb-0"><i class="bi bi-info-circle me-2"></i>Informations Générales</h5>
+                    </div>
+                    <div class="card-body">
+                        <table class="table table-borderless">
+                            <tr>
+                                <td class="fw-bold" style="width: 40%;">ID :</td>
+                                <td>#{{ intervention.id }}</td>
+                            </tr>
+                            <tr>
+                                <td class="fw-bold">{{ 'intervention.table.created_at'|trans }} :</td>
+                                <td>
+                                    <i class="bi bi-calendar3"></i>
+                                    {{ intervention.createdAt|date('d/m/Y à H:i') }}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="fw-bold">{{ 'intervention.table.quantity_added'|trans }} :</td>
+                                <td>
+                                    <span class="badge bg-success fs-6">
+                                        <i class="bi bi-plus-circle"></i> {{ intervention.quantityAdded }}
+                                    </span>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+
+                {# Distribution #}
+                <div class="card mb-3">
+                    <div class="card-header bg-light-secondary">
+                        <h5 class="mb-0"><i class="bi bi-box-seam me-2"></i>Distribution</h5>
+                    </div>
+                    <div class="card-body">
+                        <table class="table table-borderless">
+                            <tr>
+                                <td class="fw-bold" style="width: 40%;">ID Distribution :</td>
+                                <td>
+                                    <a href="#" class="text-decoration-none">
+                                        #{{ intervention.distribution.id }}
+                                    </a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="fw-bold">Livreur :</td>
+                                <td>
+                                    <i class="bi bi-person-circle"></i>
+                                    {{ intervention.distribution.user.name }}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="fw-bold">Produit :</td>
+                                <td>
+                                    <i class="bi bi-book"></i>
+                                    {{ intervention.distribution.product.name }}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="fw-bold">Destination :</td>
+                                <td>
+                                    <i class="bi bi-geo-alt"></i>
+                                    {{ intervention.distribution.destination|default('-') }}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="fw-bold">Statut :</td>
+                                <td>
+                                    {% set statusClass = {
+                                        'preparing': 'secondary',
+                                        'in_progress': 'warning',
+                                        'delivered': 'success',
+                                        'cancelled': 'danger'
+                                    } %}
+                                    <span class="badge bg-{{ statusClass[intervention.distribution.status] ?? 'secondary' }}">
+                                        {{ intervention.distribution.status }}
+                                    </span>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
             </div>
-            <div class="card-body">
-                <div class="row">
-                    {% if intervention.photoBefore %}
-                        <div class="col-md-6 mb-3">
-                            <h6 class="text-muted">{{ 'intervention.table.photo_before'|trans }}</h6>
+
+            {# Rack et Produit #}
+            <div class="col-lg-6">
+                <div class="card mb-3">
+                    <div class="card-header bg-light-secondary">
+                        <h5 class="mb-0"><i class="bi bi-hdd-rack me-2"></i>Rack</h5>
+                    </div>
+                    <div class="card-body">
+                        <table class="table table-borderless">
+                            <tr>
+                                <td class="fw-bold" style="width: 40%;">Nom du Rack :</td>
+                                <td>
+                                    <a href="#" class="text-decoration-none">
+                                        {{ intervention.rack.name }}
+                                    </a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="fw-bold">Position :</td>
+                                <td><span class="badge bg-light text-dark">{{ intervention.rack.position }}</span></td>
+                            </tr>
+                            <tr>
+                                <td class="fw-bold">Présentoir :</td>
+                                <td>
+                                    <i class="bi bi-display"></i>
+                                    {{ intervention.rack.display.name }}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="fw-bold">Hôtel :</td>
+                                <td>
+                                    <i class="bi bi-building"></i>
+                                    {{ intervention.rack.display.hotel.name }}
+                                </td>
+                            </tr>
+                        </table>
+
+                        {# Jauge de remplissage #}
+                        {% set currentQty = intervention.rack.currentQuantity %}
+                        {% set requiredQty = intervention.rack.requiredQuantity %}
+                        {% set fillPercentage = requiredQty > 0 ? (currentQty / requiredQty * 100)|round : 0 %}
+
+                        <div class="mt-3">
+                            <div class="d-flex justify-content-between mb-1">
+                                <span class="fw-bold">Remplissage :</span>
+                                <span>{{ currentQty }} / {{ requiredQty }} ({{ fillPercentage }}%)</span>
+                            </div>
+                            <div class="progress" style="height: 25px;">
+                                {% if fillPercentage >= 100 %}
+                                    <div class="progress-bar bg-success" style="width: {{ fillPercentage }}%">Complet</div>
+                                {% elseif fillPercentage >= 50 %}
+                                    <div class="progress-bar bg-warning" style="width: {{ fillPercentage }}%">{{ fillPercentage }}%</div>
+                                {% else %}
+                                    <div class="progress-bar bg-danger" style="width: {{ fillPercentage }}%">{{ fillPercentage }}%</div>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        {# Produit du rack #}
+                        {% if intervention.rack.product %}
+                            <div class="mt-3 p-3 bg-light rounded">
+                                <h6 class="fw-bold mb-2">Produit dans le rack :</h6>
+                                <div class="d-flex align-items-center">
+                                    {% if intervention.rack.product.image %}
+                                        <img src="{{ asset('uploads/products/' ~ intervention.rack.product.image) }}"
+                                             alt="{{ intervention.rack.product.name }}"
+                                             class="me-3"
+                                             style="width: 60px; height: 60px; object-fit: cover; border-radius: 8px;">
+                                    {% endif %}
+                                    <div>
+                                        <strong>{{ intervention.rack.product.name }}</strong><br>
+                                        <small class="text-muted">
+                                            {% if intervention.rack.product.language %}
+                                                <span class="badge bg-secondary">{{ intervention.rack.product.language }}</span>
+                                            {% endif %}
+                                            {% if intervention.rack.product.yearEdition %}
+                                                <span class="badge bg-info">{{ intervention.rack.product.yearEdition }}</span>
+                                            {% endif %}
+                                        </small>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {# Photos et Notes #}
+        <div class="row">
+            {# Photo Avant #}
+            <div class="col-lg-6">
+                <div class="card mb-3">
+                    <div class="card-header bg-light-secondary">
+                        <h5 class="mb-0"><i class="bi bi-camera me-2"></i>{{ 'intervention.table.photo_before'|trans }}</h5>
+                    </div>
+                    <div class="card-body text-center">
+                        {% if intervention.photoBefore %}
                             <img src="{{ asset('uploads/interventions/' ~ intervention.photoBefore) }}"
-                                 alt="Photo avant"
-                                 class="img-fluid rounded">
-                        </div>
-                    {% endif %}
-                    {% if intervention.photoAfter %}
-                        <div class="col-md-6 mb-3">
-                            <h6 class="text-muted">{{ 'intervention.table.photo_after'|trans }}</h6>
+                                 alt="Photo avant intervention"
+                                 class="img-fluid rounded shadow"
+                                 style="max-height: 400px; cursor: pointer;"
+                                 onclick="showImageModal('{{ asset('uploads/interventions/' ~ intervention.photoBefore) }}', 'Photo Avant')">
+                        {% else %}
+                            <div class="text-muted py-5">
+                                <i class="bi bi-image" style="font-size: 4rem;"></i>
+                                <p class="mt-2">Aucune photo avant</p>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+            {# Photo Après #}
+            <div class="col-lg-6">
+                <div class="card mb-3">
+                    <div class="card-header bg-light-secondary text-white">
+                        <h5 class="mb-0"><i class="bi bi-camera-fill me-2"></i>{{ 'intervention.table.photo_after'|trans }}</h5>
+                    </div>
+                    <div class="card-body text-center">
+                        {% if intervention.photoAfter %}
                             <img src="{{ asset('uploads/interventions/' ~ intervention.photoAfter) }}"
-                                 alt="Photo après"
-                                 class="img-fluid rounded">
-                        </div>
-                    {% endif %}
-                    {% if not intervention.photoBefore and not intervention.photoAfter %}
-                        <div class="col-12 text-center text-muted">
-                            <i class="bi bi-camera-slash fs-1"></i>
-                            <p>{{ 'intervention.show.no_photos'|trans }}</p>
-                        </div>
-                    {% endif %}
+                                 alt="Photo après intervention"
+                                 class="img-fluid rounded shadow"
+                                 style="max-height: 400px; cursor: pointer;"
+                                 onclick="showImageModal('{{ asset('uploads/interventions/' ~ intervention.photoAfter) }}', 'Photo Après')">
+                        {% else %}
+                            <div class="text-muted py-5">
+                                <i class="bi bi-image" style="font-size: 4rem;"></i>
+                                <p class="mt-2">Aucune photo après</p>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {# Notes #}
+        {% if intervention.notes %}
+            <div class="card">
+                <div class="card-header bg-light-secondary">
+                    <h5 class="mb-0"><i class="bi bi-journal-text me-2"></i>{{ 'intervention.table.notes'|trans }}</h5>
+                </div>
+                <div class="card-body">
+                    <div class="p-3 bg-light rounded">
+                        {{ intervention.notes|nl2br }}
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+    </section>
+
+    {# Modal pour agrandir les images #}
+    <div class="modal fade" id="imageModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-xl modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="imageModalLabel"></h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body text-center">
+                    <img id="modalImage" src="" class="img-fluid" alt="">
                 </div>
             </div>
         </div>
     </div>
+{% endblock %}
 
-    <div class="col-md-4">
-        <div class="card">
-            <div class="card-header">
-                <h4 class="card-title">{{ 'intervention.show.actions'|trans }}</h4>
-            </div>
-            <div class="card-body">
-                <div class="d-grid gap-2">
-                    <a href="{{ path('app_intervention_edit', {'id': intervention.id}) }}"
-                       class="btn btn-dark">
-                        <i class="bi bi-pencil"></i> {{ 'intervention.actions.edit'|trans }}
-                    </a>
-                    <a href="{{ path('app_intervention_index') }}"
-                       class="btn btn-light-secondary">
-                        <i class="bi bi-arrow-left"></i> {{ 'form.button.back'|trans }}
-                    </a>
-                    <button type="button"
-                            class="btn btn-danger"
-                            onclick="confirmDelete({{ intervention.id }})">
-                        <i class="bi bi-trash"></i> {{ 'intervention.actions.delete'|trans }}
-                    </button>
-                </div>
-
-                <form id="delete-form-{{ intervention.id }}"
-                      action="{{ path('app_intervention_delete', {'id': intervention.id}) }}"
-                      method="post"
-                      style="display: none;">
-                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ intervention.id) }}">
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        function showImageModal(imageSrc, title) {
+            $('#imageModalLabel').text(title);
+            $('#modalImage').attr('src', imageSrc);
+            $('#imageModal').modal('show');
+        }
+    </script>
 {% endblock %}
