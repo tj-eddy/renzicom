@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Intervention;
 use App\Form\InterventionType;
 use App\Repository\InterventionRepository;
+use App\Repository\RackRepository;
 use App\Service\ImageUploader;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -41,7 +42,8 @@ class InterventionController extends AbstractController
     public function new(
         Request $request,
         EntityManagerInterface $entityManager,
-        ImageUploader $imageUploader
+        ImageUploader $imageUploader,
+        RackRepository $rackRepository,
     ): Response {
         $intervention = new Intervention();
         $form = $this->createForm(InterventionType::class, $intervention);
@@ -70,10 +72,18 @@ class InterventionController extends AbstractController
                 }
             }
 
+            $result = $rackRepository->updateCurrentQuantityFromIntervention($intervention);
+
+            if (!$result['success']) {
+                $this->addFlash('error', $result['message']);
+                return $this->redirectToRoute('app_intervention_new');
+            }
+
+
             $entityManager->persist($intervention);
             $entityManager->flush();
 
-            $this->addFlash('success', 'intervention.messages.created');
+            $this->addFlash('success', $result['message']);
 
             return $this->redirectToRoute('app_intervention_index', [], Response::HTTP_SEE_OTHER);
         }
@@ -103,6 +113,7 @@ class InterventionController extends AbstractController
         Request $request,
         Intervention $intervention,
         EntityManagerInterface $entityManager,
+        RackRepository $rackRepository,
         ImageUploader $imageUploader
     ): Response {
         // Vérifier si l'utilisateur a le droit de modifier cette intervention
@@ -145,6 +156,13 @@ class InterventionController extends AbstractController
                 } catch (\Exception $e) {
                     $this->addFlash('danger', 'Erreur lors de l\'upload de la photo après');
                 }
+            }
+
+            $result = $rackRepository->updateCurrentQuantityFromIntervention($intervention);
+
+            if (!$result['success']) {
+                $this->addFlash('error', $result['message']);
+                return $this->redirectToRoute('app_intervention_edit', ['id' => $intervention->getId()]);
             }
 
             $entityManager->flush();

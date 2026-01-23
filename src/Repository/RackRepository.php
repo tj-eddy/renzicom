@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Rack;
+use App\Entity\Intervention;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -16,28 +17,81 @@ class RackRepository extends ServiceEntityRepository
         parent::__construct($registry, Rack::class);
     }
 
-    //    /**
-    //     * @return Rack[] Returns an array of Rack objects
-    //     */
-    //    public function findByExampleField($value): array
-    //    {
-    //        return $this->createQueryBuilder('r')
-    //            ->andWhere('r.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->orderBy('r.id', 'ASC')
-    //            ->setMaxResults(10)
-    //            ->getQuery()
-    //            ->getResult()
-    //        ;
-    //    }
+    /**
+     * Met à jour la quantité actuelle d'un rack lors d'une intervention
+     *
+     * @param Intervention $intervention
+     * @return array ['success' => bool, 'message' => string]
+     */
+    public function updateCurrentQuantityFromIntervention(Intervention $intervention): array
+    {
+        $rack = $intervention->getRack();
+        $quantityAdded = $intervention->getQuantityAdded();
+        $currentQuantity = $rack->getCurrentQuantity();
+        $requiredQuantity = $rack->getRequiredQuantity();
 
-    //    public function findOneBySomeField($value): ?Rack
-    //    {
-    //        return $this->createQueryBuilder('r')
-    //            ->andWhere('r.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->getQuery()
-    //            ->getOneOrNullResult()
-    //        ;
-    //    }
+        // Vérifier si le rack est déjà plein
+        if ($currentQuantity >= $requiredQuantity) {
+            return [
+                'success' => false,
+                'message' => 'Le rack est déjà plein. Aucune quantité supplémentaire ne peut être ajoutée.'
+            ];
+        }
+
+        // Calculer la nouvelle quantité
+        $newQuantity = $currentQuantity + $quantityAdded;
+
+        // Vérifier si la quantité ajoutée dépasse la capacité requise
+        if ($newQuantity > $requiredQuantity) {
+            return [
+                'success' => false,
+                'message' => sprintf(
+                    'La quantité ajoutée (%d) dépasse la capacité du rack. Capacité disponible: %d',
+                    $quantityAdded,
+                    $requiredQuantity - $currentQuantity
+                )
+            ];
+        }
+
+        // Mettre à jour la quantité actuelle
+        $rack->setCurrentQuantity($newQuantity);
+
+        $this->getEntityManager()->persist($rack);
+        $this->getEntityManager()->flush();
+
+        return [
+            'success' => true,
+            'message' => sprintf(
+                'Quantité mise à jour avec succès. Nouvelle quantité: %d/%d',
+                $newQuantity,
+                $requiredQuantity
+            )
+        ];
+    }
+
+    /**
+     * Vérifie si un rack peut recevoir une quantité donnée
+     *
+     * @param Rack $rack
+     * @param int $quantity
+     * @return bool
+     */
+    public function canAddQuantity(Rack $rack, int $quantity): bool
+    {
+        $currentQuantity = $rack->getCurrentQuantity();
+        $requiredQuantity = $rack->getRequiredQuantity();
+
+        return ($currentQuantity + $quantity) <= $requiredQuantity;
+    }
+
+    /**
+     * Retourne l'espace disponible dans un rack
+     *
+     * @param Rack $rack
+     * @return int
+     */
+    public function getAvailableSpace(Rack $rack): int
+    {
+        return $rack->getRequiredQuantity() - $rack->getCurrentQuantity();
+    }
 }
