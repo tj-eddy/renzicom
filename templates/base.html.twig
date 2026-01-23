@@ -87,87 +87,91 @@
 
             <div class="sidebar-menu">
                 <ul class="menu">
+                    {# === MENU PRINCIPAL === #}
+
+                    {# Dashboard #}
                     <li class="sidebar-item {% if app.request.get('_route') == 'app_dashboard' %}active{% endif %}">
                         <a href="{{ path('app_dashboard') }}"
-                           class='sidebar-link  {% if app.request.get('_route') == 'app_dashboard' %}bg-dark{% endif %}'>
+                           class='sidebar-link'>
                             <i class="bi bi-grid-fill"></i>
                             <span>{{ 'nav.dashboard'|trans }}</span>
                         </a>
                     </li>
+
+                    {# Utilisateurs (Admin seulement) #}
                     {% if is_granted('ROLE_ADMIN') %}
                         <li class="sidebar-item {% if app.request.get('_route') starts with 'app_user' %}active{% endif %}">
                             <a href="{{ path('app_user_index') }}"
-                               class='sidebar-link  {% if app.request.get('_route') starts with 'app_user' %}bg-dark{% endif %}'>
+                               class='sidebar-link'>
                                 <i class="bi bi-people-fill"></i>
                                 <span>{{ 'nav.users'|trans }}</span>
                             </a>
                         </li>
                     {% endif %}
-                    <li class="sidebar-item {% if app.request.get('_route') starts with 'app_warehouse' %}active{% endif %}">
-                        <a href="{{ path('app_warehouse_index') }}"
-                           class='sidebar-link  {% if app.request.get('_route') starts with 'app_warehouse' %}bg-dark{% endif %}'>
-                            <i class="bi bi-building"></i>
-                            <span>{{ 'nav.warehouses'|trans }}</span>
+
+                    {# === GESTION DES STOCKS === #}
+                    {% if is_granted('ROLE_ADMIN') %}
+                    {# Sous-menu Gestion des Stocks #}
+                    <li class="sidebar-item has-sub {% if app.request.get('_route') starts with 'app_product' or app.request.get('_route') starts with 'app_warehouse' or app.request.get('_route') starts with 'app_stock' %}active{% endif %}">
+                        <a href="#" class='sidebar-link'>
+                            <i class="bi bi-box-seam"></i>
+                            <span>{{ 'nav.stock_management'|trans }}</span>
                         </a>
+                        <ul class="submenu {% if app.request.get('_route') starts with 'app_product' or app.request.get('_route') starts with 'app_warehouse' or app.request.get('_route') starts with 'app_stock' %}active{% endif %}">
+                            <li class="submenu-item {% if app.request.get('_route') starts with 'app_product' %}active{% endif %}">
+                                <a href="{{ path('app_product_index') }}">{{ 'nav.products'|trans }}</a>
+                            </li>
+                            <li class="submenu-item {% if app.request.get('_route') starts with 'app_warehouse' %}active{% endif %}">
+                                <a href="{{ path('app_warehouse_index') }}">{{ 'nav.warehouses'|trans }}</a>
+                            </li>
+                            <li class="submenu-item {% if app.request.get('_route') starts with 'app_stock' %}active{% endif %}">
+                                <a href="{{ path('app_stock_index') }}">{{ 'nav.stocks'|trans }}</a>
+                            </li>
+                        </ul>
                     </li>
-                    <li class="sidebar-item {% if app.request.get('_route') starts with 'app_hotel' %}active{% endif %}">
-                        <a href="{{ path('app_hotel_index') }}"
-                           class='sidebar-link  {% if app.request.get('_route') starts with 'app_hotel' %}bg-dark{% endif %}'>
-                            <i class="bi bi-list"></i>
-                            <span>{{ 'nav.hotels'|trans }}</span>
+                    {% endif %}
+                    {# Sous-menu Réseau de Distribution #}
+                    <li class="sidebar-item has-sub {% if app.request.get('_route') starts with 'app_hotel' or app.request.get('_route') starts with 'app_display' or app.request.get('_route') starts with 'app_rack' %}active{% endif %}">
+                        <a href="#" class='sidebar-link'>
+                            <i class="bi bi-building-fill"></i>
+                            <span>{{ 'nav.distribution_network'|trans }}</span>
                         </a>
-                    </li>
-                    <li class="sidebar-item {% if app.request.get('_route') starts with 'app_display' %}active{% endif %}">
-                        <a href="{{ path('app_display_index') }}"
-                           class='sidebar-link  {% if app.request.get('_route') starts with 'app_display' %}bg-dark{% endif %}'>
-                            <i class="bi bi-card-list"></i>
-                            <span>{{ 'nav.displays'|trans }}</span>
-                        </a>
-                    </li>
-                    <li class="sidebar-item {% if app.request.get('_route') starts with 'app_product' %}active{% endif %}">
-                        <a href="{{ path('app_product_index') }}"
-                           class='sidebar-link  {% if app.request.get('_route') starts with 'app_product' %}bg-dark{% endif %}'>
-                            <i class="bi bi-book-fill"></i>
-                            <span>{{ 'nav.products'|trans }}</span>
-                        </a>
-                    </li>
-                    <li class="sidebar-item {% if app.request.get('_route') starts with 'app_stock' %}active{% endif %}">
-                        <a href="{{ path('app_stock_index') }}"
-                           class='sidebar-link  {% if app.request.get('_route') starts with 'app_stock' %}bg-dark{% endif %}'>
-                            <i class="bi bi-sort-numeric-up"></i>
-                            <span>{{ 'nav.stocks'|trans }}</span>
-                        </a>
-                    </li>
-                    <li class="sidebar-item {% if app.request.get('_route') starts with 'app_rack' %}active{% endif %}">
-                        <a href="{{ path('app_rack_index') }}"
-                           class='sidebar-link  {% if app.request.get('_route') starts with 'app_rack' %}bg-dark{% endif %}'>
-                            <i class="bi bi-hdd-rack-fill"></i>
-                            <span>{{ 'nav.racks'|trans }}</span>
-                        </a>
+                        <ul class="submenu {% if app.request.get('_route') starts with 'app_hotel' or app.request.get('_route') starts with 'app_display' or app.request.get('_route') starts with 'app_rack' %}active{% endif %}">
+                            <li class="submenu-item {% if app.request.get('_route') starts with 'app_hotel' %}active{% endif %}">
+                                <a href="{{ path('app_hotel_index') }}">{{ 'nav.hotels'|trans }}</a>
+                            </li>
+                            <li class="submenu-item {% if app.request.get('_route') starts with 'app_display' %}active{% endif %}">
+                                <a href="{{ path('app_display_index') }}">{{ 'nav.displays'|trans }}</a>
+                            </li>
+                            <li class="submenu-item {% if app.request.get('_route') starts with 'app_rack' %}active{% endif %}">
+                                <a href="{{ path('app_rack_index') }}">{{ 'nav.racks'|trans }}</a>
+                            </li>
+                        </ul>
                     </li>
 
-                    <li class="sidebar-item {% if app.request.get('_route') starts with 'app_distribution' %}active{% endif %}">
-                        <a href="{{ path('app_distribution_index') }}"
-                           class='sidebar-link  {% if app.request.get('_route') starts with 'app_distribution' %}bg-dark{% endif %}'>
-                            <i class="bi bi-book-fill"></i>
-                            <span>{{ 'nav.distributions'|trans }}</span>
+                    {# === OPÉRATIONS === #}
+
+                    {# Sous-menu Opérations de Livraison #}
+                    <li class="sidebar-item has-sub {% if app.request.get('_route') starts with 'app_distribution' or app.request.get('_route') starts with 'app_intervention' %}active{% endif %}">
+                        <a href="#" class='sidebar-link'>
+                            <i class="bi bi-truck"></i>
+                            <span>{{ 'nav.delivery_operations'|trans }}</span>
                         </a>
-                    </li>
-
-
-
-
-
-                    <li class="sidebar-item {% if app.request.get('_route') starts with 'app_intervention' %}active{% endif %}">
-                        <a href="{{ path('app_intervention_index') }}"
-                           class='sidebar-link  {% if app.request.get('_route') starts with 'app_intervention' %}bg-dark{% endif %}'>
-                            <i class="bi bi-tools"></i>
-                            <span>{{ 'nav.interventions'|trans }}</span>
-                        </a>
+                        <ul class="submenu {% if app.request.get('_route') starts with 'app_distribution' or app.request.get('_route') starts with 'app_intervention' %}active{% endif %}">
+                            <li class="submenu-item {% if app.request.get('_route') starts with 'app_distribution' %}active{% endif %}">
+                                <a href="{{ path('app_distribution_index') }}">{{ 'nav.distributions'|trans }}</a>
+                            </li>
+                            <li class="submenu-item {% if app.request.get('_route') starts with 'app_intervention' %}active{% endif %}">
+                                <a href="{{ path('app_intervention_index') }}">{{ 'nav.interventions'|trans }}</a>
+                            </li>
+                        </ul>
                     </li>
 
                     {% block sidebar_menu %}{% endblock %}
 
+                    {# === PARAMÈTRES === #}
+
+                    {# Sélecteur de langue #}
                     <li class="sidebar-item">
                         <div class="px-3 py-2">
                             <select class="form-select form-select-sm"

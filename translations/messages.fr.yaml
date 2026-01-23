@@ -12,6 +12,12 @@ nav:
     interventions: "Interventions"
     distributions: "Distributions"
     stocks: "Stocks"
+    logistics_management: "Gestion Logistique"
+    warehouse_stock: "Entrepôt & stock"
+    stock_management: "Gestion des stocks"
+    distribution_network: "Réseau de distribution"
+    operations: "Opérations"
+    delivery_operations: "Opérations de livraison"
     my:
         profile: "Mon profil"
     logout: "Déconnexion"
