@@ -20,42 +20,50 @@ class UserType extends AbstractType
     {
         $builder
             ->add('name', TextType::class, [
-                'label' => 'form.name',
-                'attr' => ['class' => 'form-control'],
+                'label' => 'user.form.name.label',
+                'attr' => [
+                    'class' => 'form-control',
+                    'placeholder' => 'user.form.name.placeholder',
+                ],
             ])
             ->add('email', EmailType::class, [
-                'label' => 'form.email',
-                'attr' => ['class' => 'form-control'],
+                'label' => 'user.form.email.label',
+                'attr' => [
+                    'class' => 'form-control',
+                    'placeholder' => 'user.form.email.placeholder',
+                ],
             ])
             ->add('role', ChoiceType::class, [
-                'label' => 'form.role',
+                'label' => 'user.form.role.label',
                 'choices' => [
                     'role.admin' => 'ROLE_ADMIN',
                     'role.driver' => 'ROLE_DRIVER',
                     'role.statistics' => 'ROLE_STATISTICS',
                 ],
                 'attr' => ['class' => 'form-select'],
-                'placeholder' => 'form.role.placeholder',
+                'placeholder' => 'user.form.role.placeholder',
                 'required' => true,
             ])
             ->add('password', PasswordType::class, [
-                'label' => 'form.password',
+                'label' => 'user.form.password.label',
                 'required' => false,
                 'mapped' => false,
                 'attr' => [
                     'class' => 'form-control',
                     'autocomplete' => 'new-password',
+                    'placeholder' => 'user.form.password.placeholder',
                 ],
             ])
             ->add('isActive', CheckboxType::class, [
-                'label' => 'form.is_active',
+                'label' => 'user.form.is_active.label',
                 'required' => false,
                 'attr' => ['class' => 'form-check-input'],
             ])
             ->add('avatarFile', FileType::class, [
-                'label' => 'user.avatar',
+                'label' => 'user.form.avatar.label',
                 'mapped' => false,
                 'required' => false,
+                'help' => 'user.form.avatar.help',
                 'attr' => [
                     'class' => 'form-control',
                     'accept' => 'image/*',

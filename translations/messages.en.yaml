@@ -77,6 +77,9 @@ distribution:
         delete: "Delete"
         show: "Distribution Details"
     form:
+        user:
+            label: "Driver"
+            placeholder: "Select a driver"
         product:
             label: "Product"
             placeholder: "Select a product"
@@ -86,14 +89,14 @@ distribution:
         quantity:
             label: "Quantity to distribute"
             placeholder: "e.g. 100"
-        driver:
-            label: "Assigned driver"
-            placeholder: "Select a driver"
         status:
             label: "Distribution status"
             preparing: "Preparing"
             in_progress: "In progress"
             delivered: "Delivered"
+        destination:
+            label: "Destination"
+            placeholder: "List of hotels (one per line)"
     created: "Distribution created successfully."
     updated: "Distribution updated successfully."
     deleted: "Distribution deleted successfully."
@@ -257,7 +260,6 @@ hotel:
         contact_phone:
             label: "Contact phone"
             placeholder: "+33 1 23 45 67 89"
-        contact_info: "Contact Information"
     details:
         title: "Hotel Details"
         contact: "Contact"
@@ -361,6 +363,24 @@ user:
     created: "User created successfully."
     updated: "User updated successfully."
     deleted: "User deleted successfully."
+    form:
+        name:
+            label: "Name"
+            placeholder: "e.g. John Doe"
+        email:
+            label: "Email"
+            placeholder: "e.g. john.doe@example.com"
+        role:
+            label: "Role"
+            placeholder: "Select a role"
+        password:
+            label: "Password"
+            placeholder: "Leave empty to keep current password"
+        is_active:
+            label: "Active account"
+        avatar:
+            label: "Profile photo"
+            help: "Accepted formats: JPG, PNG, WEBP (Max 2Mo)"
 
 # INTERVENTIONS
 intervention:

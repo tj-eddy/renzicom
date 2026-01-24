@@ -77,6 +77,9 @@ distribution:
         delete: "Supprimer"
         show: "Détails de la distribution"
     form:
+        user:
+            label: "Livreur"
+            placeholder: "Sélectionner un livreur"
         product:
             label: "Produit"
             placeholder: "Sélectionner un produit"
@@ -86,14 +89,14 @@ distribution:
         quantity:
             label: "Quantité à distribuer"
             placeholder: "Ex: 100"
-        driver:
-            label: "Chauffeur assigné"
-            placeholder: "Sélectionner un chauffeur"
         status:
             label: "Statut de la distribution"
             preparing: "En préparation"
             in_progress: "En cours"
             delivered: "Livrée"
+        destination:
+            label: "Destination"
+            placeholder: "Liste des hôtels (un par ligne)"
     created: "Distribution créée avec succès."
     updated: "Distribution mise à jour avec succès."
     deleted: "Distribution supprimée avec succès."
@@ -257,7 +260,6 @@ hotel:
         contact_phone:
             label: "Téléphone du contact"
             placeholder: "01 23 45 67 89"
-        contact_info: "Informations de contact"
     details:
         title: "Détails de l'hôtel"
         contact: "Contact"
@@ -361,6 +363,24 @@ user:
     created: "Utilisateur créé avec succès."
     updated: "Utilisateur mis à jour avec succès."
     deleted: "Utilisateur supprimé avec succès."
+    form:
+        name:
+            label: "Nom"
+            placeholder: "Ex: Jean Dupont"
+        email:
+            label: "Email"
+            placeholder: "Ex: jean.dupont@exemple.com"
+        role:
+            label: "Rôle"
+            placeholder: "Sélectionner un rôle"
+        password:
+            label: "Mot de passe"
+            placeholder: "Laisser vide pour ne pas modifier"
+        is_active:
+            label: "Compte actif"
+        avatar:
+            label: "Photo de profil"
+            help: "Formats acceptés: JPG, PNG, WEBP (Max 2Mo)"
 
 # INTERVENTIONS
 intervention:
