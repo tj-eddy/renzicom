@@ -238,7 +238,7 @@
             </div>
         </div>
     </div>
-    {# Activités récentes #}
+    {# Section des activités récentes - CORRECTION #}
     <div class="col-12">
         <div class="card">
             <div class="card-header">
@@ -259,29 +259,29 @@
                         </thead>
                         <tbody>
                         {% for activity in recent_activities %}
-                        <tr>
-                            <td>
-                                <i class="bi bi-box-seam text-primary"></i>
-                                {{ activity.product ? activity.product.name : 'N/A' }}
-                            </td>
-                            <td>
-                                <span class="badge bg-dark">{{ activity.quantity }}</span>
-                            </td>
-                            <td>{{ activity.user ? activity.user.name : 'N/A' }}</td>
-                            <td>
-                                <small>{{ activity.destination|slice(0, 30) }}{% if activity.destination|length > 30 %}...{% endif %}</small>
-                            </td>
-                            <td>{{ activity.createAt|date('d/m/Y H:i') }}</td>
-                            <td>
-                                                <span class="badge {{ activity.statusBadgeClass }}">
-                                                    {{ activity.statusLabel|trans }}
-                                                </span>
-                            </td>
-                        </tr>
+                            <tr>
+                                <td>
+                                    <i class="bi bi-box-seam text-primary"></i>
+                                    {{ activity.product ? activity.product.name : 'N/A' }}
+                                </td>
+                                <td>
+                                    <span class="badge bg-dark">{{ activity.quantity }}</span>
+                                </td>
+                                <td>{{ activity.user ? activity.user.name : 'N/A' }}</td>
+                                <td>
+                                    <small>{{ activity.destination|slice(0, 30) }}{% if activity.destination|length > 30 %}...{% endif %}</small>
+                                </td>
+                                <td>{{ activity.createdAt|date('d/m/Y H:i') }}</td>
+                                <td>
+                            <span class="badge {{ activity.statusBadgeClass }}">
+                                {{ activity.statusLabel|trans }}
+                            </span>
+                                </td>
+                            </tr>
                         {% else %}
-                        <tr>
-                            <td colspan="6" class="text-center">{{ 'activities.no_activities'|trans }}</td>
-                        </tr>
+                            <tr>
+                                <td colspan="6" class="text-center">{{ 'activities.no_activities'|trans }}</td>
+                            </tr>
                         {% endfor %}
                         </tbody>
                     </table>
