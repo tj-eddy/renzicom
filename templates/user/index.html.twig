@@ -1,155 +1,152 @@
 {% extends 'base.html.twig' %}
 
 {% block stylesheets %}
-    {{ parent() }}
+	{{ parent() }}
 {% endblock %}
 
-{% block title %}{{ 'user.list.title'|trans }}{% endblock %}
+{% block title %}
+	{{ 'user.list.title'|trans }}
+{% endblock %}
 
 {% block page_title %}
-    <div class="page-title">
-        <div class="row">
-            <div class="col-12 col-md-6 order-md-1 order-last">
-                <h3>{{ 'user.list.title'|trans }}</h3>
-            </div>
-            <div class="col-12 col-md-6 order-md-2 order-first">
-                <nav aria-label="breadcrumb" class="breadcrumb-header float-start float-lg-end">
-                    <ol class="breadcrumb">
-                        <li class="breadcrumb-item"><a
-                                href="{{ path('app_dashboard') }}">{{ 'breadcrumb.home'|trans }}</a></li>
-                        <li class="breadcrumb-item active" aria-current="page">{{ 'breadcrumb.users'|trans }}</li>
-                    </ol>
-                </nav>
-            </div>
-        </div>
-    </div>
+	<div class="page-title">
+		<div class="row">
+			<div class="col-12 col-md-6 order-md-1 order-last">
+				<h3>{{ 'user.list.title'|trans }}</h3>
+			</div>
+			<div class="col-12 col-md-6 order-md-2 order-first">
+				<nav aria-label="breadcrumb" class="breadcrumb-header float-start float-lg-end">
+					<ol class="breadcrumb">
+						<li class="breadcrumb-item">
+							<a href="{{ path('app_dashboard') }}">{{ 'breadcrumb.home'|trans }}</a>
+						</li>
+						<li class="breadcrumb-item active" aria-current="page">{{ 'breadcrumb.users'|trans }}</li>
+					</ol>
+				</nav>
+			</div>
+		</div>
+	</div>
 {% endblock %}
 
 {% block body %}
-    <style>
-        .user-avatar-wrapper {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            overflow: hidden;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            background-color: #f0f0f0;
-        }
+	<style>
+		.user-avatar-wrapper {
+			width: 40px;
+			height: 40px;
+			border-radius: 50%;
+			overflow: hidden;
+			display: inline-flex;
+			align-items: center;
+			justify-content: center;
+			background-color: #f0f0f0;
+		}
 
-        .user-avatar {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            display: block;
-        }
+		.user-avatar {
+			width: 100%;
+			height: 100%;
+			object-fit: cover;
+			display: block;
+		}
 
-        .avatar-placeholder {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-weight: 600;
-            font-size: 16px;
-            text-transform: uppercase;
-        }
-    </style>
-    <section class="section">
-        <div class="card">
-            <div class="card-header d-flex justify-content-between align-items-center">
-                <h4 class="mb-0">{{ 'user.list.title'|trans }}</h4>
-                <a href="{{ path('app_user_new') }}" class="btn btn-dark">
-                    <i class="bi bi-plus-circle"></i> {{ 'user.actions.new'|trans }}
-                </a>
-            </div>
-            <div class="card-body">
-                <table class="table table-striped" id="users-table">
-                    <thead>
-                    <tr>
-                        <th>{{ 'user.table.id'|trans }}</th>
-                        <th>{{ 'user.table.avatar'|trans }}</th>
-                        <th>{{ 'user.table.name'|trans }}</th>
-                        <th>{{ 'user.table.email'|trans }}</th>
-                        <th>{{ 'user.table.role'|trans }}</th>
-                        <th>{{ 'user.table.status'|trans }}</th>
-                        <th>{{ 'user.table.actions'|trans }}</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    {% for user in users %}
-                        <tr>
-                            <td>{{ user.id }}</td>
-                            <td>
-                                {% if user.avatar %}
-                                    <div class="user-avatar-wrapper">
-                                        <img src="{{ asset('uploads/avatars/' ~ user.avatar) }}"
-                                             alt="{{ user.name }}"
-                                             class="user-avatar">
-                                    </div>
-                                {% else %}
-                                    <div class="avatar-placeholder">
-                                        {{ user.name|first|upper }}
-                                    </div>
-                                {% endif %}
-                            </td>
-                            <td>{{ user.name }}</td>
-                            <td>{{ user.email }}</td>
-                            <td>
-                                {% if user.role == 'ROLE_ADMIN' %}
-                                    <span class="badge bg-dark">{{ 'role.admin'|trans }}</span>
-                                {% elseif user.role == 'ROLE_DRIVER' %}
-                                    <span class="badge bg-dark">{{ 'role.driver'|trans }}</span>
-                                {% elseif user.role == 'ROLE_STATISTICS' %}
-                                    <span class="badge bg-dark">{{ 'role.statistics'|trans }}</span>
-                                {% else %}
-                                    <span class="badge bg-secondary">{{ user.role }}</span>
-                                {% endif %}
-                            </td>
-                            <td>
-                                {% if user.isActive %}
-                                    <span class="badge bg-dark">{{ 'user.status.active'|trans }}</span>
-                                {% else %}
-                                    <span class="badge bg-secondary">{{ 'user.status.inactive'|trans }}</span>
-                                {% endif %}
-                            </td>
-                            <td>
-                                <div class="btn-group" role="group">
-                                    <a href="{{ path('app_user_edit', {'id': user.id}) }}"
-                                       class="btn btn-sm btn-dark"
-                                       title="{{ 'user.actions.edit'|trans }}">
-                                        <i class="bi bi-pencil"></i>
-                                    </a>
-                                </div>
+		.avatar-placeholder {
+			width: 40px;
+			height: 40px;
+			border-radius: 50%;
+			background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+			display: inline-flex;
+			align-items: center;
+			justify-content: center;
+			color: white;
+			font-weight: 600;
+			font-size: 16px;
+			text-transform: uppercase;
+		}
+	</style>
+	<section class="section">
+		<div class="card">
+			<div class="card-header d-flex justify-content-between align-items-center">
+				<h4 class="mb-0">{{ 'user.list.title'|trans }}</h4>
+				<a href="{{ path('app_user_new') }}" class="btn btn-dark">
+					<i class="bi bi-plus-circle"></i>
+					{{ 'user.actions.new'|trans }}
+				</a>
+			</div>
+			<div class="card-body">
+				<table class="table table-striped" id="users-table">
+					<thead>
+						<tr>
+							<th>{{ 'user.table.id'|trans }}</th>
+							<th>{{ 'user.table.avatar'|trans }}</th>
+							<th>{{ 'user.table.name'|trans }}</th>
+							<th>{{ 'user.table.email'|trans }}</th>
+							<th>{{ 'user.table.role'|trans }}</th>
+							<th>{{ 'user.table.status'|trans }}</th>
+							<th>{{ 'user.table.actions'|trans }}</th>
+						</tr>
+					</thead>
+					<tbody>
+						{% for user in users %}
+							<tr>
+								<td>{{ user.id }}</td>
+								<td>
+									{% if user.avatar %}
+										<div class="user-avatar-wrapper">
+											<img src="{{ asset('uploads/avatars/' ~ user.avatar) }}" alt="{{ user.name }}" class="user-avatar">
+										</div>
+									{% else %}
+										<div class="avatar-placeholder">
+											{{ user.name|first|upper }}
+										</div>
+									{% endif %}
+								</td>
+								<td>{{ user.name }}</td>
+								<td>{{ user.email }}</td>
+								<td>
+									{% if user.role == 'ROLE_ADMIN' %}
+										<span class="badge bg-dark">{{ 'role.admin'|trans }}</span>
+									{% elseif user.role == 'ROLE_DRIVER' %}
+										<span class="badge bg-dark">{{ 'role.driver'|trans }}</span>
+									{% elseif user.role == 'ROLE_STATISTICS' %}
+										<span class="badge bg-dark">{{ 'role.statistics'|trans }}</span>
+									{% else %}
+										<span class="badge bg-secondary">{{ user.role }}</span>
+									{% endif %}
+								</td>
+								<td>
+									{% if user.isActive %}
+										<span class="badge bg-dark">{{ 'user.status.active'|trans }}</span>
+									{% else %}
+										<span class="badge bg-secondary">{{ 'user.status.inactive'|trans }}</span>
+									{% endif %}
+								</td>
+								<td>
+									<div class="btn-group" role="group">
+										<a href="{{ path('app_user_edit', {'id': user.id}) }}" class="btn btn-sm btn-dark" title="{{ 'user.actions.edit'|trans }}">
+											<i class="bi bi-pencil"></i>
+										</a>
+									</div>
 
-                                {# Formulaire de suppression caché #}
-                                <form id="delete-form-{{ user.id }}"
-                                      action="{{ path('app_user_delete', {'id': user.id}) }}"
-                                      method="post"
-                                      style="display: none;">
-                                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ user.id) }}">
-                                </form>
-                            </td>
-                        </tr>
-                    {% else %}
-                        <tr>
-                            <td colspan="5" class="text-center">{{ 'user.list.no_users'|trans }}</td>
-                        </tr>
-                    {% endfor %}
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </section>
+									{# Formulaire de suppression caché #}
+									<form id="delete-form-{{ user.id }}" action="{{ path('app_user_delete', {'id': user.id}) }}" method="post" style="display: none;">
+										<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ user.id) }}">
+									</form>
+								</td>
+							</tr>
+						{% else %}
+							<tr>
+								<td colspan="7" class="text-center">{{ 'user.list.no_users'|trans }}</td>
+							</tr>
+						{% endfor %}
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</section>
 {% endblock %}
 
 {% block javascripts %}
-    {{ parent() }}
-    <script>
-        initDataTable('#users-table');
-    </script>
+	{{ parent() }}
+	<script>
+		initDataTable('#users-table');
+	</script>
 {% endblock %}

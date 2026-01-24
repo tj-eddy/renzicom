@@ -10,6 +10,7 @@ actions:
     back: "Back"
     close: "Close"
     confirm_delete_title: "Confirm Deletion"
+    confirm_delete: "Are you sure you want to delete this item?"
 common:
     na: "N/A"
     others: "Others"
@@ -17,6 +18,31 @@ common:
 # ========================================
 # LAYOUT & BREADCRUMBS
 # ========================================
+nav:
+    dashboard: "Dashboard"
+    users: "Users"
+    stock:
+        management: "Stock Management"
+        products: "Products"
+        warehouses: "Warehouses"
+        stocks: "Stocks"
+    distribution:
+        network: "Distribution Network"
+        hotels: "Hotels"
+        displays: "Displays"
+        racks: "Racks"
+    delivery:
+        operations: "Delivery Operations"
+        distributions: "Distributions"
+        interventions: "Interventions"
+    logout:
+        label: "Logout"
+        confirm_title: "Confirm Logout"
+        confirm_message: "Are you sure you want to log out?"
+    user:
+        greeting: "Welcome, %name%"
+    my_profile: "My Profile"
+
 breadcrumb:
     home: "Dashboard"
     users: "Users"
@@ -46,6 +72,50 @@ dashboard:
     recent_interventions: "Recent Interventions"
     no_interventions: "No recent interventions"
 
+stats:
+    products_stock: "Products in Stock"
+    total_products: "%count% different products"
+    racks: "Total Racks"
+    warehouses: "%count% warehouses"
+    products_distributed: "Products Distributed"
+    total_distributions: "%count% distributions made"
+    distribution_status: "Distribution Status"
+    distributions: "distributions"
+    user_accounts: "User Accounts"
+    role:
+        admin: "Administrator"
+        driver: "Driver / Delivery"
+        statistics: "Statistics"
+        accounts: "%count% accounts"
+
+quick_access:
+    title: "Quick Access"
+    users: "Manage Users"
+    products: "Manage Products"
+    distributions: "Track Deliveries"
+    racks: "Manage Racks"
+
+quick_stats:
+    title: "Quick Stats"
+    stock_available: "Available stock"
+    distributions: "Delivered distributions"
+    racks:
+        active: "Racks with products"
+
+month:
+    jan: "Jan"
+    feb: "Feb"
+    mar: "Mar"
+    apr: "Apr"
+    may: "May"
+    jun: "Jun"
+    jul: "Jul"
+    aug: "Aug"
+    sep: "Sep"
+    oct: "Oct"
+    nov: "Nov"
+    dec: "Dec"
+
 activities:
     title: "Recent Activities"
     product: "Product"
@@ -62,23 +132,36 @@ activities:
 
 # DISTRIBUTION
 distribution:
+    title: "Monthly Distribution"
+    subtitle: "Total quantity of products distributed per month."
+    products: "Distributed products"
+    y_axis: "Quantity"
+    unit: "units"
     list:
         title: "Distribution List"
         no_distributions: "No distributions found"
     table:
         id: "ID"
+        user: "Driver"
         product: "Product"
         warehouse: "Warehouse"
-        quantity: "Quantity"
-        driver: "Driver"
+        quantity: "Qty"
         status: "Status"
+        destination: "Destination"
+        progress: "Progress"
         created_at: "Created at"
+        completed_at: "Completed at"
         actions: "Actions"
+        driver: "Driver"
+        remaining: "Remaining: %count%"
     actions:
         new: "New Distribution"
         edit: "Edit"
         delete: "Delete"
-        show: "Distribution Details"
+        show: "Details"
+        complete: "Complete Route"
+    confirm:
+        complete: "Complete the route?\n\nUndistributed magazines will be returned to the warehouse.\nThis action will update the stock."
     form:
         user:
             label: "Driver"
@@ -109,6 +192,11 @@ distribution:
         completed: "Distribution completed successfully"
         already_completed: "This distribution is already completed"
     statuses:
+        preparing: "Preparing"
+        in_progress: "In progress"
+        delivered: "Delivered"
+        cancelled: "Cancelled"
+    status:
         preparing: "Preparing"
         in_progress: "In progress"
         delivered: "Delivered"
@@ -221,7 +309,9 @@ display:
         new: "New Display Stand"
         edit: "Edit"
         delete: "Delete"
-        show: "Display Stand Details"
+        show: "Display stand details"
+    details:
+        title: "Display stand details"
     form:
         name:
             label: "Display stand name"
@@ -272,6 +362,7 @@ hotel:
         contact_phone:
             label: "Contact phone"
             placeholder: "+33 1 23 45 67 89"
+        contact_info: "Contact Information"
     details:
         title: "Hotel Details"
         contact: "Contact"
@@ -311,8 +402,12 @@ warehouse:
 
 # PRODUCT
 product:
+    created: "Product created successfully."
+    updated: "Product updated successfully."
+    deleted: "Product deleted successfully."
+    title: "Product Management"
     list:
-        title: "Product List"
+        title: "Product Management"
         no_products: "No products found"
     table:
         id: "ID"
@@ -347,40 +442,35 @@ product:
             label: "Technical details (JSON)"
             placeholder: '{"color": "red"}'
             help: "Valid JSON format required"
-    created: "Product created successfully."
-    updated: "Product updated successfully."
-    deleted: "Product deleted successfully."
 
 # USER
 user:
+    created: "User created successfully."
+    updated: "User updated successfully."
+    deleted: "User deleted successfully."
+    confirm_delete: "Are you sure you want to delete this user?"
     list:
-        title: "User List"
+        title: "User Management"
         no_users: "No users found"
-    table:
-        id: "ID"
-        name: "Name"
-        email: "Email"
-        role: "Role"
-        status: "Status"
-        created_at: "Created at"
-        actions: "Actions"
     actions:
         new: "New User"
         edit: "Edit"
         delete: "Delete"
         show: "User Details"
-    status:
-        active: "Active"
-        inactive: "Inactive"
-    created: "User created successfully."
-    updated: "User updated successfully."
-    deleted: "User deleted successfully."
+    table:
+        id: "ID"
+        avatar: "Avatar"
+        name: "Name"
+        email: "Email"
+        role: "Role"
+        status: "Status"
+        actions: "Actions"
     form:
         name:
-            label: "Name"
+            label: "Full Name"
             placeholder: "e.g. John Doe"
         email:
-            label: "Email"
+            label: "Email Address"
             placeholder: "e.g. john.doe@example.com"
         role:
             label: "Role"
@@ -393,6 +483,11 @@ user:
         avatar:
             label: "Profile photo"
             help: "Accepted formats: JPG, PNG, WEBP (Max 2Mo)"
+    status:
+        active: "Active"
+        inactive: "Inactive"
+    avatar:
+        upload_error: "Error during avatar upload"
 
 # INTERVENTIONS
 intervention:
@@ -447,3 +542,34 @@ intervention:
 exception:
     invalid_token: "Invalid CSRF token"
     access_denied: "Access denied"
+
+access:
+    denied:
+        create: "You are not authorized to create this item."
+        edit: "You are not authorized to edit this item."
+        delete: "You are not authorized to delete this item."
+
+role:
+    admin: "Administrator"
+    driver: "Driver / Delivery"
+    statistics: "Statistics"
+
+form:
+    button:
+        create: "Create"
+        update: "Update"
+        cancel: "Cancel"
+        save: "Save"
+
+messages:
+    error:
+        image_upload: "Error during image upload."
+
+datatable:
+    search: "Search..."
+    no_data: "No data available"
+    info: "Showing {start} to {end} of {rows} entries"
+
+select2:
+    no_results: "No results found"
+    searching: "Searching..."

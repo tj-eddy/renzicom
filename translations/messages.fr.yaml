@@ -10,6 +10,7 @@ actions:
     back: "Retour"
     close: "Fermer"
     confirm_delete_title: "Confirmer la suppression"
+    confirm_delete: "Êtes-vous sûr de vouloir supprimer cet élément ?"
 common:
     na: "N/A"
     others: "Autres"
@@ -17,6 +18,31 @@ common:
 # ========================================
 # LAYOUT & BREADCRUMBS
 # ========================================
+nav:
+    dashboard: "Tableau de bord"
+    users: "Utilisateurs"
+    stock:
+        management: "Gestion des stocks"
+        products: "Produits"
+        warehouses: "Entrepôts"
+        stocks: "Stocks"
+    distribution:
+        network: "Réseau de Distribution"
+        hotels: "Hôtels"
+        displays: "Présentoirs"
+        racks: "Racks"
+    delivery:
+        operations: "Opérations de Livraison"
+        distributions: "Distributions"
+        interventions: "Interventions"
+    logout:
+        label: "Déconnexion"
+        confirm_title: "Confirmer la déconnexion"
+        confirm_message: "Êtes-vous sûr de vouloir vous déconnecter ?"
+    user:
+        greeting: "Bienvenue, %name%"
+    my_profile: "Mon Profil"
+
 breadcrumb:
     home: "Tableau de bord"
     users: "Utilisateurs"
@@ -46,6 +72,50 @@ dashboard:
     recent_interventions: "Dernières Interventions"
     no_interventions: "Aucune intervention récente"
 
+stats:
+    products_stock: "Produits en Stock"
+    total_products: "%count% produits différents"
+    racks: "Total des Rayons"
+    warehouses: "%count% entrepôts"
+    products_distributed: "Produits Distribués"
+    total_distributions: "%count% distributions réalisées"
+    distribution_status: "Statut des Distributions"
+    distributions: "distributions"
+    user_accounts: "Comptes Utilisateurs"
+    role:
+        admin: "Administrateur"
+        driver: "Livreur / Chauffeur"
+        statistics: "Statistiques"
+        accounts: "%count% comptes"
+
+quick_access:
+    title: "Accès Rapide"
+    users: "Gérer Utilisateurs"
+    products: "Gérer Produits"
+    distributions: "Suivi Livraisons"
+    racks: "Gérer Racks"
+
+quick_stats:
+    title: "Statistiques Rapides"
+    stock_available: "Stock disponible"
+    distributions: "Distributions livrées"
+    racks:
+        active: "Rayons avec produits"
+
+month:
+    jan: "Jan"
+    feb: "Fév"
+    mar: "Mar"
+    apr: "Avr"
+    may: "Mai"
+    jun: "Juin"
+    jul: "Juil"
+    aug: "Août"
+    sep: "Sep"
+    oct: "Oct"
+    nov: "Nov"
+    dec: "Déc"
+
 activities:
     title: "Activités Récentes"
     product: "Produit"
@@ -62,23 +132,36 @@ activities:
 
 # DISTRIBUTION
 distribution:
+    title: "Distribution Mensuelle"
+    subtitle: "Quantité totale de produits distribués par mois."
+    products: "Produits distribués"
+    y_axis: "Quantité"
+    unit: "unités"
     list:
         title: "Liste des Distributions"
         no_distributions: "Aucune distribution trouvée"
     table:
         id: "ID"
+        user: "Livreur"
         product: "Produit"
         warehouse: "Entrepôt"
-        quantity: "Quantité"
-        driver: "Chauffeur"
+        quantity: "Qté"
         status: "Statut"
+        destination: "Destination"
+        progress: "Progression"
         created_at: "Créé le"
+        completed_at: "Terminé le"
         actions: "Actions"
+        driver: "Livreur"
+        remaining: "Restant: %count%"
     actions:
         new: "Nouvelle Distribution"
         edit: "Modifier"
         delete: "Supprimer"
-        show: "Détails de la distribution"
+        show: "Détails"
+        complete: "Terminer la tournée"
+    confirm:
+        complete: "Terminer la tournée ?\n\nLes magazines non distribués seront retournés à l'entrepôt.\nCette action mettra à jour le stock."
     form:
         user:
             label: "Livreur"
@@ -109,6 +192,11 @@ distribution:
         completed: "Distribution terminée avec succès"
         already_completed: "Cette distribution est déjà terminée"
     statuses:
+        preparing: "En préparation"
+        in_progress: "En cours"
+        delivered: "Livrée"
+        cancelled: "Annulée"
+    status:
         preparing: "En préparation"
         in_progress: "En cours"
         delivered: "Livrée"
@@ -222,6 +310,8 @@ display:
         edit: "Modifier"
         delete: "Supprimer"
         show: "Détails du présentoir"
+    details:
+        title: "Détails du présentoir"
     form:
         name:
             label: "Nom du présentoir"
@@ -272,6 +362,7 @@ hotel:
         contact_phone:
             label: "Téléphone du contact"
             placeholder: "01 23 45 67 89"
+        contact_info: "Informations de Contact"
     details:
         title: "Détails de l'hôtel"
         contact: "Contact"
@@ -311,8 +402,12 @@ warehouse:
 
 # PRODUCT
 product:
+    created: "Produit créé avec succès."
+    updated: "Produit mis à jour avec succès."
+    deleted: "Produit supprimé avec succès."
+    title: "Gestion des Produits"
     list:
-        title: "Liste des Produits"
+        title: "Gestion des Produits"
         no_products: "Aucun produit trouvé"
     table:
         id: "ID"
@@ -347,40 +442,35 @@ product:
             label: "Détails techniques (JSON)"
             placeholder: '{"couleur": "rouge"}'
             help: "Format JSON valide requis"
-    created: "Produit créé avec succès."
-    updated: "Produit mis à jour avec succès."
-    deleted: "Produit supprimé avec succès."
 
 # USER
 user:
+    created: "Utilisateur créé avec succès."
+    updated: "Utilisateur mis à jour avec succès."
+    deleted: "Utilisateur supprimé avec succès."
+    confirm_delete: "Êtes-vous sûr de vouloir supprimer cet utilisateur ?"
     list:
-        title: "Liste des Utilisateurs"
+        title: "Gestion des Utilisateurs"
         no_users: "Aucun utilisateur trouvé"
-    table:
-        id: "ID"
-        name: "Nom"
-        email: "Email"
-        role: "Rôle"
-        status: "Statut"
-        created_at: "Créé le"
-        actions: "Actions"
     actions:
         new: "Nouvel Utilisateur"
         edit: "Modifier"
         delete: "Supprimer"
         show: "Détails de l'utilisateur"
-    status:
-        active: "Actif"
-        inactive: "Inactif"
-    created: "Utilisateur créé avec succès."
-    updated: "Utilisateur mis à jour avec succès."
-    deleted: "Utilisateur supprimé avec succès."
+    table:
+        id: "ID"
+        avatar: "Avatar"
+        name: "Nom"
+        email: "Email"
+        role: "Rôle"
+        status: "Statut"
+        actions: "Actions"
     form:
         name:
-            label: "Nom"
+            label: "Nom Complet"
             placeholder: "Ex: Jean Dupont"
         email:
-            label: "Email"
+            label: "Adresse Email"
             placeholder: "Ex: jean.dupont@exemple.com"
         role:
             label: "Rôle"
@@ -393,6 +483,11 @@ user:
         avatar:
             label: "Photo de profil"
             help: "Formats acceptés: JPG, PNG, WEBP (Max 2Mo)"
+    status:
+        active: "Actif"
+        inactive: "Inactif"
+    avatar:
+        upload_error: "Erreur lors de l'upload de l'avatar"
 
 # INTERVENTIONS
 intervention:
@@ -447,3 +542,34 @@ intervention:
 exception:
     invalid_token: "Token CSRF invalide"
     access_denied: "Accès refusé"
+
+access:
+    denied:
+        create: "Vous n'avez pas l'autorisation de créer cet élément."
+        edit: "Vous n'avez pas l'autorisation de modifier cet élément."
+        delete: "Vous n'avez pas l'autorisation de supprimer cet élément."
+
+role:
+    admin: "Administrateur"
+    driver: "Livreur / Chauffeur"
+    statistics: "Statistiques"
+
+form:
+    button:
+        create: "Créer"
+        update: "Mettre à jour"
+        cancel: "Annuler"
+        save: "Enregistrer"
+
+messages:
+    error:
+        image_upload: "Erreur lors de l'upload de l'image."
+
+datatable:
+    search: "Rechercher..."
+    no_data: "Aucune donnée disponible"
+    info: "Affichage de {start} à {end} sur {rows} entrées"
+
+select2:
+    no_results: "Aucun résultat trouvé"
+    searching: "Recherche en cours..."
