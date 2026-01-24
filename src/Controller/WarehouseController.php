@@ -85,4 +85,35 @@ class WarehouseController extends AbstractController
 
         return $this->redirectToRoute('app_warehouse_index');
     }
+
+    /**
+     * Récupérer les produits disponibles dans un entrepôt avec leurs quantités
+     */
+    #[Route('/{id}/products', name: 'get_warehouse_products', methods: ['GET'])]
+    public function getWarehouseProducts(int $id, WarehouseRepository $warehouseRepository): \Symfony\Component\HttpFoundation\JsonResponse
+    {
+        $warehouse = $warehouseRepository->find($id);
+
+        if (!$warehouse) {
+            return $this->json(['error' => 'Entrepôt non trouvé'], 404);
+        }
+
+        $products = [];
+
+        foreach ($warehouse->getStocks() as $stock) {
+            if ($stock->getQuantity() > 0 && $stock->getProduct()) {
+                $product = $stock->getProduct();
+                $products[] = [
+                    'id' => $product->getId(),
+                    'name' => $product->getName(),
+                    'quantity' => $stock->getQuantity(),
+                    'image' => $product->getImage(),
+                    'label' => sprintf('%s (Stock: %d)', $product->getName(), $stock->getQuantity()),
+                ];
+            }
+        }
+
+        return $this->json($products);
+    }
+
 }

@@ -1,3 +1,12 @@
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+{% block javascripts %}
+    <script src="{{ asset('assets/js/distribution.js') }}"></script>
+
+{% endblock %}
+
+
 {{ form_start(form, {'attr': {'class': 'form form-horizontal'}}) }}
 <div class="form-body">
     <div class="row">
@@ -20,6 +29,23 @@
         </div>
 
         {# Produit #}
+        <div class="col-md-4">
+            <label for="{{ form.warehouse.vars.id }}">{{ form_label(form.warehouse) }}</label>
+        </div>
+        <div class="col-md-8">
+            <div class="form-group">
+                <div class="position-relative">
+                    {{ form_widget(form.warehouse, {
+                        'attr': {
+                            'class': 'form-select select2-warehouse',
+                            'data-placeholder': 'distribution.form.product.placeholder'|trans
+                        }
+                    }) }}
+                </div>
+                {{ form_errors(form.warehouse) }}
+            </div>
+        </div>
+
         <div class="col-md-4">
             <label for="{{ form.product.vars.id }}">{{ form_label(form.product) }}</label>
         </div>
@@ -119,6 +145,7 @@
     $(document).ready(function() {
         // Initialiser Select2 sur tous les selects
         initSelect2('.select2-user');
+        initSelect2('.select2-warehouse');
         initSelect2('.select2-product');
     });
 </script>

@@ -13,47 +13,38 @@ use Doctrine\ORM\EntityManagerInterface;
 class StockManager
 {
     public function __construct(
-        private EntityManagerInterface $entityManager,
-        private StockRepository $stockRepository,
-    ) {
+        private readonly EntityManagerInterface $entityManager,
+        private readonly StockRepository        $stockRepository,
+    )
+    {
     }
 
     /**
      * Déduit le stock de l'entrepôt lors de la création d'une distribution
      * (Le livreur charge sa voiture).
      */
-    public function deductStockForDistribution(Distribution $distribution): bool
+    public function deductStockForDistribution($request): bool
     {
-        $product = $distribution->getProduct();
-        $quantity = $distribution->getQuantity();
+        $distribution = $request['distribution'];
+        $remainingQuantity = $distribution['quantity'];
+        $idProduct = $distribution['product'];
+        $idWarehouse = $distribution['warehouse'];
 
-        if (!$product || $quantity <= 0) {
+        if ($remainingQuantity <= 0) {
             return false;
         }
 
-        // Chercher le stock disponible dans les entrepôts pour ce produit
-        $stocks = $this->stockRepository->createQueryBuilder('s')
-            ->where('s.product = :product')
-            ->andWhere('s.quantity > 0')
-            ->setParameter('product', $product)
-            ->orderBy('s.createdAt', 'ASC') // FIFO
-            ->getQuery()
-            ->getResult();
+        $stock = $this->stockRepository->findOneBy([
+            'warehouse' => $idWarehouse,
+            'product' => $idProduct,
+        ]);
 
-        $remainingQuantity = $quantity;
-
-        foreach ($stocks as $stock) {
-            if ($remainingQuantity <= 0) {
-                break;
-            }
-
-            if ($stock->getQuantity() >= $remainingQuantity) {
-                $stock->setQuantity($stock->getQuantity() - $remainingQuantity);
-                $remainingQuantity = 0;
-            } else {
-                $remainingQuantity -= $stock->getQuantity();
-                $stock->setQuantity(0);
-            }
+        if ($stock->getQuantity() >= $remainingQuantity) {
+            $stock->setQuantity($stock->getQuantity() - $remainingQuantity);
+            $remainingQuantity = 0;
+        } else {
+            $remainingQuantity -= $stock->getQuantity();
+            $stock->setQuantity(0);
         }
 
         if ($remainingQuantity > 0) {
@@ -98,7 +89,7 @@ class StockManager
             $stock->setProduct($product);
             $stock->setWarehouse($warehouse);
             $stock->setQuantity($quantity);
-            $stock->setNote('Stock restauré depuis distribution #'.$distribution->getId());
+            $stock->setNote('Stock restauré depuis distribution #' . $distribution->getId());
             $this->entityManager->persist($stock);
         }
 
@@ -130,6 +121,7 @@ class StockManager
             'product' => $product,
             'warehouse' => $warehouse,
         ]);
+
 
         if ($stock) {
             $stock->setQuantity($stock->getQuantity() + $remainingQuantity);
@@ -221,6 +213,6 @@ class StockManager
             ->getQuery()
             ->getSingleScalarResult();
 
-        return (int) ($totalStock ?? 0);
+        return (int)($totalStock ?? 0);
     }
 }

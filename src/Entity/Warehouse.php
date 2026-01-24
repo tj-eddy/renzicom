@@ -109,4 +109,46 @@ class Warehouse
 
         return $this;
     }
+
+    /**
+     * Récupérer tous les produits disponibles dans cet entrepôt
+     *
+     * @return Product[]
+     */
+    public function getAvailableProducts(): array
+    {
+        $products = [];
+
+        foreach ($this->stocks as $stock) {
+            if ($stock->getQuantity() > 0 && $stock->getProduct()) {
+                $products[] = $stock->getProduct();
+            }
+        }
+
+        return $products;
+    }
+
+    /**
+     * Récupérer le stock d'un produit spécifique
+     */
+    public function getStockForProduct(Product $product): ?Stock
+    {
+        foreach ($this->stocks as $stock) {
+            if ($stock->getProduct() === $product) {
+                return $stock;
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * Récupérer la quantité disponible d'un produit
+     */
+    public function getAvailableQuantity(Product $product): int
+    {
+        $stock = $this->getStockForProduct($product);
+
+        return $stock ? $stock->getQuantity() : 0;
+    }
 }
