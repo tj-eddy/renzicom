@@ -10,6 +10,9 @@ actions:
     back: "Back"
     close: "Close"
     confirm_delete_title: "Confirm Deletion"
+common:
+    na: "N/A"
+    others: "Others"
 
 # ========================================
 # LAYOUT & BREADCRUMBS
@@ -100,6 +103,11 @@ distribution:
     created: "Distribution created successfully."
     updated: "Distribution updated successfully."
     deleted: "Distribution deleted successfully."
+    messages:
+        returned: "%count% magazines not distributed have been returned to the warehouse"
+        all_distributed: "All goods have been distributed!"
+        completed: "Distribution completed successfully"
+        already_completed: "This distribution is already completed"
     statuses:
         preparing: "Preparing"
         in_progress: "In progress"
@@ -192,6 +200,10 @@ rack:
     created: "Rack created successfully."
     updated: "Rack updated successfully."
     deleted: "Rack deleted successfully."
+    messages:
+        already_full: "The rack is already full. No additional quantity can be added."
+        exceeds_capacity: "The added quantity (%added%) exceeds the rack capacity. Available capacity: %available%"
+        updated_quantity: "Quantity updated successfully. New quantity: %new%/%required%"
 
 # DISPLAY
 display:
@@ -426,3 +438,12 @@ intervention:
     filling: "Filling"
     none_photo_before: "No photo before"
     none_photo_after: "No photo after"
+    created: "Intervention created successfully."
+    updated: "Intervention updated successfully."
+    deleted: "Intervention deleted successfully."
+    messages:
+        photo_upload_error: "Error during photo upload"
+
+exception:
+    invalid_token: "Invalid CSRF token"
+    access_denied: "Access denied"

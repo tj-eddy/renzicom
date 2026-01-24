@@ -41,7 +41,7 @@ class HotelController extends AbstractController
             $this->entityManager->persist($hotel);
             $this->entityManager->flush();
 
-            $this->addFlash('success', $this->translator->trans('messages.success.created'));
+            $this->addFlash('success', $this->translator->trans('hotel.created'));
 
             return $this->redirectToRoute('app_hotel_index');
         }
@@ -101,7 +101,7 @@ class HotelController extends AbstractController
             }
 
             // Trier les racks par position
-            usort($displayData['racks'], fn ($a, $b) => $a['position'] <=> $b['position']);
+            usort($displayData['racks'], fn($a, $b) => $a['position'] <=> $b['position']);
 
             $data['displays'][] = $displayData;
         }
@@ -139,7 +139,7 @@ class HotelController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $this->entityManager->flush();
 
-            $this->addFlash('success', $this->translator->trans('messages.success.updated'));
+            $this->addFlash('success', $this->translator->trans('hotel.updated'));
 
             return $this->redirectToRoute('app_hotel_index');
         }
@@ -153,11 +153,13 @@ class HotelController extends AbstractController
     #[Route('/{id}', name: 'app_hotel_delete', methods: ['POST'])]
     public function delete(Request $request, Hotel $hotel): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$hotel->getId(), $request->request->get('_token'))) {
+        if ($this->isCsrfTokenValid('delete' . $hotel->getId(), $request->request->get('_token'))) {
             $this->entityManager->remove($hotel);
             $this->entityManager->flush();
 
-            $this->addFlash('success', $this->translator->trans('messages.success.deleted'));
+            $this->addFlash('success', $this->translator->trans('hotel.deleted'));
+        } else {
+            $this->addFlash('error', $this->translator->trans('exception.invalid_token'));
         }
 
         return $this->redirectToRoute('app_hotel_index');

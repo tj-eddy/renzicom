@@ -74,7 +74,7 @@ class UserType extends AbstractType
                         'image/png',
                         'image/gif',
                         'image/webp',
-                    ], mimeTypesMessage: 'user.avatar.invalid_format'),
+                    ], mimeTypesMessage: 'validation.user.avatar.invalid_format'),
                 ],
             ]);
     }

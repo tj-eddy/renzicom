@@ -40,7 +40,7 @@ class StockController extends AbstractController
             $this->entityManager->persist($stock);
             $this->entityManager->flush();
 
-            $this->addFlash('success', $this->translator->trans('messages.success.created'));
+            $this->addFlash('success', $this->translator->trans('stock.created'));
 
             return $this->redirectToRoute('app_stock_index');
         }
@@ -60,7 +60,7 @@ class StockController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $this->entityManager->flush();
 
-            $this->addFlash('success', $this->translator->trans('messages.success.updated'));
+            $this->addFlash('success', $this->translator->trans('stock.updated'));
 
             return $this->redirectToRoute('app_stock_index');
         }
@@ -74,11 +74,13 @@ class StockController extends AbstractController
     #[Route('/{id}', name: 'app_stock_delete', methods: ['POST'])]
     public function delete(Request $request, Stock $stock): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$stock->getId(), $request->request->get('_token'))) {
+        if ($this->isCsrfTokenValid('delete' . $stock->getId(), $request->request->get('_token'))) {
             $this->entityManager->remove($stock);
             $this->entityManager->flush();
 
-            $this->addFlash('success', $this->translator->trans('messages.success.deleted'));
+            $this->addFlash('success', $this->translator->trans('stock.deleted'));
+        } else {
+            $this->addFlash('error', $this->translator->trans('exception.invalid_token'));
         }
 
         return $this->redirectToRoute('app_stock_index');

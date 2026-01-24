@@ -6,6 +6,8 @@ use App\Repository\ProductRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\HttpFoundation\File\File;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Représente un produit/magazine (Paris Match, Elle, Geo, etc.).
@@ -58,7 +60,7 @@ class Product
     #[Assert\Image(
         maxSize: '2M',
         mimeTypes: ['image/jpeg', 'image/png', 'image/webp'],
-        mimeTypesMessage: 'Veuillez uploader une image valide (JPEG, PNG, WEBP)'
+        mimeTypesMessage: 'validation.product.image.invalid_type'
     )]
     private ?File $imageFile = null;
 

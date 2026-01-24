@@ -14,8 +14,15 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\File;
 
+use Symfony\Contracts\Translation\TranslatorInterface;
+
 class InterventionType extends AbstractType
 {
+    public function __construct(
+        private TranslatorInterface $translator
+    ) {
+    }
+
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
@@ -25,8 +32,8 @@ class InterventionType extends AbstractType
                     return sprintf(
                         '#%d - %s - %s',
                         $distribution->getId(),
-                        $distribution->getProduct() ? $distribution->getProduct()->getName() : 'N/A',
-                        $distribution->getUser() ? $distribution->getUser()->getName() : 'N/A'
+                        $distribution->getProduct() ? $distribution->getProduct()->getName() : $this->translator->trans('common.na'),
+                        $distribution->getUser() ? $distribution->getUser()->getName() : $this->translator->trans('common.na')
                     );
                 },
                 'label' => 'intervention.form.distribution.label',
@@ -48,15 +55,15 @@ class InterventionType extends AbstractType
                     $label = $rack->getName();
 
                     if ($rack->getDisplay()) {
-                        $label .= ' - '.$rack->getDisplay()->getName();
+                        $label .= ' - ' . $rack->getDisplay()->getName();
 
                         if ($rack->getDisplay()->getHotel()) {
-                            $label .= ' ('.$rack->getDisplay()->getHotel()->getName().')';
+                            $label .= ' (' . $rack->getDisplay()->getHotel()->getName() . ')';
                         }
                     }
 
                     if ($rack->getProduct()) {
-                        $label .= ' - '.$rack->getProduct()->getName();
+                        $label .= ' - ' . $rack->getProduct()->getName();
                     }
 
                     return $label;
@@ -72,7 +79,7 @@ class InterventionType extends AbstractType
                         return $rack->getDisplay()->getHotel()->getName();
                     }
 
-                    return 'Autres';
+                    return $this->translator->trans('common.others');
                 },
             ])
             ->add('quantityAdded', IntegerType::class, [
@@ -97,7 +104,7 @@ class InterventionType extends AbstractType
                         'image/jpeg',
                         'image/png',
                         'image/jpg',
-                    ], mimeTypesMessage: 'intervention.form.photo_before.invalid'),
+                    ], mimeTypesMessage: 'validation.intervention.photo_before.invalid'),
                 ],
             ])
             ->add('photoAfter', FileType::class, [
@@ -113,7 +120,7 @@ class InterventionType extends AbstractType
                         'image/jpeg',
                         'image/png',
                         'image/jpg',
-                    ], mimeTypesMessage: 'intervention.form.photo_after.invalid'),
+                    ], mimeTypesMessage: 'validation.intervention.photo_after.invalid'),
                 ],
             ])
             ->add('notes', TextareaType::class, [

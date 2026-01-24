@@ -11,11 +11,16 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 #[Route('/intervention')]
 class InterventionController extends AbstractController
 {
+    public function __construct(
+        private readonly TranslatorInterface $translator,
+    ) {
+    }
     #[Route('/', name: 'app_intervention_index', methods: ['GET'])]
     public function index(InterventionRepository $interventionRepository): Response
     {
@@ -57,7 +62,7 @@ class InterventionController extends AbstractController
                     $photoBeforeFilename = $imageUploader->uploadInterventionImage($photoBeforeFile);
                     $intervention->setPhotoBefore($photoBeforeFilename);
                 } catch (\Exception $e) {
-                    $this->addFlash('danger', 'Erreur lors de l\'upload de la photo avant');
+                    $this->addFlash('danger', $this->translator->trans('intervention.messages.photo_upload_error'));
                 }
             }
 
@@ -68,14 +73,14 @@ class InterventionController extends AbstractController
                     $photoAfterFilename = $imageUploader->uploadInterventionImage($photoAfterFile);
                     $intervention->setPhotoAfter($photoAfterFilename);
                 } catch (\Exception $e) {
-                    $this->addFlash('danger', 'Erreur lors de l\'upload de la photo après');
+                    $this->addFlash('danger', $this->translator->trans('intervention.messages.photo_upload_error'));
                 }
             }
 
             $result = $rackRepository->updateCurrentQuantityFromIntervention($intervention);
 
             if (!$result['success']) {
-                $this->addFlash('error', $result['message']);
+                $this->addFlash('error', $this->translator->trans($result['message'], $result['params'] ?? []));
 
                 return $this->redirectToRoute('app_intervention_new');
             }
@@ -83,7 +88,7 @@ class InterventionController extends AbstractController
             $entityManager->persist($intervention);
             $entityManager->flush();
 
-            $this->addFlash('success', $result['message']);
+            $this->addFlash('success', $this->translator->trans($result['message'], $result['params'] ?? []));
 
             return $this->redirectToRoute('app_intervention_index', [], Response::HTTP_SEE_OTHER);
         }
@@ -98,8 +103,10 @@ class InterventionController extends AbstractController
     public function show(Intervention $intervention): Response
     {
         // Vérifier si l'utilisateur a le droit de voir cette intervention
-        if (!$this->isGranted('ROLE_ADMIN')
-            && $intervention->getDistribution()->getUser() !== $this->getUser()) {
+        if (
+            !$this->isGranted('ROLE_ADMIN')
+            && $intervention->getDistribution()->getUser() !== $this->getUser()
+        ) {
             throw $this->createAccessDeniedException();
         }
 
@@ -117,8 +124,10 @@ class InterventionController extends AbstractController
         ImageUploader $imageUploader,
     ): Response {
         // Vérifier si l'utilisateur a le droit de modifier cette intervention
-        if (!$this->isGranted('ROLE_ADMIN')
-            && $intervention->getDistribution()->getUser() !== $this->getUser()) {
+        if (
+            !$this->isGranted('ROLE_ADMIN')
+            && $intervention->getDistribution()->getUser() !== $this->getUser()
+        ) {
             throw $this->createAccessDeniedException();
         }
 
@@ -138,7 +147,7 @@ class InterventionController extends AbstractController
                     $photoBeforeFilename = $imageUploader->uploadInterventionImage($photoBeforeFile);
                     $intervention->setPhotoBefore($photoBeforeFilename);
                 } catch (\Exception $e) {
-                    $this->addFlash('danger', 'Erreur lors de l\'upload de la photo avant');
+                    $this->addFlash('danger', $this->translator->trans('intervention.messages.photo_upload_error'));
                 }
             }
 
@@ -154,21 +163,21 @@ class InterventionController extends AbstractController
                     $photoAfterFilename = $imageUploader->uploadInterventionImage($photoAfterFile);
                     $intervention->setPhotoAfter($photoAfterFilename);
                 } catch (\Exception $e) {
-                    $this->addFlash('danger', 'Erreur lors de l\'upload de la photo après');
+                    $this->addFlash('danger', $this->translator->trans('intervention.messages.photo_upload_error'));
                 }
             }
 
             $result = $rackRepository->updateCurrentQuantityFromIntervention($intervention);
 
             if (!$result['success']) {
-                $this->addFlash('error', $result['message']);
+                $this->addFlash('error', $this->translator->trans($result['message'], $result['params'] ?? []));
 
                 return $this->redirectToRoute('app_intervention_edit', ['id' => $intervention->getId()]);
             }
 
             $entityManager->flush();
 
-            $this->addFlash('success', 'intervention.messages.updated');
+            $this->addFlash('success', $this->translator->trans($result['message'], $result['params'] ?? []));
 
             return $this->redirectToRoute('app_intervention_index', [], Response::HTTP_SEE_OTHER);
         }
@@ -186,7 +195,7 @@ class InterventionController extends AbstractController
         EntityManagerInterface $entityManager,
         ImageUploader $imageUploader,
     ): Response {
-        if ($this->isCsrfTokenValid('delete'.$intervention->getId(), $request->getPayload()->getString('_token'))) {
+        if ($this->isCsrfTokenValid('delete' . $intervention->getId(), $request->getPayload()->getString('_token'))) {
             // Supprimer les photos si elles existent
             if ($intervention->getPhotoBefore()) {
                 $imageUploader->removeInterventionImage($intervention->getPhotoBefore());
@@ -198,7 +207,9 @@ class InterventionController extends AbstractController
             $entityManager->remove($intervention);
             $entityManager->flush();
 
-            $this->addFlash('success', 'intervention.messages.deleted');
+            $this->addFlash('success', $this->translator->trans('intervention.deleted'));
+        } else {
+            $this->addFlash('error', $this->translator->trans('exception.invalid_token'));
         }
 
         return $this->redirectToRoute('app_intervention_index', [], Response::HTTP_SEE_OTHER);

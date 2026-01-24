@@ -40,7 +40,7 @@ class WarehouseController extends AbstractController
             $this->entityManager->persist($warehouse);
             $this->entityManager->flush();
 
-            $this->addFlash('success', $this->translator->trans('messages.success.created'));
+            $this->addFlash('success', $this->translator->trans('warehouse.created'));
 
             return $this->redirectToRoute('app_warehouse_index');
         }
@@ -60,7 +60,7 @@ class WarehouseController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $this->entityManager->flush();
 
-            $this->addFlash('success', $this->translator->trans('messages.success.updated'));
+            $this->addFlash('success', $this->translator->trans('warehouse.updated'));
 
             return $this->redirectToRoute('app_warehouse_index');
         }
@@ -74,11 +74,13 @@ class WarehouseController extends AbstractController
     #[Route('/{id}', name: 'app_warehouse_delete', methods: ['POST'])]
     public function delete(Request $request, Warehouse $warehouse): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$warehouse->getId(), $request->request->get('_token'))) {
+        if ($this->isCsrfTokenValid('delete' . $warehouse->getId(), $request->request->get('_token'))) {
             $this->entityManager->remove($warehouse);
             $this->entityManager->flush();
 
-            $this->addFlash('success', $this->translator->trans('messages.success.deleted'));
+            $this->addFlash('success', $this->translator->trans('warehouse.deleted'));
+        } else {
+            $this->addFlash('error', $this->translator->trans('exception.invalid_token'));
         }
 
         return $this->redirectToRoute('app_warehouse_index');

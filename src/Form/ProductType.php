@@ -36,8 +36,8 @@ class ProductType extends AbstractType
                             'image/png',
                             'image/webp',
                         ],
-                        'mimeTypesMessage' => 'Veuillez uploader une image valide (JPEG, PNG, WEBP)',
-                        'maxSizeMessage' => 'L\'image ne doit pas dépasser {{ limit }} {{ suffix }}',
+                        'mimeTypesMessage' => 'validation.product.image.invalid_type',
+                        'maxSizeMessage' => 'validation.product.image.too_large',
                     ]),
                 ],
             ])

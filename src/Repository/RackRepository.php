@@ -33,7 +33,7 @@ class RackRepository extends ServiceEntityRepository
         if ($currentQuantity >= $requiredQuantity) {
             return [
                 'success' => false,
-                'message' => 'Le rack est déjà plein. Aucune quantité supplémentaire ne peut être ajoutée.',
+                'message' => 'rack.messages.already_full',
             ];
         }
 
@@ -44,11 +44,11 @@ class RackRepository extends ServiceEntityRepository
         if ($newQuantity > $requiredQuantity) {
             return [
                 'success' => false,
-                'message' => sprintf(
-                    'La quantité ajoutée (%d) dépasse la capacité du rack. Capacité disponible: %d',
-                    $quantityAdded,
-                    $requiredQuantity - $currentQuantity
-                ),
+                'message' => 'rack.messages.exceeds_capacity',
+                'params' => [
+                    '%added%' => $quantityAdded,
+                    '%available%' => $requiredQuantity - $currentQuantity,
+                ],
             ];
         }
 
@@ -60,11 +60,11 @@ class RackRepository extends ServiceEntityRepository
 
         return [
             'success' => true,
-            'message' => sprintf(
-                'Quantité mise à jour avec succès. Nouvelle quantité: %d/%d',
-                $newQuantity,
-                $requiredQuantity
-            ),
+            'message' => 'rack.messages.updated_quantity',
+            'params' => [
+                '%new%' => $newQuantity,
+                '%required%' => $requiredQuantity,
+            ],
         ];
     }
 

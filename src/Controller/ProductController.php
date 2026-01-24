@@ -68,7 +68,7 @@ class ProductController extends AbstractController
             $this->entityManager->persist($product);
             $this->entityManager->flush();
 
-            $this->addFlash('success', $this->translator->trans('messages.success.created'));
+            $this->addFlash('success', $this->translator->trans('product.created'));
 
             return $this->redirectToRoute('app_product_index');
         }
@@ -126,7 +126,7 @@ class ProductController extends AbstractController
 
             $this->entityManager->flush();
 
-            $this->addFlash('success', $this->translator->trans('messages.success.updated'));
+            $this->addFlash('success', $this->translator->trans('product.updated'));
 
             return $this->redirectToRoute('app_product_index');
         }
@@ -140,7 +140,7 @@ class ProductController extends AbstractController
     #[Route('/{id}', name: 'app_product_delete', methods: ['POST'])]
     public function delete(Request $request, Product $product): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$product->getId(), $request->request->get('_token'))) {
+        if ($this->isCsrfTokenValid('delete' . $product->getId(), $request->request->get('_token'))) {
             if ($product->getImage()) {
                 try {
                     $this->imageUploader->removeProductImage($product->getImage());
@@ -151,7 +151,9 @@ class ProductController extends AbstractController
             $this->entityManager->remove($product);
             $this->entityManager->flush();
 
-            $this->addFlash('success', $this->translator->trans('messages.success.deleted'));
+            $this->addFlash('success', $this->translator->trans('product.deleted'));
+        } else {
+            $this->addFlash('error', $this->translator->trans('exception.invalid_token'));
         }
 
         return $this->redirectToRoute('app_product_index');

@@ -78,9 +78,13 @@ final class UserController extends AbstractController
     }
 
     #[Route('/{id}/edit', name: 'app_user_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, User $user, EntityManagerInterface $entityManager,
-        UserPasswordHasherInterface $passwordHasher, ImageUploader $imageUploader): Response
-    {
+    public function edit(
+        Request $request,
+        User $user,
+        EntityManagerInterface $entityManager,
+        UserPasswordHasherInterface $passwordHasher,
+        ImageUploader $imageUploader
+    ): Response {
         if (!$this->isGranted('ROLE_ADMIN')) {
             $this->addFlash('error', $this->translator->trans('access.denied.edit'));
 
@@ -136,15 +140,21 @@ final class UserController extends AbstractController
     }
 
     #[Route('/{id}', name: 'app_user_delete', methods: ['POST'])]
-    public function delete(Request $request, User $user, EntityManagerInterface $entityManager,
-        ImageUploader $imageUploader): Response
-    {
-        if ($this->isCsrfTokenValid('delete'.$user->getId(), $request->getPayload()->getString('_token'))) {
+    public function delete(
+        Request $request,
+        User $user,
+        EntityManagerInterface $entityManager,
+        ImageUploader $imageUploader
+    ): Response {
+        if ($this->isCsrfTokenValid('delete' . $user->getId(), $request->getPayload()->getString('_token'))) {
             if ($user->getAvatar()) {
                 $imageUploader->removeAvatar($user->getAvatar());
             }
             $entityManager->remove($user);
             $entityManager->flush();
+            $this->addFlash('success', $this->translator->trans('user.deleted'));
+        } else {
+            $this->addFlash('error', $this->translator->trans('exception.invalid_token'));
         }
 
         return $this->redirectToRoute('app_user_index', [], Response::HTTP_SEE_OTHER);

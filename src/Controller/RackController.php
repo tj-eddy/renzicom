@@ -40,7 +40,7 @@ class RackController extends AbstractController
             $this->entityManager->persist($rack);
             $this->entityManager->flush();
 
-            $this->addFlash('success', $this->translator->trans('messages.success.created'));
+            $this->addFlash('success', $this->translator->trans('rack.created'));
 
             return $this->redirectToRoute('app_rack_index');
         }
@@ -60,7 +60,7 @@ class RackController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $this->entityManager->flush();
 
-            $this->addFlash('success', $this->translator->trans('messages.success.updated'));
+            $this->addFlash('success', $this->translator->trans('rack.updated'));
 
             return $this->redirectToRoute('app_rack_index');
         }
@@ -74,11 +74,13 @@ class RackController extends AbstractController
     #[Route('/{id}', name: 'app_rack_delete', methods: ['POST'])]
     public function delete(Request $request, Rack $rack): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$rack->getId(), $request->request->get('_token'))) {
+        if ($this->isCsrfTokenValid('delete' . $rack->getId(), $request->request->get('_token'))) {
             $this->entityManager->remove($rack);
             $this->entityManager->flush();
 
-            $this->addFlash('success', $this->translator->trans('messages.success.deleted'));
+            $this->addFlash('success', $this->translator->trans('rack.deleted'));
+        } else {
+            $this->addFlash('error', $this->translator->trans('exception.invalid_token'));
         }
 
         return $this->redirectToRoute('app_rack_index');

@@ -1,0 +1,13 @@
+validation:
+  product:
+    image:
+      invalid_type: "Please upload a valid image (JPEG, PNG, WEBP)"
+      too_large: "Image should not exceed {{ limit }} {{ suffix }}"
+  user:
+    avatar:
+      invalid_format: "File format not allowed (JPEG, PNG, GIF, WEBP)"
+  intervention:
+    photo_before:
+      invalid: "Invalid photo before format (JPEG, PNG, JPG)"
+    photo_after:
+      invalid: "Invalid photo after format (JPEG, PNG, JPG)"

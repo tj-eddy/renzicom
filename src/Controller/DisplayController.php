@@ -40,7 +40,7 @@ class DisplayController extends AbstractController
             $this->entityManager->persist($display);
             $this->entityManager->flush();
 
-            $this->addFlash('success', $this->translator->trans('messages.success.created'));
+            $this->addFlash('success', $this->translator->trans('display.created'));
 
             return $this->redirectToRoute('app_display_index');
         }
@@ -60,7 +60,7 @@ class DisplayController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $this->entityManager->flush();
 
-            $this->addFlash('success', $this->translator->trans('messages.success.updated'));
+            $this->addFlash('success', $this->translator->trans('display.updated'));
 
             return $this->redirectToRoute('app_display_index');
         }
@@ -74,11 +74,13 @@ class DisplayController extends AbstractController
     #[Route('/{id}', name: 'app_display_delete', methods: ['POST'])]
     public function delete(Request $request, Display $display): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$display->getId(), $request->request->get('_token'))) {
+        if ($this->isCsrfTokenValid('delete' . $display->getId(), $request->request->get('_token'))) {
             $this->entityManager->remove($display);
             $this->entityManager->flush();
 
-            $this->addFlash('success', $this->translator->trans('messages.success.deleted'));
+            $this->addFlash('success', $this->translator->trans('display.deleted'));
+        } else {
+            $this->addFlash('error', $this->translator->trans('exception.invalid_token'));
         }
 
         return $this->redirectToRoute('app_display_index');
