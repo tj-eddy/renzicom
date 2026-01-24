@@ -89,7 +89,7 @@
                                     <button type="button"
                                             class="btn btn-sm btn-info"
                                             onclick="showHotelDetails({{ hotel.id }})"
-                                            title="Voir les détails">
+                                            title="{{ 'hotel.actions.show'|trans }}">
                                         <i class="bi bi-eye"></i>
                                     </button>
                                     <a href="{{ path('app_hotel_edit', {'id': hotel.id}) }}"
@@ -141,11 +141,11 @@
                         <div class="card-body">
                             <div class="row">
                                 <div class="col-md-6">
-                                    <p class="mb-2"><strong><i class="bi bi-geo-alt"></i> Adresse:</strong></p>
+                                    <p class="mb-2"><strong><i class="bi bi-geo-alt"></i> {{ 'hotel.table.address'|trans }}:</strong></p>
                                     <p id="hotelAddress" class="text-muted ms-4"></p>
                                 </div>
                                 <div class="col-md-6">
-                                    <p class="mb-2"><strong><i class="bi bi-person-circle"></i> Contact:</strong></p>
+                                    <p class="mb-2"><strong><i class="bi bi-person-circle"></i> {{ 'hotel.details.contact'|trans }}:</strong></p>
                                     <p id="hotelContact" class="text-muted ms-4"></p>
                                 </div>
                             </div>
@@ -155,7 +155,7 @@
                     {# Loading spinner #}
                     <div id="loadingSpinner" class="text-center py-5">
                         <div class="spinner-border text-primary" role="status">
-                            <span class="visually-hidden">Chargement...</span>
+                            <span class="visually-hidden">{{ 'hotel.details.loading'|trans }}</span>
                         </div>
                     </div>
 
@@ -164,11 +164,11 @@
 
                     {# Message si aucun display #}
                     <div id="noDisplays" style="display: none;" class="alert alert-info">
-                        <i class="bi bi-info-circle"></i> Aucun présentoir configuré pour cet hôtel.
+                        <i class="bi bi-info-circle"></i> {{ 'hotel.details.no_displays'|trans }}
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ 'actions.close'|trans }}</button>
                 </div>
             </div>
         </div>
@@ -234,7 +234,7 @@
                 error: function(xhr, status, error) {
                     console.error('Erreur:', error);
                     $('#loadingSpinner').hide();
-                    alert('Erreur lors du chargement des données');
+                    alert('{{ 'hotel.details.error_loading'|trans }}');
                 }
             });
         }

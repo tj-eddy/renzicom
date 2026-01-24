@@ -1,46 +1,91 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Product{% endblock %}
+{% block title %}{{ 'product.actions.show'|trans }}{% endblock %}
+
+{% block page_title %}
+    <div class="page-title">
+        <div class="row">
+            <div class="col-12 col-md-6 order-md-1 order-last">
+                <h3>{{ 'product.actions.show'|trans }}</h3>
+            </div>
+            <div class="col-12 col-md-6 order-md-2 order-first">
+                <nav aria-label="breadcrumb" class="breadcrumb-header float-start float-lg-end">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="{{ path('app_dashboard') }}">{{ 'breadcrumb.home'|trans }}</a></li>
+                        <li class="breadcrumb-item"><a href="{{ path('app_product_index') }}">{{ 'breadcrumb.products'|trans }}</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">{{ 'product.actions.show'|trans }}</li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+    </div>
+{% endblock %}
 
 {% block body %}
-    <h1>Product</h1>
+    <section class="section">
+        <div class="card">
+            <div class="card-header">
+                <h4 class="card-title">{{ 'product.actions.show'|trans }}</h4>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-4 text-center mb-4">
+                        {% if product.image %}
+                            <img src="{{ asset('uploads/products/' ~ product.image) }}"
+                                 alt="{{ product.name }}"
+                                 class="img-fluid rounded shadow-sm"
+                                 style="max-height: 400px; object-fit: contain;">
+                        {% else %}
+                            <div class="bg-light d-flex align-items-center justify-content-center rounded border" style="height: 300px;">
+                                <i class="bi bi-image text-muted fs-1"></i>
+                            </div>
+                        {% endif %}
+                    </div>
+                    <div class="col-md-8">
+                        <table class="table table-striped">
+                            <tbody>
+                            <tr>
+                                <th style="width: 30%;">{{ 'product.table.id'|trans }}</th>
+                                <td>{{ product.id }}</td>
+                            </tr>
+                            <tr>
+                                <th>{{ 'product.table.name'|trans }}</th>
+                                <td>{{ product.name }}</td>
+                            </tr>
+                            <tr>
+                                <th>{{ 'product.table.year_edition'|trans }}</th>
+                                <td>{{ product.yearEdition ?? '-' }}</td>
+                            </tr>
+                            <tr>
+                                <th>{{ 'product.table.language'|trans }}</th>
+                                <td><span class="badge bg-dark">{{ product.language|upper }}</span></td>
+                            </tr>
+                            <tr>
+                                <th>{{ 'product.table.created_at'|trans }}</th>
+                                <td>{{ product.createdAt ? product.createdAt|date('d/m/Y H:i') : '' }}</td>
+                            </tr>
+                            {% if product.variant %}
+                                <tr>
+                                    <th>{{ 'product.form.variant.label'|trans }}</th>
+                                    <td>
+                                        <pre class="bg-light p-2 rounded mb-0"><code>{{ product.variant|json_encode(constant('JSON_PRETTY_PRINT')) }}</code></pre>
+                                    </td>
+                                </tr>
+                            {% endif %}
+                            </tbody>
+                        </table>
 
-    <table class="table">
-        <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ product.id }}</td>
-            </tr>
-            <tr>
-                <th>Name</th>
-                <td>{{ product.name }}</td>
-            </tr>
-            <tr>
-                <th>Image</th>
-                <td>{{ product.image }}</td>
-            </tr>
-            <tr>
-                <th>YearEdition</th>
-                <td>{{ product.yearEdition }}</td>
-            </tr>
-            <tr>
-                <th>Language</th>
-                <td>{{ product.language }}</td>
-            </tr>
-            <tr>
-                <th>Variant</th>
-                <td>{{ product.variant ? product.variant|json_encode : '' }}</td>
-            </tr>
-            <tr>
-                <th>CreatedAt</th>
-                <td>{{ product.createdAt ? product.createdAt|date('Y-m-d H:i:s') : '' }}</td>
-            </tr>
-        </tbody>
-    </table>
-
-    <a href="{{ path('app_product_index') }}">back to list</a>
-
-    <a href="{{ path('app_product_edit', {'id': product.id}) }}">edit</a>
-
-    {{ include('product/_delete_form.html.twig') }}
+                        <div class="d-flex justify-content-end gap-2 mt-4">
+                            <a href="{{ path('app_product_index') }}" class="btn btn-light-secondary">
+                                <i class="bi bi-arrow-left-circle"></i> {{ 'actions.back'|trans }}
+                            </a>
+                            <a href="{{ path('app_product_edit', {'id': product.id}) }}" class="btn btn-dark">
+                                <i class="bi bi-pencil"></i> {{ 'product.actions.edit'|trans }}
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 {% endblock %}

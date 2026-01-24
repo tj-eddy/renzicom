@@ -1,46 +1,89 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hotel{% endblock %}
+{% block title %}{{ 'hotel.actions.show'|trans }}{% endblock %}
+
+{% block page_title %}
+    <div class="page-title">
+        <div class="row">
+            <div class="col-12 col-md-6 order-md-1 order-last">
+                <h3>{{ 'hotel.actions.show'|trans }}</h3>
+            </div>
+            <div class="col-12 col-md-6 order-md-2 order-first">
+                <nav aria-label="breadcrumb" class="breadcrumb-header float-start float-lg-end">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="{{ path('app_dashboard') }}">{{ 'breadcrumb.home'|trans }}</a></li>
+                        <li class="breadcrumb-item"><a href="{{ path('app_hotel_index') }}">{{ 'breadcrumb.hotels'|trans }}</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">{{ 'hotel.actions.show'|trans }}</li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+    </div>
+{% endblock %}
 
 {% block body %}
-    <h1>Hotel</h1>
+    <section class="section">
+        <div class="card">
+            <div class="card-header">
+                <h4 class="card-title">{{ 'hotel.actions.show'|trans }}</h4>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <table class="table table-striped">
+                            <tbody>
+                            <tr>
+                                <th style="width: 40%;">{{ 'hotel.table.id'|trans }}</th>
+                                <td>{{ hotel.id }}</td>
+                            </tr>
+                            <tr>
+                                <th>{{ 'hotel.table.name'|trans }}</th>
+                                <td><strong>{{ hotel.name }}</strong></td>
+                            </tr>
+                            <tr>
+                                <th>{{ 'hotel.table.address'|trans }}</th>
+                                <td>{{ hotel.address ?? '-' }}</td>
+                            </tr>
+                            <tr>
+                                <th>{{ 'hotel.table.created_at'|trans }}</th>
+                                <td>{{ hotel.createdAt ? hotel.createdAt|date('d/m/Y H:i') : '' }}</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card bg-light border-0">
+                            <div class="card-body">
+                                <h5 class="card-title mb-3"><i class="bi bi-person-lines-fill"></i> {{ 'hotel.form.contact_info'|trans }}</h5>
+                                <p class="mb-2"><strong>{{ 'hotel.table.contact_name'|trans }}:</strong> {{ hotel.contactName ?? '-' }}</p>
+                                <p class="mb-2"><strong>{{ 'hotel.table.contact_email'|trans }}:</strong> 
+                                    {% if hotel.contactEmail %}
+                                        <a href="mailto:{{ hotel.contactEmail }}">{{ hotel.contactEmail }}</a>
+                                    {% else %}
+                                        -
+                                    {% endif %}
+                                </p>
+                                <p class="mb-0"><strong>{{ 'hotel.table.contact_phone'|trans }}:</strong> 
+                                    {% if hotel.contactPhone %}
+                                        <a href="tel:{{ hotel.contactPhone }}">{{ hotel.contactPhone }}</a>
+                                    {% else %}
+                                        -
+                                    {% endif %}
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
-    <table class="table">
-        <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ hotel.id }}</td>
-            </tr>
-            <tr>
-                <th>Name</th>
-                <td>{{ hotel.name }}</td>
-            </tr>
-            <tr>
-                <th>Address</th>
-                <td>{{ hotel.address }}</td>
-            </tr>
-            <tr>
-                <th>ContactName</th>
-                <td>{{ hotel.contactName }}</td>
-            </tr>
-            <tr>
-                <th>ContactEmail</th>
-                <td>{{ hotel.contactEmail }}</td>
-            </tr>
-            <tr>
-                <th>ContactPhone</th>
-                <td>{{ hotel.contactPhone }}</td>
-            </tr>
-            <tr>
-                <th>CreatedAt</th>
-                <td>{{ hotel.createdAt ? hotel.createdAt|date('Y-m-d H:i:s') : '' }}</td>
-            </tr>
-        </tbody>
-    </table>
-
-    <a href="{{ path('app_hotel_index') }}">back to list</a>
-
-    <a href="{{ path('app_hotel_edit', {'id': hotel.id}) }}">edit</a>
-
-    {{ include('hotel/_delete_form.html.twig') }}
+                <div class="d-flex justify-content-end gap-2 mt-4">
+                    <a href="{{ path('app_hotel_index') }}" class="btn btn-light-secondary">
+                        <i class="bi bi-arrow-left-circle"></i> {{ 'actions.back'|trans }}
+                    </a>
+                    <a href="{{ path('app_hotel_edit', {'id': hotel.id}) }}" class="btn btn-dark">
+                        <i class="bi bi-pencil"></i> {{ 'hotel.actions.edit'|trans }}
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
 {% endblock %}

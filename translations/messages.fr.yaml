@@ -1,8 +1,370 @@
 # ========================================
-# INTERVENTIONS - COMPLÉMENT (à ajouter à votre section intervention existante)
+# GENERAL ACTIONS & BUTTONS
 # ========================================
+actions:
+    add: "Ajouter"
+    edit: "Modifier"
+    save: "Enregistrer"
+    cancel: "Annuler"
+    delete: "Supprimer"
+    back: "Retour"
+    close: "Fermer"
+    confirm_delete_title: "Confirmer la suppression"
+
+# ========================================
+# LAYOUT & BREADCRUMBS
+# ========================================
+breadcrumb:
+    home: "Tableau de bord"
+    users: "Utilisateurs"
+    products: "Produits"
+    warehouses: "Entrepôts"
+    hotels: "Hôtels"
+    displays: "Présentoirs"
+    racks: "Racks"
+    stocks: "Stocks"
+    distributions: "Distributions"
+    interventions: "Interventions"
+    new: "Nouveau"
+    edit: "Modifier"
+
+# ========================================
+# DASHBOARD / STATS
+# ========================================
+dashboard:
+    title: "Tableau de bord"
+    welcome: "Bienvenue,"
+    welcome_sub: "Voici un aperçu de l'activité de Renzicom."
+    total_users: "Utilisateurs"
+    total_products: "Produits"
+    total_warehouses: "Entrepôts"
+    total_interventions: "Interventions"
+    stats_overview: "Vue d'ensemble"
+    recent_interventions: "Dernières Interventions"
+    no_interventions: "Aucune intervention récente"
+
+activities:
+    title: "Activités Récentes"
+    product: "Produit"
+    quantity: "Quantité"
+    user: "Utilisateur"
+    destination: "Destination"
+    date: "Date"
+    status: "Statut"
+    no_activities: "Aucune activité récente"
+
+# ========================================
+# MODULES
+# ========================================
+
+# DISTRIBUTION
+distribution:
+    list:
+        title: "Liste des Distributions"
+        no_distributions: "Aucune distribution trouvée"
+    table:
+        id: "ID"
+        product: "Produit"
+        warehouse: "Entrepôt"
+        quantity: "Quantité"
+        driver: "Chauffeur"
+        status: "Statut"
+        created_at: "Créé le"
+        actions: "Actions"
+    actions:
+        new: "Nouvelle Distribution"
+        edit: "Modifier"
+        delete: "Supprimer"
+        show: "Détails de la distribution"
+    form:
+        product:
+            label: "Produit"
+            placeholder: "Sélectionner un produit"
+        warehouse:
+            label: "Entrepôt source"
+            placeholder: "Sélectionner l'entrepôt"
+        quantity:
+            label: "Quantité à distribuer"
+            placeholder: "Ex: 100"
+        driver:
+            label: "Chauffeur assigné"
+            placeholder: "Sélectionner un chauffeur"
+        status:
+            label: "Statut de la distribution"
+            preparing: "En préparation"
+            in_progress: "En cours"
+            delivered: "Livrée"
+    created: "Distribution créée avec succès."
+    updated: "Distribution mise à jour avec succès."
+    deleted: "Distribution supprimée avec succès."
+    statuses:
+        preparing: "En préparation"
+        in_progress: "En cours"
+        delivered: "Livrée"
+        cancelled: "Annulée"
+
+# STOCK
+stock:
+    list:
+        title: "État des Stocks"
+        no_stocks: "Aucun stock trouvé"
+    table:
+        id: "ID"
+        warehouse: "Entrepôt"
+        product: "Produit"
+        quantity: "Quantité"
+        note: "Note / Observation"
+        created_at: "Créé le"
+        actions: "Actions"
+    actions:
+        new: "Ajouter du Stock"
+        edit: "Modifier"
+        delete: "Supprimer"
+        show: "Détails du stock"
+    form:
+        warehouse:
+            label: "Entrepôt"
+            placeholder: "Sélectionner un entrepôt"
+        product:
+            label: "Produit"
+            placeholder: "Sélectionner un produit"
+        quantity:
+            label: "Quantité"
+            placeholder: "Ex: 100"
+        note:
+            label: "Note / Observation"
+            placeholder: "Ex: Arrivage du 15/05"
+    created: "Stock ajouté avec succès."
+    updated: "Stock mis à jour avec succès."
+    deleted: "Stock supprimé avec succès."
+
+# RACK
+rack:
+    list:
+        title: "Liste des Racks"
+        no_racks: "Aucun rack trouvé"
+    table:
+        id: "ID"
+        name: "Nom"
+        display: "Présentoir"
+        product: "Produit"
+        position: "Position"
+        required_quantity: "Qté requise"
+        current_quantity: "Qté actuelle"
+        fill_rate: "Remplissage"
+        created_at: "Créé le"
+        actions: "Actions"
+    actions:
+        new: "Nouveau Rack"
+        edit: "Modifier"
+        delete: "Supprimer"
+        show: "Détails du rack"
+    form:
+        name:
+            label: "Nom du rack"
+            placeholder: "Ex: Niveau 1"
+        display:
+            label: "Présentoir"
+            placeholder: "Sélectionner un présentoir"
+        product:
+            label: "Produit assigné"
+            placeholder: "Sélectionner un produit"
+        position:
+            label: "Position"
+            placeholder: "Ex: 1"
+            help: "Ordre d'affichage du rack dans le présentoir"
+        required_quantity:
+            label: "Capacité maximale"
+            placeholder: "Ex: 50"
+            help: "Quantité maximale que le rack peut contenir"
+        current_quantity:
+            label: "Quantité actuelle"
+            placeholder: "Ex: 0"
+            help: "Quantité actuellement présente"
+    status:
+        full: "Complet"
+        medium: "Moyen"
+        low: "Faible"
+        empty: "Vide"
+    created: "Rack créé avec succès."
+    updated: "Rack mis à jour avec succès."
+    deleted: "Rack supprimé avec succès."
+
+# DISPLAY
+display:
+    list:
+        title: "Liste des Présentoirs"
+        no_displays: "Aucun présentoir trouvé"
+    table:
+        id: "ID"
+        name: "Nom"
+        hotel: "Hôtel"
+        location: "Emplacement"
+        created_at: "Créé le"
+        actions: "Actions"
+    actions:
+        new: "Nouveau Présentoir"
+        edit: "Modifier"
+        delete: "Supprimer"
+        show: "Détails du présentoir"
+    form:
+        name:
+            label: "Nom du présentoir"
+            placeholder: "Ex: Présentoir Hall"
+        hotel:
+            label: "Hôtel"
+            placeholder: "Sélectionner un hôtel"
+        location:
+            label: "Emplacement précis"
+            placeholder: "Ex: Près de la réception"
+            help: "Ex: Hall d'entrée, Étage 2, Salle de petit-déjeuner..."
+    created: "Présentoir créé avec succès."
+    updated: "Présentoir mis à jour avec succès."
+    deleted: "Présentoir supprimé avec succès."
+
+# HOTEL
+hotel:
+    list:
+        title: "Liste des Hôtels"
+        no_hotels: "Aucun hôtel trouvé"
+    table:
+        id: "ID"
+        name: "Nom"
+        address: "Adresse"
+        contact_name: "Contact"
+        contact_email: "Email"
+        contact_phone: "Téléphone"
+        created_at: "Créé le"
+        actions: "Actions"
+    actions:
+        new: "Nouvel Hôtel"
+        edit: "Modifier"
+        delete: "Supprimer"
+        show: "Détails de l'hôtel"
+    form:
+        name:
+            label: "Nom de l'hôtel"
+            placeholder: "Ex: Hotel de Paris"
+        address:
+            label: "Adresse"
+            placeholder: "Ex: 1 Rue de Rivoli, Paris"
+        contact_name:
+            label: "Nom du contact"
+            placeholder: "Ex: Jean Dupont"
+        contact_email:
+            label: "Email du contact"
+            placeholder: "example@email.com"
+        contact_phone:
+            label: "Téléphone du contact"
+            placeholder: "01 23 45 67 89"
+        contact_info: "Informations de contact"
+    details:
+        title: "Détails de l'hôtel"
+        contact: "Contact"
+        no_displays: "Aucun présentoir configuré pour cet hôtel."
+        loading: "Chargement..."
+        error_loading: "Erreur lors du chargement des données"
+    created: "Hôtel créé avec succès."
+    updated: "Hôtel mis à jour avec succès."
+    deleted: "Hôtel supprimé avec succès."
+
+# WAREHOUSE
+warehouse:
+    list:
+        title: "Liste des Entrepôts"
+        no_warehouses: "Aucun entrepôt trouvé"
+    table:
+        id: "ID"
+        name: "Nom"
+        address: "Adresse"
+        created_at: "Créé le"
+        actions: "Actions"
+    actions:
+        new: "Nouvel Entrepôt"
+        edit: "Modifier"
+        delete: "Supprimer"
+        show: "Détails de l'entrepôt"
+    form:
+        name:
+            label: "Nom de l'entrepôt"
+            placeholder: "Ex: Entrepôt Principal"
+        address:
+            label: "Adresse"
+            placeholder: "Ex: 123 Rue de la Logistique, Paris"
+    created: "Entrepôt créé avec succès."
+    updated: "Entrepôt mis à jour avec succès."
+    deleted: "Entrepôt supprimé avec succès."
+
+# PRODUCT
+product:
+    list:
+        title: "Liste des Produits"
+        no_products: "Aucun produit trouvé"
+    table:
+        id: "ID"
+        name: "Nom"
+        year_edition: "Année / Édition"
+        language: "Langue"
+        created_at: "Créé le"
+        actions: "Actions"
+    actions:
+        new: "Nouveau Produit"
+        edit: "Modifier"
+        delete: "Supprimer"
+        show: "Détails du produit"
+    form:
+        name:
+            label: "Nom du produit"
+            placeholder: "Ex: Paris Match"
+        image:
+            label: "Image du produit"
+            current: "Image actuelle"
+            new_preview: "Nouvelle image"
+            help: "Formats acceptés: JPG, PNG, WEBP (Max 2Mo)"
+            invalid_type: "Type de fichier non autorisé"
+            too_large: "Le fichier est trop volumineux (Max 2Mo)"
+        year_edition:
+            label: "Année / Édition"
+            placeholder: "Ex: 2024"
+        language:
+            label: "Langue"
+            placeholder: "Ex: FR, EN"
+        variant:
+            label: "Détails techniques (JSON)"
+            placeholder: '{"couleur": "rouge"}'
+            help: "Format JSON valide requis"
+    created: "Produit créé avec succès."
+    updated: "Produit mis à jour avec succès."
+    deleted: "Produit supprimé avec succès."
+
+# USER
+user:
+    list:
+        title: "Liste des Utilisateurs"
+        no_users: "Aucun utilisateur trouvé"
+    table:
+        id: "ID"
+        name: "Nom"
+        email: "Email"
+        role: "Rôle"
+        status: "Statut"
+        created_at: "Créé le"
+        actions: "Actions"
+    actions:
+        new: "Nouvel Utilisateur"
+        edit: "Modifier"
+        delete: "Supprimer"
+        show: "Détails de l'utilisateur"
+    status:
+        active: "Actif"
+        inactive: "Inactif"
+    created: "Utilisateur créé avec succès."
+    updated: "Utilisateur mis à jour avec succès."
+    deleted: "Utilisateur supprimé avec succès."
+
+# INTERVENTIONS
 intervention:
-    title: "Interventions"
+    title: "Intervention"
     list:
         title: "Liste des interventions"
         no_interventions: "Aucune intervention trouvée"
@@ -10,7 +372,7 @@ intervention:
         new: "Nouvelle intervention"
         edit: "Modifier l'intervention"
         delete: "Supprimer l'intervention"
-        show: "Voir l'intervention"  # <- CLÉ MANQUANTE
+        show: "Voir l'intervention"
     table:
         id: "ID"
         distribution: "Distribution"
@@ -39,3 +401,8 @@ intervention:
             label: "Notes"
             placeholder: "Observations..."
     confirm_delete: "Êtes-vous sûr de vouloir supprimer cette intervention ?"
+    info: "Informations Générales"
+    product_in_rack: "Produit dans le rack"
+    filling: "Remplissage"
+    none_photo_before: "Aucune photo avant"
+    none_photo_after: "Aucune photo après"

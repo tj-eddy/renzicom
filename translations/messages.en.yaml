@@ -1,8 +1,370 @@
 # ========================================
-# INTERVENTIONS - ENGLISH TRANSLATIONS
+# GENERAL ACTIONS & BUTTONS
 # ========================================
+actions:
+    add: "Add"
+    edit: "Edit"
+    save: "Save"
+    cancel: "Cancel"
+    delete: "Delete"
+    back: "Back"
+    close: "Close"
+    confirm_delete_title: "Confirm Deletion"
+
+# ========================================
+# LAYOUT & BREADCRUMBS
+# ========================================
+breadcrumb:
+    home: "Dashboard"
+    users: "Users"
+    products: "Products"
+    warehouses: "Warehouses"
+    hotels: "Hotels"
+    displays: "Displays"
+    racks: "Racks"
+    stocks: "Stocks"
+    distributions: "Distributions"
+    interventions: "Interventions"
+    new: "New"
+    edit: "Edit"
+
+# ========================================
+# DASHBOARD / STATS
+# ========================================
+dashboard:
+    title: "Dashboard"
+    welcome: "Welcome,"
+    welcome_sub: "Here is an overview of Renzicom's activity."
+    total_users: "Users"
+    total_products: "Products"
+    total_warehouses: "Warehouses"
+    total_interventions: "Interventions"
+    stats_overview: "Overview"
+    recent_interventions: "Recent Interventions"
+    no_interventions: "No recent interventions"
+
+activities:
+    title: "Recent Activities"
+    product: "Product"
+    quantity: "Quantity"
+    user: "User"
+    destination: "Destination"
+    date: "Date"
+    status: "Status"
+    no_activities: "No recent activities"
+
+# ========================================
+# MODULES
+# ========================================
+
+# DISTRIBUTION
+distribution:
+    list:
+        title: "Distribution List"
+        no_distributions: "No distributions found"
+    table:
+        id: "ID"
+        product: "Product"
+        warehouse: "Warehouse"
+        quantity: "Quantity"
+        driver: "Driver"
+        status: "Status"
+        created_at: "Created at"
+        actions: "Actions"
+    actions:
+        new: "New Distribution"
+        edit: "Edit"
+        delete: "Delete"
+        show: "Distribution Details"
+    form:
+        product:
+            label: "Product"
+            placeholder: "Select a product"
+        warehouse:
+            label: "Source warehouse"
+            placeholder: "Select warehouse"
+        quantity:
+            label: "Quantity to distribute"
+            placeholder: "e.g. 100"
+        driver:
+            label: "Assigned driver"
+            placeholder: "Select a driver"
+        status:
+            label: "Distribution status"
+            preparing: "Preparing"
+            in_progress: "In progress"
+            delivered: "Delivered"
+    created: "Distribution created successfully."
+    updated: "Distribution updated successfully."
+    deleted: "Distribution deleted successfully."
+    statuses:
+        preparing: "Preparing"
+        in_progress: "In progress"
+        delivered: "Delivered"
+        cancelled: "Cancelled"
+
+# STOCK
+stock:
+    list:
+        title: "Stock Status"
+        no_stocks: "No stocks found"
+    table:
+        id: "ID"
+        warehouse: "Warehouse"
+        product: "Product"
+        quantity: "Quantity"
+        note: "Note / Observation"
+        created_at: "Created at"
+        actions: "Actions"
+    actions:
+        new: "Add Stock"
+        edit: "Edit"
+        delete: "Delete"
+        show: "Stock Details"
+    form:
+        warehouse:
+            label: "Warehouse"
+            placeholder: "Select a warehouse"
+        product:
+            label: "Product"
+            placeholder: "Select a product"
+        quantity:
+            label: "Quantity"
+            placeholder: "e.g. 100"
+        note:
+            label: "Note / Observation"
+            placeholder: "e.g. Arrival on 05/15"
+    created: "Stock added successfully."
+    updated: "Stock updated successfully."
+    deleted: "Stock deleted successfully."
+
+# RACK
+rack:
+    list:
+        title: "Rack List"
+        no_racks: "No racks found"
+    table:
+        id: "ID"
+        name: "Name"
+        display: "Display Stand"
+        product: "Product"
+        position: "Position"
+        required_quantity: "Req Qty"
+        current_quantity: "Curr Qty"
+        fill_rate: "Fill Rate"
+        created_at: "Created at"
+        actions: "Actions"
+    actions:
+        new: "New Rack"
+        edit: "Edit"
+        delete: "Delete"
+        show: "Rack Details"
+    form:
+        name:
+            label: "Rack name"
+            placeholder: "e.g. Level 1"
+        display:
+            label: "Display stand"
+            placeholder: "Select a display stand"
+        product:
+            label: "Assigned product"
+            placeholder: "Select a product"
+        position:
+            label: "Position"
+            placeholder: "e.g. 1"
+            help: "Display order of the rack in the stand"
+        required_quantity:
+            label: "Maximum capacity"
+            placeholder: "e.g. 50"
+            help: "Maximum quantity the rack can hold"
+        current_quantity:
+            label: "Current quantity"
+            placeholder: "e.g. 0"
+            help: "Current quantity present"
+    status:
+        full: "Full"
+        medium: "Medium"
+        low: "Low"
+        empty: "Empty"
+    created: "Rack created successfully."
+    updated: "Rack updated successfully."
+    deleted: "Rack deleted successfully."
+
+# DISPLAY
+display:
+    list:
+        title: "Display Stand List"
+        no_displays: "No display stands found"
+    table:
+        id: "ID"
+        name: "Name"
+        hotel: "Hotel"
+        location: "Location"
+        created_at: "Created at"
+        actions: "Actions"
+    actions:
+        new: "New Display Stand"
+        edit: "Edit"
+        delete: "Delete"
+        show: "Display Stand Details"
+    form:
+        name:
+            label: "Display stand name"
+            placeholder: "e.g. Lobby Stand"
+        hotel:
+            label: "Hotel"
+            placeholder: "Select a hotel"
+        location:
+            label: "Precise location"
+            placeholder: "e.g. Near reception"
+            help: "e.g. Main Lobby, 2nd Floor, Breakfast Room..."
+    created: "Display stand created successfully."
+    updated: "Display stand updated successfully."
+    deleted: "Display stand deleted successfully."
+
+# HOTEL
+hotel:
+    list:
+        title: "Hotel List"
+        no_hotels: "No hotels found"
+    table:
+        id: "ID"
+        name: "Name"
+        address: "Address"
+        contact_name: "Contact"
+        contact_email: "Email"
+        contact_phone: "Phone"
+        created_at: "Created at"
+        actions: "Actions"
+    actions:
+        new: "New Hotel"
+        edit: "Edit"
+        delete: "Delete"
+        show: "Hotel Details"
+    form:
+        name:
+            label: "Hotel name"
+            placeholder: "e.g. Hotel de Paris"
+        address:
+            label: "Address"
+            placeholder: "e.g. 1 Rivoli St, Paris"
+        contact_name:
+            label: "Contact name"
+            placeholder: "e.g. John Doe"
+        contact_email:
+            label: "Contact email"
+            placeholder: "example@email.com"
+        contact_phone:
+            label: "Contact phone"
+            placeholder: "+33 1 23 45 67 89"
+        contact_info: "Contact Information"
+    details:
+        title: "Hotel Details"
+        contact: "Contact"
+        no_displays: "No displays configured for this hotel."
+        loading: "Loading..."
+        error_loading: "Error loading data"
+    created: "Hotel created successfully."
+    updated: "Hotel updated successfully."
+    deleted: "Hotel deleted successfully."
+
+# WAREHOUSE
+warehouse:
+    list:
+        title: "Warehouse List"
+        no_warehouses: "No warehouses found"
+    table:
+        id: "ID"
+        name: "Name"
+        address: "Address"
+        created_at: "Created at"
+        actions: "Actions"
+    actions:
+        new: "New Warehouse"
+        edit: "Edit"
+        delete: "Delete"
+        show: "Warehouse Details"
+    form:
+        name:
+            label: "Warehouse name"
+            placeholder: "e.g. Main Warehouse"
+        address:
+            label: "Address"
+            placeholder: "e.g. 123 Logistics St, London"
+    created: "Warehouse created successfully."
+    updated: "Warehouse updated successfully."
+    deleted: "Warehouse deleted successfully."
+
+# PRODUCT
+product:
+    list:
+        title: "Product List"
+        no_products: "No products found"
+    table:
+        id: "ID"
+        name: "Name"
+        year_edition: "Year / Edition"
+        language: "Language"
+        created_at: "Created at"
+        actions: "Actions"
+    actions:
+        new: "New Product"
+        edit: "Edit"
+        delete: "Delete"
+        show: "Product Details"
+    form:
+        name:
+            label: "Product name"
+            placeholder: "e.g. Paris Match"
+        image:
+            label: "Product image"
+            current: "Current image"
+            new_preview: "New image"
+            help: "Accepted formats: JPG, PNG, WEBP (Max 2Mo)"
+            invalid_type: "File type not allowed"
+            too_large: "File is too large (Max 2Mo)"
+        year_edition:
+            label: "Year / Edition"
+            placeholder: "e.g. 2024"
+        language:
+            label: "Language"
+            placeholder: "e.g. FR, EN"
+        variant:
+            label: "Technical details (JSON)"
+            placeholder: '{"color": "red"}'
+            help: "Valid JSON format required"
+    created: "Product created successfully."
+    updated: "Product updated successfully."
+    deleted: "Product deleted successfully."
+
+# USER
+user:
+    list:
+        title: "User List"
+        no_users: "No users found"
+    table:
+        id: "ID"
+        name: "Name"
+        email: "Email"
+        role: "Role"
+        status: "Status"
+        created_at: "Created at"
+        actions: "Actions"
+    actions:
+        new: "New User"
+        edit: "Edit"
+        delete: "Delete"
+        show: "User Details"
+    status:
+        active: "Active"
+        inactive: "Inactive"
+    created: "User created successfully."
+    updated: "User updated successfully."
+    deleted: "User deleted successfully."
+
+# INTERVENTIONS
 intervention:
-    title: "Interventions"
+    title: "Intervention"
     list:
         title: "Interventions list"
         no_interventions: "No interventions found"
@@ -10,7 +372,7 @@ intervention:
         new: "New intervention"
         edit: "Edit intervention"
         delete: "Delete intervention"
-        show: "View intervention"  # <- MISSING KEY
+        show: "View intervention"
     table:
         id: "ID"
         distribution: "Distribution"
@@ -39,3 +401,8 @@ intervention:
             label: "Notes"
             placeholder: "Observations..."
     confirm_delete: "Are you sure you want to delete this intervention?"
+    info: "General Information"
+    product_in_rack: "Product in rack"
+    filling: "Filling"
+    none_photo_before: "No photo before"
+    none_photo_after: "No photo after"
