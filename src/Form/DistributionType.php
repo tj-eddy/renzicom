@@ -21,7 +21,7 @@ class DistributionType extends AbstractType
             ->add('user', EntityType::class, [
                 'class' => User::class,
                 'choice_label' => function (User $user) {
-                    return $user->getName() . ' (' . $user->getEmail() . ')';
+                    return $user->getName().' ('.$user->getEmail().')';
                 },
                 'label' => 'distribution.form.user.label',
                 'required' => true,

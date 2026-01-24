@@ -5,11 +5,10 @@ namespace App\Entity;
 use App\Repository\DistributionRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
-use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Représente une tournée de livraison effectuée par un livreur
+ * Représente une tournée de livraison effectuée par un livreur.
  */
 #[ORM\Entity(repositoryClass: DistributionRepository::class)]
 #[ORM\Table(name: 'distribution')]
@@ -179,23 +178,23 @@ class Distribution
     }
 
     /**
-     * Vérifie si la distribution est terminée
+     * Vérifie si la distribution est terminée.
      */
     public function isCompleted(): bool
     {
-        return $this->status === self::STATUS_DELIVERED;
+        return self::STATUS_DELIVERED === $this->status;
     }
 
     /**
-     * Vérifie si la distribution est en cours
+     * Vérifie si la distribution est en cours.
      */
     public function isInProgress(): bool
     {
-        return $this->status === self::STATUS_IN_PROGRESS;
+        return self::STATUS_IN_PROGRESS === $this->status;
     }
 
     /**
-     * Marque la distribution comme terminée
+     * Marque la distribution comme terminée.
      */
     public function markAsCompleted(): static
     {
@@ -206,7 +205,7 @@ class Distribution
     }
 
     /**
-     * Calcule la quantité restante non distribuée
+     * Calcule la quantité restante non distribuée.
      */
     public function getRemainingQuantity(): int
     {
@@ -218,9 +217,8 @@ class Distribution
         return $this->quantity - $distributed;
     }
 
-
     /**
-     * Calcule la quantité totale distribuée via les interventions
+     * Calcule la quantité totale distribuée via les interventions.
      */
     public function getQuantityDistributed(): int
     {
@@ -228,11 +226,12 @@ class Distribution
         foreach ($this->interventions as $intervention) {
             $total += $intervention->getQuantityAdded();
         }
+
         return $total;
     }
 
     /**
-     * Calcule la quantité restante dans la voiture du livreur
+     * Calcule la quantité restante dans la voiture du livreur.
      */
     public function getQuantityRemaining(): int
     {
@@ -240,21 +239,22 @@ class Distribution
     }
 
     /**
-     * Vérifie si la distribution est complète
+     * Vérifie si la distribution est complète.
      */
     public function isFullyDistributed(): bool
     {
-        return $this->getQuantityRemaining() === 0;
+        return 0 === $this->getQuantityRemaining();
     }
 
     /**
-     * Calcule le pourcentage de distribution
+     * Calcule le pourcentage de distribution.
      */
     public function getDistributionPercentage(): float
     {
-        if ($this->quantity === 0) {
+        if (0 === $this->quantity) {
             return 0;
         }
+
         return ($this->getQuantityDistributed() / $this->quantity) * 100;
     }
 

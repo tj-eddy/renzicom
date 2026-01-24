@@ -19,7 +19,7 @@ class DistributionController extends AbstractController
     public function __construct(
         private EntityManagerInterface $entityManager,
         private TranslatorInterface $translator,
-        private StockManager $stockManager
+        private StockManager $stockManager,
     ) {
     }
 
@@ -44,7 +44,7 @@ class DistributionController extends AbstractController
                 $this->stockManager->deductStockForDistribution($distribution);
 
                 // Si le statut est "delivered", mettre à jour completedAt
-                if ($distribution->getStatus() === Distribution::STATUS_DELIVERED) {
+                if (Distribution::STATUS_DELIVERED === $distribution->getStatus()) {
                     $distribution->setCompletedAt(new \DateTimeImmutable());
                 }
 
@@ -78,9 +78,8 @@ class DistributionController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             try {
                 // Si le produit ou la quantité a changé, gérer le stock
-                if ($oldProduct !== $distribution->getProduct() ||
-                    $oldQuantity !== $distribution->getQuantity()) {
-
+                if ($oldProduct !== $distribution->getProduct()
+                    || $oldQuantity !== $distribution->getQuantity()) {
                     // Restaurer l'ancien stock
                     $oldDistribution = new Distribution();
                     $oldDistribution->setProduct($oldProduct);
@@ -92,9 +91,8 @@ class DistributionController extends AbstractController
                 }
 
                 // Si le statut passe à "delivered", gérer le retour du stock non distribué
-                if ($distribution->getStatus() === Distribution::STATUS_DELIVERED &&
-                    $oldStatus !== Distribution::STATUS_DELIVERED) {
-
+                if (Distribution::STATUS_DELIVERED === $distribution->getStatus()
+                    && Distribution::STATUS_DELIVERED !== $oldStatus) {
                     // Retourner les magazines non distribués à l'entrepôt
                     $remainingQuantity = $distribution->getQuantityRemaining();
 
@@ -110,8 +108,8 @@ class DistributionController extends AbstractController
                 }
 
                 // Si on revient en arrière depuis delivered, réinitialiser completedAt
-                if ($distribution->getStatus() !== Distribution::STATUS_DELIVERED &&
-                    $oldStatus === Distribution::STATUS_DELIVERED) {
+                if (Distribution::STATUS_DELIVERED !== $distribution->getStatus()
+                    && Distribution::STATUS_DELIVERED === $oldStatus) {
                     $distribution->setCompletedAt(null);
                 }
 
@@ -132,7 +130,7 @@ class DistributionController extends AbstractController
     }
 
     /**
-     * Terminer une distribution et retourner le stock restant
+     * Terminer une distribution et retourner le stock restant.
      */
     #[Route('/{id}/complete', name: 'app_distribution_complete', methods: ['POST'])]
     public function complete(Request $request, Distribution $distribution): Response
@@ -140,12 +138,14 @@ class DistributionController extends AbstractController
         // Vérification CSRF
         if (!$this->isCsrfTokenValid('complete'.$distribution->getId(), $request->request->get('_token'))) {
             $this->addFlash('danger', 'Token CSRF invalide');
+
             return $this->redirectToRoute('app_distribution_index');
         }
 
         // Vérifier que la distribution n'est pas déjà terminée
-        if ($distribution->getStatus() === Distribution::STATUS_DELIVERED) {
+        if (Distribution::STATUS_DELIVERED === $distribution->getStatus()) {
             $this->addFlash('warning', 'Cette distribution est déjà terminée');
+
             return $this->redirectToRoute('app_distribution_index');
         }
 
@@ -172,9 +172,8 @@ class DistributionController extends AbstractController
             $this->entityManager->flush();
 
             $this->addFlash('success', '🎉 Distribution terminée avec succès');
-
         } catch (\Exception $e) {
-            $this->addFlash('danger', '❌ Erreur: ' . $e->getMessage());
+            $this->addFlash('danger', '❌ Erreur: '.$e->getMessage());
         }
 
         return $this->redirectToRoute('app_distribution_index');
@@ -183,7 +182,7 @@ class DistributionController extends AbstractController
     #[Route('/{id}', name: 'app_distribution_delete', methods: ['POST'])]
     public function delete(Request $request, Distribution $distribution): Response
     {
-        if ($this->isCsrfTokenValid('delete' . $distribution->getId(), $request->request->get('_token'))) {
+        if ($this->isCsrfTokenValid('delete'.$distribution->getId(), $request->request->get('_token'))) {
             try {
                 // Restaurer le stock dans l'entrepôt
                 $this->stockManager->restoreStockForDistribution($distribution);

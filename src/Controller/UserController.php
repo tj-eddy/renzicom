@@ -15,7 +15,7 @@ use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
-#[IsGranted("ROLE_ADMIN")]
+#[IsGranted('ROLE_ADMIN')]
 #[Route('/user')]
 final class UserController extends AbstractController
 {
@@ -26,7 +26,7 @@ final class UserController extends AbstractController
     #[Route(name: 'app_user_index', methods: ['GET'])]
     public function index(UserRepository $userRepository): Response
     {
-        return $this->render('user/index.html.twig', ['users' => $userRepository->findBy([], ['id' => 'DESC']),]);
+        return $this->render('user/index.html.twig', ['users' => $userRepository->findBy([], ['id' => 'DESC'])]);
     }
 
     #[Route('/new', name: 'app_user_new', methods: ['GET', 'POST'])]
@@ -34,6 +34,7 @@ final class UserController extends AbstractController
     {
         if (!$this->isGranted('ROLE_ADMIN')) {
             $this->addFlash('error', $this->translator->trans('access.denied.create'));
+
             return $this->redirectToRoute('app_user_index');
         }
 
@@ -69,18 +70,20 @@ final class UserController extends AbstractController
             $entityManager->flush();
 
             $this->addFlash('success', $this->translator->trans('user.created'));
+
             return $this->redirectToRoute('app_user_index', [], Response::HTTP_SEE_OTHER);
         }
 
-        return $this->render('user/new.html.twig', ['user' => $user, 'form' => $form,]);
+        return $this->render('user/new.html.twig', ['user' => $user, 'form' => $form]);
     }
 
     #[Route('/{id}/edit', name: 'app_user_edit', methods: ['GET', 'POST'])]
-    public function edit(Request                     $request, User $user, EntityManagerInterface $entityManager,
-                         UserPasswordHasherInterface $passwordHasher, ImageUploader $imageUploader): Response
+    public function edit(Request $request, User $user, EntityManagerInterface $entityManager,
+        UserPasswordHasherInterface $passwordHasher, ImageUploader $imageUploader): Response
     {
         if (!$this->isGranted('ROLE_ADMIN')) {
             $this->addFlash('error', $this->translator->trans('access.denied.edit'));
+
             return $this->redirectToRoute('app_user_index');
         }
 
@@ -122,21 +125,21 @@ final class UserController extends AbstractController
                 }
             }
 
-
             $entityManager->flush();
 
             $this->addFlash('success', $this->translator->trans('user.updated'));
+
             return $this->redirectToRoute('app_user_index', [], Response::HTTP_SEE_OTHER);
         }
 
-        return $this->render('user/edit.html.twig', ['user' => $user, 'form' => $form,]);
+        return $this->render('user/edit.html.twig', ['user' => $user, 'form' => $form]);
     }
 
     #[Route('/{id}', name: 'app_user_delete', methods: ['POST'])]
-    public function delete(Request       $request, User $user, EntityManagerInterface $entityManager,
-                           ImageUploader $imageUploader): Response
+    public function delete(Request $request, User $user, EntityManagerInterface $entityManager,
+        ImageUploader $imageUploader): Response
     {
-        if ($this->isCsrfTokenValid('delete' . $user->getId(), $request->getPayload()->getString('_token'))) {
+        if ($this->isCsrfTokenValid('delete'.$user->getId(), $request->getPayload()->getString('_token'))) {
             if ($user->getAvatar()) {
                 $imageUploader->removeAvatar($user->getAvatar());
             }

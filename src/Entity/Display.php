@@ -8,7 +8,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Représente un présentoir dans un hôtel (ex: Présentoir Lobby, Présentoir Étage 2)
+ * Représente un présentoir dans un hôtel (ex: Présentoir Lobby, Présentoir Étage 2).
  */
 #[ORM\Entity(repositoryClass: DisplayRepository::class)]
 #[ORM\Table(name: 'display')]

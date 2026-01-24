@@ -8,7 +8,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Représente un produit/magazine (Paris Match, Elle, Geo, etc.)
+ * Représente un produit/magazine (Paris Match, Elle, Geo, etc.).
  */
 #[ORM\Entity(repositoryClass: ProductRepository::class)]
 #[ORM\Table(name: 'product')]
@@ -55,9 +55,6 @@ class Product
     #[ORM\OneToMany(mappedBy: 'product', targetEntity: Distribution::class)]
     private Collection $distributions;
 
-    /**
-     * @var File|null
-     */
     #[Assert\Image(
         maxSize: '2M',
         mimeTypes: ['image/jpeg', 'image/png', 'image/webp'],

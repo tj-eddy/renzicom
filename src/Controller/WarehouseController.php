@@ -17,9 +17,8 @@ class WarehouseController extends AbstractController
 {
     public function __construct(
         private readonly EntityManagerInterface $entityManager,
-        private readonly TranslatorInterface $translator
-    )
-    {
+        private readonly TranslatorInterface $translator,
+    ) {
     }
 
     #[Route('/', name: 'app_warehouse_index', methods: ['GET'])]
@@ -75,7 +74,7 @@ class WarehouseController extends AbstractController
     #[Route('/{id}', name: 'app_warehouse_delete', methods: ['POST'])]
     public function delete(Request $request, Warehouse $warehouse): Response
     {
-        if ($this->isCsrfTokenValid('delete' . $warehouse->getId(), $request->request->get('_token'))) {
+        if ($this->isCsrfTokenValid('delete'.$warehouse->getId(), $request->request->get('_token'))) {
             $this->entityManager->remove($warehouse);
             $this->entityManager->flush();
 

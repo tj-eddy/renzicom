@@ -20,7 +20,7 @@ class RackType extends AbstractType
             ->add('display', EntityType::class, [
                 'class' => Display::class,
                 'choice_label' => function (Display $display) {
-                    return $display->getName() . ' (' . $display->getHotel()->getName() . ')';
+                    return $display->getName().' ('.$display->getHotel()->getName().')';
                 },
                 'label' => 'rack.form.display.label',
                 'required' => true,

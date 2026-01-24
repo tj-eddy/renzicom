@@ -14,13 +14,13 @@ class StockManager
 {
     public function __construct(
         private EntityManagerInterface $entityManager,
-        private StockRepository $stockRepository
+        private StockRepository $stockRepository,
     ) {
     }
 
     /**
      * Déduit le stock de l'entrepôt lors de la création d'une distribution
-     * (Le livreur charge sa voiture)
+     * (Le livreur charge sa voiture).
      */
     public function deductStockForDistribution(Distribution $distribution): bool
     {
@@ -57,23 +57,17 @@ class StockManager
         }
 
         if ($remainingQuantity > 0) {
-            throw new \Exception(
-                sprintf(
-                    'Stock insuffisant pour le produit "%s". Demandé: %d, Disponible: %d',
-                    $product->getName(),
-                    $quantity,
-                    $quantity - $remainingQuantity
-                )
-            );
+            throw new \Exception(sprintf('Stock insuffisant pour le produit "%s". Demandé: %d, Disponible: %d', $product->getName(), $quantity, $quantity - $remainingQuantity));
         }
 
         $this->entityManager->flush();
+
         return true;
     }
 
     /**
      * Restaure le stock de l'entrepôt lors de l'annulation d'une distribution
-     * OU lors du retour de marchandises non distribuées
+     * OU lors du retour de marchandises non distribuées.
      */
     public function restoreStockForDistribution(Distribution $distribution, ?Warehouse $warehouse = null): void
     {
@@ -94,7 +88,7 @@ class StockManager
 
         $stock = $this->stockRepository->findOneBy([
             'product' => $product,
-            'warehouse' => $warehouse
+            'warehouse' => $warehouse,
         ]);
 
         if ($stock) {
@@ -104,7 +98,7 @@ class StockManager
             $stock->setProduct($product);
             $stock->setWarehouse($warehouse);
             $stock->setQuantity($quantity);
-            $stock->setNote('Stock restauré depuis distribution #' . $distribution->getId());
+            $stock->setNote('Stock restauré depuis distribution #'.$distribution->getId());
             $this->entityManager->persist($stock);
         }
 
@@ -113,7 +107,7 @@ class StockManager
 
     /**
      * Retourne les marchandises non distribuées à l'entrepôt
-     * (Fin de tournée avec reste)
+     * (Fin de tournée avec reste).
      */
     public function returnRemainingStock(Distribution $distribution, ?Warehouse $warehouse = null): void
     {
@@ -134,7 +128,7 @@ class StockManager
 
         $stock = $this->stockRepository->findOneBy([
             'product' => $product,
-            'warehouse' => $warehouse
+            'warehouse' => $warehouse,
         ]);
 
         if ($stock) {
@@ -156,7 +150,7 @@ class StockManager
     }
 
     /**
-     * Met à jour le stock du rack lors d'une intervention
+     * Met à jour le stock du rack lors d'une intervention.
      */
     public function updateRackStockForIntervention(Intervention $intervention): void
     {
@@ -172,11 +166,7 @@ class StockManager
         $quantityRemaining = $distribution->getQuantity() - $distribution->getQuantityDistributed();
 
         if ($quantityAdded > $quantityRemaining + $quantityAdded) {
-            throw new \Exception(sprintf(
-                'Quantité insuffisante dans la distribution. Disponible: %d, Demandé: %d',
-                $quantityRemaining + $quantityAdded,
-                $quantityAdded
-            ));
+            throw new \Exception(sprintf('Quantité insuffisante dans la distribution. Disponible: %d, Demandé: %d', $quantityRemaining + $quantityAdded, $quantityAdded));
         }
 
         // Mettre à jour la quantité actuelle du rack
@@ -187,7 +177,7 @@ class StockManager
     }
 
     /**
-     * Annule la mise à jour du rack lors de la suppression d'une intervention
+     * Annule la mise à jour du rack lors de la suppression d'une intervention.
      */
     public function revertRackStockForIntervention(Intervention $intervention): void
     {
@@ -205,7 +195,7 @@ class StockManager
     }
 
     /**
-     * Vérifie si le stock est suffisant pour une distribution
+     * Vérifie si le stock est suffisant pour une distribution.
      */
     public function hasEnoughStock(Product $product, int $quantity): bool
     {
@@ -220,7 +210,7 @@ class StockManager
     }
 
     /**
-     * Obtient le stock total disponible pour un produit
+     * Obtient le stock total disponible pour un produit.
      */
     public function getTotalStockForProduct(Product $product): int
     {

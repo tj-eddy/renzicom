@@ -1,4 +1,5 @@
 <?php
+
 // src/Controller/DashboardController.php
 
 namespace App\Controller;
@@ -48,7 +49,7 @@ class DashboardController extends AbstractController
                     'destination' => 'Hôtel Marriott, Hôtel Hilton',
                     'createAt' => new \DateTime('2025-01-22 14:30:00'),
                     'statusLabel' => 'distribution.status.delivered',
-                    'statusBadgeClass' => 'bg-success'
+                    'statusBadgeClass' => 'bg-success',
                 ],
                 (object) [
                     'product' => (object) ['name' => 'Elle Magazine'],
@@ -57,7 +58,7 @@ class DashboardController extends AbstractController
                     'destination' => 'Hôtel Sofitel, Hôtel Novotel',
                     'createAt' => new \DateTime('2025-01-22 11:15:00'),
                     'statusLabel' => 'distribution.status.in_progress',
-                    'statusBadgeClass' => 'bg-primary'
+                    'statusBadgeClass' => 'bg-primary',
                 ],
                 (object) [
                     'product' => (object) ['name' => 'Geo Magazine'],
@@ -66,7 +67,7 @@ class DashboardController extends AbstractController
                     'destination' => 'Hôtel Ibis, Hôtel Mercure',
                     'createAt' => new \DateTime('2025-01-22 09:45:00'),
                     'statusLabel' => 'distribution.status.delivered',
-                    'statusBadgeClass' => 'bg-success'
+                    'statusBadgeClass' => 'bg-success',
                 ],
                 (object) [
                     'product' => (object) ['name' => 'Le Point'],
@@ -75,7 +76,7 @@ class DashboardController extends AbstractController
                     'destination' => 'Hôtel Pullman, Hôtel Accor',
                     'createAt' => new \DateTime('2025-01-21 16:20:00'),
                     'statusLabel' => 'distribution.status.preparing',
-                    'statusBadgeClass' => 'bg-warning'
+                    'statusBadgeClass' => 'bg-warning',
                 ],
                 (object) [
                     'product' => (object) ['name' => 'L\'Express'],
@@ -84,7 +85,7 @@ class DashboardController extends AbstractController
                     'destination' => 'Hôtel Renaissance Paris',
                     'createAt' => new \DateTime('2025-01-21 14:00:00'),
                     'statusLabel' => 'distribution.status.delivered',
-                    'statusBadgeClass' => 'bg-success'
+                    'statusBadgeClass' => 'bg-success',
                 ],
             ],
         ]);

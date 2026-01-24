@@ -1,4 +1,5 @@
 <?php
+
 // src/DataFixtures/UserFixtures.php
 
 namespace App\DataFixtures;
@@ -45,7 +46,7 @@ class UserFixtures extends Fixture
         $this->addReference(self::USER_MANAGER, $managerUser);
 
         // 10 utilisateurs normaux
-        for ($i = 1; $i <= 10; $i++) {
+        for ($i = 1; $i <= 10; ++$i) {
             $user = new User();
             $user->setName($faker->name());
             $user->setEmail($faker->email());
@@ -53,7 +54,7 @@ class UserFixtures extends Fixture
             $user->setRole($faker->randomElement(['ROLE_DRIVER', 'ROLE_STATISTICS']));
             $admin->setCreatedAt(new \DateTimeImmutable());
             $manager->persist($user);
-            $this->addReference('user_' . $i, $user);
+            $this->addReference('user_'.$i, $user);
         }
 
         $manager->flush();

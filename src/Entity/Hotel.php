@@ -8,7 +8,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Représente un hôtel client (Marriott, Hilton, etc.)
+ * Représente un hôtel client (Marriott, Hilton, etc.).
  */
 #[ORM\Entity(repositoryClass: HotelRepository::class)]
 #[ORM\Table(name: 'hotel')]

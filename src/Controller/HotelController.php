@@ -18,9 +18,8 @@ class HotelController extends AbstractController
 {
     public function __construct(
         private readonly EntityManagerInterface $entityManager,
-        private readonly TranslatorInterface    $translator
-    )
-    {
+        private readonly TranslatorInterface $translator,
+    ) {
     }
 
     #[Route('/', name: 'app_hotel_index', methods: ['GET'])]
@@ -65,7 +64,7 @@ class HotelController extends AbstractController
                 'email' => $hotel->getContactEmail(),
                 'phone' => $hotel->getContactPhone(),
             ],
-            'displays' => []
+            'displays' => [],
         ];
 
         foreach ($hotel->getDisplays() as $display) {
@@ -73,7 +72,7 @@ class HotelController extends AbstractController
                 'id' => $display->getId(),
                 'name' => $display->getName(),
                 'location' => $display->getLocation(),
-                'racks' => []
+                'racks' => [],
             ];
 
             foreach ($display->getRacks() as $rack) {
@@ -95,14 +94,14 @@ class HotelController extends AbstractController
                         'image' => $product->getImage(),
                         'language' => $product->getLanguage(),
                         'year_edition' => $product->getYearEdition(),
-                    ] : null
+                    ] : null,
                 ];
 
                 $displayData['racks'][] = $rackData;
             }
 
             // Trier les racks par position
-            usort($displayData['racks'], fn($a, $b) => $a['position'] <=> $b['position']);
+            usort($displayData['racks'], fn ($a, $b) => $a['position'] <=> $b['position']);
 
             $data['displays'][] = $displayData;
         }
@@ -112,13 +111,21 @@ class HotelController extends AbstractController
 
     private function getRackStatus(int $current, int $required): string
     {
-        if ($required === 0) return 'empty';
+        if (0 === $required) {
+            return 'empty';
+        }
 
         $percentage = ($current / $required) * 100;
 
-        if ($percentage >= 100) return 'full';
-        if ($percentage >= 50) return 'medium';
-        if ($percentage > 0) return 'low';
+        if ($percentage >= 100) {
+            return 'full';
+        }
+        if ($percentage >= 50) {
+            return 'medium';
+        }
+        if ($percentage > 0) {
+            return 'low';
+        }
 
         return 'empty';
     }
@@ -146,7 +153,7 @@ class HotelController extends AbstractController
     #[Route('/{id}', name: 'app_hotel_delete', methods: ['POST'])]
     public function delete(Request $request, Hotel $hotel): Response
     {
-        if ($this->isCsrfTokenValid('delete' . $hotel->getId(), $request->request->get('_token'))) {
+        if ($this->isCsrfTokenValid('delete'.$hotel->getId(), $request->request->get('_token'))) {
             $this->entityManager->remove($hotel);
             $this->entityManager->flush();
 

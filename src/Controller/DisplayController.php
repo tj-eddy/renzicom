@@ -17,9 +17,8 @@ class DisplayController extends AbstractController
 {
     public function __construct(
         private readonly EntityManagerInterface $entityManager,
-        private readonly TranslatorInterface    $translator
-    )
-    {
+        private readonly TranslatorInterface $translator,
+    ) {
     }
 
     #[Route('/', name: 'app_display_index', methods: ['GET'])]
@@ -75,7 +74,7 @@ class DisplayController extends AbstractController
     #[Route('/{id}', name: 'app_display_delete', methods: ['POST'])]
     public function delete(Request $request, Display $display): Response
     {
-        if ($this->isCsrfTokenValid('delete' . $display->getId(), $request->request->get('_token'))) {
+        if ($this->isCsrfTokenValid('delete'.$display->getId(), $request->request->get('_token'))) {
             $this->entityManager->remove($display);
             $this->entityManager->flush();
 

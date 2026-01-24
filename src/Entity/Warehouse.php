@@ -8,7 +8,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Représente un entrepôt de stockage
+ * Représente un entrepôt de stockage.
  */
 #[ORM\Entity(repositoryClass: WarehouseRepository::class)]
 #[ORM\Table(name: 'warehouse')]

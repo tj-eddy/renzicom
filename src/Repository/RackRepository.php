@@ -2,8 +2,8 @@
 
 namespace App\Repository;
 
-use App\Entity\Rack;
 use App\Entity\Intervention;
+use App\Entity\Rack;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -18,9 +18,8 @@ class RackRepository extends ServiceEntityRepository
     }
 
     /**
-     * Met à jour la quantité actuelle d'un rack lors d'une intervention
+     * Met à jour la quantité actuelle d'un rack lors d'une intervention.
      *
-     * @param Intervention $intervention
      * @return array ['success' => bool, 'message' => string]
      */
     public function updateCurrentQuantityFromIntervention(Intervention $intervention): array
@@ -34,7 +33,7 @@ class RackRepository extends ServiceEntityRepository
         if ($currentQuantity >= $requiredQuantity) {
             return [
                 'success' => false,
-                'message' => 'Le rack est déjà plein. Aucune quantité supplémentaire ne peut être ajoutée.'
+                'message' => 'Le rack est déjà plein. Aucune quantité supplémentaire ne peut être ajoutée.',
             ];
         }
 
@@ -49,7 +48,7 @@ class RackRepository extends ServiceEntityRepository
                     'La quantité ajoutée (%d) dépasse la capacité du rack. Capacité disponible: %d',
                     $quantityAdded,
                     $requiredQuantity - $currentQuantity
-                )
+                ),
             ];
         }
 
@@ -65,16 +64,12 @@ class RackRepository extends ServiceEntityRepository
                 'Quantité mise à jour avec succès. Nouvelle quantité: %d/%d',
                 $newQuantity,
                 $requiredQuantity
-            )
+            ),
         ];
     }
 
     /**
-     * Vérifie si un rack peut recevoir une quantité donnée
-     *
-     * @param Rack $rack
-     * @param int $quantity
-     * @return bool
+     * Vérifie si un rack peut recevoir une quantité donnée.
      */
     public function canAddQuantity(Rack $rack, int $quantity): bool
     {
@@ -85,10 +80,7 @@ class RackRepository extends ServiceEntityRepository
     }
 
     /**
-     * Retourne l'espace disponible dans un rack
-     *
-     * @param Rack $rack
-     * @return int
+     * Retourne l'espace disponible dans un rack.
      */
     public function getAvailableSpace(Rack $rack): int
     {

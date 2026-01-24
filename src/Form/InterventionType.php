@@ -48,15 +48,15 @@ class InterventionType extends AbstractType
                     $label = $rack->getName();
 
                     if ($rack->getDisplay()) {
-                        $label .= ' - ' . $rack->getDisplay()->getName();
+                        $label .= ' - '.$rack->getDisplay()->getName();
 
                         if ($rack->getDisplay()->getHotel()) {
-                            $label .= ' (' . $rack->getDisplay()->getHotel()->getName() . ')';
+                            $label .= ' ('.$rack->getDisplay()->getHotel()->getName().')';
                         }
                     }
 
                     if ($rack->getProduct()) {
-                        $label .= ' - ' . $rack->getProduct()->getName();
+                        $label .= ' - '.$rack->getProduct()->getName();
                     }
 
                     return $label;
@@ -67,10 +67,11 @@ class InterventionType extends AbstractType
                 'attr' => [
                     'class' => 'form-select',
                 ],
-                'group_by' => function(Rack $rack) {
+                'group_by' => function (Rack $rack) {
                     if ($rack->getDisplay() && $rack->getDisplay()->getHotel()) {
                         return $rack->getDisplay()->getHotel()->getName();
                     }
+
                     return 'Autres';
                 },
             ])
@@ -96,7 +97,7 @@ class InterventionType extends AbstractType
                         'image/jpeg',
                         'image/png',
                         'image/jpg',
-                    ], mimeTypesMessage: 'intervention.form.photo_before.invalid')
+                    ], mimeTypesMessage: 'intervention.form.photo_before.invalid'),
                 ],
             ])
             ->add('photoAfter', FileType::class, [
@@ -112,7 +113,7 @@ class InterventionType extends AbstractType
                         'image/jpeg',
                         'image/png',
                         'image/jpg',
-                    ], mimeTypesMessage: 'intervention.form.photo_after.invalid')
+                    ], mimeTypesMessage: 'intervention.form.photo_after.invalid'),
                 ],
             ])
             ->add('notes', TextareaType::class, [

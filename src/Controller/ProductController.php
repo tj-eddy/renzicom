@@ -7,7 +7,6 @@ use App\Form\ProductType;
 use App\Repository\ProductRepository;
 use App\Service\ImageUploader;
 use Doctrine\ORM\EntityManagerInterface;
-use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -19,10 +18,9 @@ class ProductController extends AbstractController
 {
     public function __construct(
         private readonly EntityManagerInterface $entityManager,
-        private readonly TranslatorInterface    $translator,
-        private readonly ImageUploader          $imageUploader
-    )
-    {
+        private readonly TranslatorInterface $translator,
+        private readonly ImageUploader $imageUploader,
+    ) {
     }
 
     #[Route('/', name: 'app_product_index', methods: ['GET'])]
@@ -47,7 +45,7 @@ class ProductController extends AbstractController
                 try {
                     $imageName = $this->imageUploader->uploadProductImage($imageFile);
                     $product->setImage($imageName);
-                } catch (Exception $e) {
+                } catch (\Exception $e) {
                     $this->addFlash('error', $this->translator->trans('messages.error.image_upload'));
                 }
             }
@@ -57,7 +55,7 @@ class ProductController extends AbstractController
             if ($variantData) {
                 try {
                     $variantArray = json_decode($variantData, true);
-                    if (json_last_error() === JSON_ERROR_NONE) {
+                    if (JSON_ERROR_NONE === json_last_error()) {
                         $product->setVariant($variantArray);
                     } else {
                         $product->setVariant([]);
@@ -108,7 +106,7 @@ class ProductController extends AbstractController
                 try {
                     $imageName = $this->imageUploader->uploadProductImage($imageFile);
                     $product->setImage($imageName);
-                } catch (Exception $e) {
+                } catch (\Exception $e) {
                     $this->addFlash('error', $this->translator->trans('messages.error.image_upload'));
                 }
             }
@@ -117,7 +115,7 @@ class ProductController extends AbstractController
             if ($variantData) {
                 try {
                     $variantArray = json_decode($variantData, true);
-                    if (json_last_error() === JSON_ERROR_NONE) {
+                    if (JSON_ERROR_NONE === json_last_error()) {
                         $product->setVariant($variantArray);
                     }
                 } catch (\Exception $e) {
@@ -142,7 +140,7 @@ class ProductController extends AbstractController
     #[Route('/{id}', name: 'app_product_delete', methods: ['POST'])]
     public function delete(Request $request, Product $product): Response
     {
-        if ($this->isCsrfTokenValid('delete' . $product->getId(), $request->request->get('_token'))) {
+        if ($this->isCsrfTokenValid('delete'.$product->getId(), $request->request->get('_token'))) {
             if ($product->getImage()) {
                 try {
                     $this->imageUploader->removeProductImage($product->getImage());

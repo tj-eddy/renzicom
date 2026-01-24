@@ -17,7 +17,7 @@ class RackController extends AbstractController
 {
     public function __construct(
         private EntityManagerInterface $entityManager,
-        private TranslatorInterface $translator
+        private TranslatorInterface $translator,
     ) {
     }
 
@@ -74,7 +74,7 @@ class RackController extends AbstractController
     #[Route('/{id}', name: 'app_rack_delete', methods: ['POST'])]
     public function delete(Request $request, Rack $rack): Response
     {
-        if ($this->isCsrfTokenValid('delete' . $rack->getId(), $request->request->get('_token'))) {
+        if ($this->isCsrfTokenValid('delete'.$rack->getId(), $request->request->get('_token'))) {
             $this->entityManager->remove($rack);
             $this->entityManager->flush();
 

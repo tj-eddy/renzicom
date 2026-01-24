@@ -8,7 +8,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Représente un espace/rack dans un présentoir (ex: Rack 1, Rack A)
+ * Représente un espace/rack dans un présentoir (ex: Rack 1, Rack A).
  */
 #[ORM\Entity(repositoryClass: RackRepository::class)]
 #[ORM\Table(name: 'rack')]
@@ -173,11 +173,11 @@ class Rack
     }
 
     /**
-     * Calcule le taux de remplissage du rack en pourcentage
+     * Calcule le taux de remplissage du rack en pourcentage.
      */
     public function getFillRate(): float
     {
-        if ($this->requiredQuantity === 0) {
+        if (0 === $this->requiredQuantity) {
             return 0.0;
         }
 
@@ -185,7 +185,7 @@ class Rack
     }
 
     /**
-     * Vérifie si le rack nécessite un réapprovisionnement
+     * Vérifie si le rack nécessite un réapprovisionnement.
      */
     public function needsRefill(int $threshold = 50): bool
     {

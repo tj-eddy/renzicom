@@ -63,18 +63,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return array_unique($roles);
     }
 
-
-    /**
-     * @param \DateTimeImmutable|null $createdAt
-     */
     public function setCreatedAt(?\DateTimeImmutable $createdAt): void
     {
         $this->createdAt = $createdAt;
     }
 
-    /**
-     * @return \DateTimeImmutable|null
-     */
     public function getCreatedAt(): ?\DateTimeImmutable
     {
         return $this->createdAt;
@@ -83,7 +76,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setRoles(array $roles): static
     {
         // Si on reçoit un tableau avec un seul élément, on le met dans role
-        if (count($roles) === 1) {
+        if (1 === count($roles)) {
             $this->role = $roles[0];
             $this->roles = [];
         } else {
@@ -101,6 +94,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setRole(?string $role): static
     {
         $this->role = $role;
+
         return $this;
     }
 
@@ -119,6 +113,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setIsActive(bool $isActive): static
     {
         $this->isActive = $isActive;
+
         return $this;
     }
 
@@ -139,8 +134,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-
-
     public function getAvatar(): ?string
     {
         return $this->avatar;
@@ -149,6 +142,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setAvatar(?string $avatar): static
     {
         $this->avatar = $avatar;
+
         return $this;
     }
 

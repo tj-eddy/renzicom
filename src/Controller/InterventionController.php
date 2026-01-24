@@ -76,9 +76,9 @@ class InterventionController extends AbstractController
 
             if (!$result['success']) {
                 $this->addFlash('error', $result['message']);
+
                 return $this->redirectToRoute('app_intervention_new');
             }
-
 
             $entityManager->persist($intervention);
             $entityManager->flush();
@@ -98,8 +98,8 @@ class InterventionController extends AbstractController
     public function show(Intervention $intervention): Response
     {
         // Vérifier si l'utilisateur a le droit de voir cette intervention
-        if (!$this->isGranted('ROLE_ADMIN') &&
-            $intervention->getDistribution()->getUser() !== $this->getUser()) {
+        if (!$this->isGranted('ROLE_ADMIN')
+            && $intervention->getDistribution()->getUser() !== $this->getUser()) {
             throw $this->createAccessDeniedException();
         }
 
@@ -114,11 +114,11 @@ class InterventionController extends AbstractController
         Intervention $intervention,
         EntityManagerInterface $entityManager,
         RackRepository $rackRepository,
-        ImageUploader $imageUploader
+        ImageUploader $imageUploader,
     ): Response {
         // Vérifier si l'utilisateur a le droit de modifier cette intervention
-        if (!$this->isGranted('ROLE_ADMIN') &&
-            $intervention->getDistribution()->getUser() !== $this->getUser()) {
+        if (!$this->isGranted('ROLE_ADMIN')
+            && $intervention->getDistribution()->getUser() !== $this->getUser()) {
             throw $this->createAccessDeniedException();
         }
 
@@ -162,6 +162,7 @@ class InterventionController extends AbstractController
 
             if (!$result['success']) {
                 $this->addFlash('error', $result['message']);
+
                 return $this->redirectToRoute('app_intervention_edit', ['id' => $intervention->getId()]);
             }
 
@@ -183,7 +184,7 @@ class InterventionController extends AbstractController
         Request $request,
         Intervention $intervention,
         EntityManagerInterface $entityManager,
-        ImageUploader $imageUploader
+        ImageUploader $imageUploader,
     ): Response {
         if ($this->isCsrfTokenValid('delete'.$intervention->getId(), $request->getPayload()->getString('_token'))) {
             // Supprimer les photos si elles existent

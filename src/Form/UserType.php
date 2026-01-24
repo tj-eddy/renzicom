@@ -21,11 +21,11 @@ class UserType extends AbstractType
         $builder
             ->add('name', TextType::class, [
                 'label' => 'form.name',
-                'attr' => ['class' => 'form-control']
+                'attr' => ['class' => 'form-control'],
             ])
             ->add('email', EmailType::class, [
                 'label' => 'form.email',
-                'attr' => ['class' => 'form-control']
+                'attr' => ['class' => 'form-control'],
             ])
             ->add('role', ChoiceType::class, [
                 'label' => 'form.role',
@@ -44,13 +44,13 @@ class UserType extends AbstractType
                 'mapped' => false,
                 'attr' => [
                     'class' => 'form-control',
-                    'autocomplete' => 'new-password'
-                ]
+                    'autocomplete' => 'new-password',
+                ],
             ])
             ->add('isActive', CheckboxType::class, [
                 'label' => 'form.is_active',
                 'required' => false,
-                'attr' => ['class' => 'form-check-input']
+                'attr' => ['class' => 'form-check-input'],
             ])
             ->add('avatarFile', FileType::class, [
                 'label' => 'user.avatar',
@@ -58,7 +58,7 @@ class UserType extends AbstractType
                 'required' => false,
                 'attr' => [
                     'class' => 'form-control',
-                    'accept' => 'image/*'
+                    'accept' => 'image/*',
                 ],
                 'constraints' => [
                     new File(maxSize: '2M', mimeTypes: [
@@ -66,10 +66,9 @@ class UserType extends AbstractType
                         'image/png',
                         'image/gif',
                         'image/webp',
-                    ], mimeTypesMessage: 'user.avatar.invalid_format')
+                    ], mimeTypesMessage: 'user.avatar.invalid_format'),
                 ],
             ]);
-        ;
     }
 
     public function configureOptions(OptionsResolver $resolver): void

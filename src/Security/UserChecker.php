@@ -1,4 +1,5 @@
 <?php
+
 // src/Security/UserChecker.php
 
 namespace App\Security;
@@ -12,7 +13,9 @@ class UserChecker implements UserCheckerInterface
 {
     public function checkPreAuth(UserInterface $user): void
     {
-        if (!$user instanceof User) {return;}
+        if (!$user instanceof User) {
+            return;
+        }
 
         if (!$user->isActive()) {
             throw new CustomUserMessageAccountStatusException('Votre compte a été désactivé. Veuillez contacter un administrateur.');

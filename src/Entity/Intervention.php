@@ -3,11 +3,10 @@
 namespace App\Entity;
 
 use App\Repository\InterventionRepository;
-use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Représente une intervention de remplissage d'un rack lors d'une distribution
+ * Représente une intervention de remplissage d'un rack lors d'une distribution.
  */
 #[ORM\Entity(repositoryClass: InterventionRepository::class)]
 #[ORM\Table(name: 'intervention')]
@@ -136,10 +135,10 @@ class Intervention
     }
 
     /**
-     * Vérifie si l'intervention possède des photos
+     * Vérifie si l'intervention possède des photos.
      */
     public function hasPhotos(): bool
     {
-        return $this->photoBefore !== null || $this->photoAfter !== null;
+        return null !== $this->photoBefore || null !== $this->photoAfter;
     }
 }

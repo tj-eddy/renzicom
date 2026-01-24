@@ -17,7 +17,7 @@ class StockController extends AbstractController
 {
     public function __construct(
         private EntityManagerInterface $entityManager,
-        private TranslatorInterface $translator
+        private TranslatorInterface $translator,
     ) {
     }
 
@@ -74,7 +74,7 @@ class StockController extends AbstractController
     #[Route('/{id}', name: 'app_stock_delete', methods: ['POST'])]
     public function delete(Request $request, Stock $stock): Response
     {
-        if ($this->isCsrfTokenValid('delete' . $stock->getId(), $request->request->get('_token'))) {
+        if ($this->isCsrfTokenValid('delete'.$stock->getId(), $request->request->get('_token'))) {
             $this->entityManager->remove($stock);
             $this->entityManager->flush();
 

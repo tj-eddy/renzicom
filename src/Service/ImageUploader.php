@@ -2,7 +2,6 @@
 
 namespace App\Service;
 
-use Exception;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\String\Slugger\SluggerInterface;
@@ -18,7 +17,7 @@ class ImageUploader
         string $avatarImagesDirectory,
         string $productImagesDirectory,
         string $interventionImagesDirectory,
-        SluggerInterface $slugger
+        SluggerInterface $slugger,
     ) {
         $this->avatarImagesDirectory = $avatarImagesDirectory;
         $this->productImagesDirectory = $productImagesDirectory;
@@ -27,7 +26,7 @@ class ImageUploader
     }
 
     /**
-     * @throws Exception
+     * @throws \Exception
      */
     public function uploadAvatar(UploadedFile $file): string
     {
@@ -35,7 +34,7 @@ class ImageUploader
     }
 
     /**
-     * @throws Exception
+     * @throws \Exception
      */
     public function uploadProductImage(UploadedFile $file): string
     {
@@ -43,7 +42,7 @@ class ImageUploader
     }
 
     /**
-     * @throws Exception
+     * @throws \Exception
      */
     public function uploadInterventionImage(UploadedFile $file): string
     {
@@ -59,7 +58,7 @@ class ImageUploader
         try {
             $file->move($targetDirectory, $fileName);
         } catch (FileException $e) {
-            throw new Exception('Erreur lors de l\'upload du fichier');
+            throw new \Exception('Erreur lors de l\'upload du fichier');
         }
 
         return $fileName;

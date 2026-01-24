@@ -3,11 +3,10 @@
 namespace App\Entity;
 
 use App\Repository\StockRepository;
-use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Représente le stock d'un produit dans un entrepôt
+ * Représente le stock d'un produit dans un entrepôt.
  */
 #[ORM\Entity(repositoryClass: StockRepository::class)]
 #[ORM\Table(name: 'stock')]
