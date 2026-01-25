@@ -4,23 +4,22 @@ namespace App\Controller;
 
 use App\Entity\Intervention;
 use App\Form\InterventionType;
-use App\Repository\InterventionRepository;
-use App\Repository\RackRepository;
 use App\Service\ImageUploader;
+use App\Repository\RackRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use App\Repository\InterventionRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Contracts\Translation\TranslatorInterface;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 #[Route('/intervention')]
 class InterventionController extends AbstractController
 {
     public function __construct(
         private readonly TranslatorInterface $translator,
-    ) {
-    }
+    ) {}
     #[Route('/', name: 'app_intervention_index', methods: ['GET'])]
     public function index(InterventionRepository $interventionRepository): Response
     {
@@ -48,7 +47,6 @@ class InterventionController extends AbstractController
         Request $request,
         EntityManagerInterface $entityManager,
         ImageUploader $imageUploader,
-        RackRepository $rackRepository,
     ): Response {
         $intervention = new Intervention();
         $form = $this->createForm(InterventionType::class, $intervention);
@@ -77,18 +75,41 @@ class InterventionController extends AbstractController
                 }
             }
 
-            $result = $rackRepository->updateCurrentQuantityFromIntervention($intervention);
+            $rack = $intervention->getRack();
+            $distribution = $intervention->getDistribution();
+            $quantityAdded = $intervention->getQuantityAdded();
 
-            if (!$result['success']) {
-                $this->addFlash('error', $this->translator->trans($result['message'], $result['params'] ?? []));
+            // 1. Mise à jour de la table Rack
+            $newRackQuantity = $rack->getCurrentQuantity() + $quantityAdded;
 
-                return $this->redirectToRoute('app_intervention_new');
+            // Validation: Vérifier si le rack dépasse sa capacité
+            if ($newRackQuantity > $rack->getRequiredQuantity()) {
+                $this->addFlash('error', $this->translator->trans('rack.messages.exceeds_capacity', [
+                    '%added%' => $quantityAdded,
+                    '%available%' => $rack->getRequiredQuantity() - $rack->getCurrentQuantity(),
+                ]));
+
+                return $this->render('intervention/new.html.twig', [
+                    'intervention' => $intervention,
+                    'form' => $form,
+                ]);
             }
+
+            $rack->setCurrentQuantity($newRackQuantity);
+
+            // Mise à jour du produit dans le rack
+            if ($distribution->getProduct()) {
+                $rack->setProduct($distribution->getProduct());
+            }
+
+            // 2. Déduction du stock de la distribution
+            // On déduit la quantité ajoutée au rack du stock total de la distribution
+            $distribution->setQuantity(max(0, $distribution->getQuantity() - $quantityAdded));
 
             $entityManager->persist($intervention);
             $entityManager->flush();
 
-            $this->addFlash('success', $this->translator->trans($result['message'], $result['params'] ?? []));
+            $this->addFlash('success', $this->translator->trans('intervention.messages.created'));
 
             return $this->redirectToRoute('app_intervention_index', [], Response::HTTP_SEE_OTHER);
         }
@@ -120,7 +141,6 @@ class InterventionController extends AbstractController
         Request $request,
         Intervention $intervention,
         EntityManagerInterface $entityManager,
-        RackRepository $rackRepository,
         ImageUploader $imageUploader,
     ): Response {
         // Vérifier si l'utilisateur a le droit de modifier cette intervention
@@ -131,6 +151,11 @@ class InterventionController extends AbstractController
             throw $this->createAccessDeniedException();
         }
 
+        // Sauvegarder l'ancienne quantité pour ajuster le rack et la distribution
+        $oldQuantity = $intervention->getQuantityAdded();
+        $oldRack = $intervention->getRack();
+        $oldDistribution = $intervention->getDistribution();
+
         $form = $this->createForm(InterventionType::class, $intervention);
         $form->handleRequest($request);
 
@@ -138,11 +163,9 @@ class InterventionController extends AbstractController
             // Gérer l'upload de la photo avant
             $photoBeforeFile = $form->get('photoBefore')->getData();
             if ($photoBeforeFile) {
-                // Supprimer l'ancienne photo si elle existe
                 if ($intervention->getPhotoBefore()) {
                     $imageUploader->removeInterventionImage($intervention->getPhotoBefore());
                 }
-
                 try {
                     $photoBeforeFilename = $imageUploader->uploadInterventionImage($photoBeforeFile);
                     $intervention->setPhotoBefore($photoBeforeFilename);
@@ -154,11 +177,9 @@ class InterventionController extends AbstractController
             // Gérer l'upload de la photo après
             $photoAfterFile = $form->get('photoAfter')->getData();
             if ($photoAfterFile) {
-                // Supprimer l'ancienne photo si elle existe
                 if ($intervention->getPhotoAfter()) {
                     $imageUploader->removeInterventionImage($intervention->getPhotoAfter());
                 }
-
                 try {
                     $photoAfterFilename = $imageUploader->uploadInterventionImage($photoAfterFile);
                     $intervention->setPhotoAfter($photoAfterFilename);
@@ -167,17 +188,58 @@ class InterventionController extends AbstractController
                 }
             }
 
-            $result = $rackRepository->updateCurrentQuantityFromIntervention($intervention);
+            $rack = $intervention->getRack();
+            $distribution = $intervention->getDistribution();
+            $newQuantity = $intervention->getQuantityAdded();
 
-            if (!$result['success']) {
-                $this->addFlash('error', $this->translator->trans($result['message'], $result['params'] ?? []));
+            // Ajustement si le rack ou la distribution a changé (très rare en édition mais possible)
+            if ($oldRack !== $rack) {
+                // Restaurer l'ancien rack
+                $oldRack->setCurrentQuantity(max(0, $oldRack->getCurrentQuantity() - $oldQuantity));
+                // Mettre à jour le nouveau rack
+                $rack->setCurrentQuantity($rack->getCurrentQuantity() + $newQuantity);
+            } else {
+                // Ajuster la quantité sur le même rack
+                $diff = $newQuantity - $oldQuantity;
+                $rack->setCurrentQuantity($rack->getCurrentQuantity() + $diff);
+            }
 
-                return $this->redirectToRoute('app_intervention_edit', ['id' => $intervention->getId()]);
+            // Validation: Vérifier si le rack dépasse sa capacité
+            if ($rack->getCurrentQuantity() > $rack->getRequiredQuantity()) {
+                $this->addFlash('error', $this->translator->trans('rack.messages.exceeds_capacity', [
+                    '%added%' => $newQuantity,
+                    '%available%' => $rack->getRequiredQuantity() - ($rack->getCurrentQuantity() - $newQuantity),
+                ]));
+
+                // On ne flush pas pour annuler les changements en mémoire si possible, 
+                // mais ici on redirige ou on réaffiche le formulaire.
+                // Note: En Symfony/Doctrine, les changements sont en mémoire jusqu'au flush.
+                return $this->render('intervention/edit.html.twig', [
+                    'intervention' => $intervention,
+                    'form' => $form,
+                ]);
+            }
+
+            // Ajustement de la distribution
+            if ($oldDistribution !== $distribution) {
+                // Restaurer l'ancienne distribution
+                $oldDistribution->setQuantity($oldDistribution->getQuantity() + $oldQuantity);
+                // Déduire de la nouvelle distribution
+                $distribution->setQuantity(max(0, $distribution->getQuantity() - $newQuantity));
+            } else {
+                // Ajuster la quantité sur la même distribution
+                $diff = $newQuantity - $oldQuantity;
+                $distribution->setQuantity(max(0, $distribution->getQuantity() - $diff));
+            }
+
+            // Mise à jour du produit dans le rack (au cas où la distribution a changé de produit)
+            if ($distribution->getProduct()) {
+                $rack->setProduct($distribution->getProduct());
             }
 
             $entityManager->flush();
 
-            $this->addFlash('success', $this->translator->trans($result['message'], $result['params'] ?? []));
+            $this->addFlash('success', $this->translator->trans('intervention.messages.updated'));
 
             return $this->redirectToRoute('app_intervention_index', [], Response::HTTP_SEE_OTHER);
         }
@@ -196,6 +258,16 @@ class InterventionController extends AbstractController
         ImageUploader $imageUploader,
     ): Response {
         if ($this->isCsrfTokenValid('delete' . $intervention->getId(), $request->getPayload()->getString('_token'))) {
+            $rack = $intervention->getRack();
+            $distribution = $intervention->getDistribution();
+            $quantityAdded = $intervention->getQuantityAdded();
+
+            // 1. Restaurer la quantité du rack
+            $rack->setCurrentQuantity(max(0, $rack->getCurrentQuantity() - $quantityAdded));
+
+            // 2. Restaurer le stock de la distribution
+            $distribution->setQuantity($distribution->getQuantity() + $quantityAdded);
+
             // Supprimer les photos si elles existent
             if ($intervention->getPhotoBefore()) {
                 $imageUploader->removeInterventionImage($intervention->getPhotoBefore());
@@ -207,7 +279,7 @@ class InterventionController extends AbstractController
             $entityManager->remove($intervention);
             $entityManager->flush();
 
-            $this->addFlash('success', $this->translator->trans('intervention.deleted'));
+            $this->addFlash('success', $this->translator->trans('intervention.messages.deleted'));
         } else {
             $this->addFlash('error', $this->translator->trans('exception.invalid_token'));
         }
