@@ -48,7 +48,6 @@ class AppFixtures extends Fixture
             $warehouse = new Warehouse();
             $warehouse->setName($data['name']);
             $warehouse->setAddress($data['address']);
-            $warehouse->setCreatedAt(new \DateTimeImmutable());
 
             $manager->persist($warehouse);
             $warehouses[] = $warehouse;
@@ -235,7 +234,6 @@ class AppFixtures extends Fixture
             $product->setYearEdition($data['year_edition']);
             $product->setLanguage($data['language']);
             $product->setVariant($data['variant']);
-            $product->setCreatedAt(new \DateTimeImmutable());
 
             $manager->persist($product);
             $products[] = $product;
@@ -279,8 +277,6 @@ class AppFixtures extends Fixture
                     ];
                     $stock->setNote($notes[array_rand($notes)]);
                 }
-
-                $stock->setCreatedAt(new \DateTimeImmutable('-' . rand(1, 30) . ' days'));
 
                 $manager->persist($stock);
                 $stocks[] = $stock;
@@ -399,7 +395,6 @@ class AppFixtures extends Fixture
             $hotel->setContactName($data['contact_name']);
             $hotel->setContactEmail($data['contact_email']);
             $hotel->setContactPhone($data['contact_phone']);
-            $hotel->setCreatedAt(new \DateTimeImmutable());
 
             $manager->persist($hotel);
             $hotels[] = $hotel;
@@ -437,7 +432,6 @@ class AppFixtures extends Fixture
                 $display->setName('Présentoir ' . chr(65 + $i)); // A, B, C, D
                 $display->setLocation($displayLocations[array_rand($displayLocations)]);
                 $display->setHotel($hotel);
-                $display->setCreatedAt(new \DateTimeImmutable());
 
                 $manager->persist($display);
                 $displays[] = $display;
@@ -486,7 +480,6 @@ class AppFixtures extends Fixture
                     $rack->setCurrentQuantity(0);
                 }
 
-                $rack->setCreatedAt(new \DateTimeImmutable());
 
                 $manager->persist($rack);
                 $racks[] = $rack;
@@ -538,14 +531,22 @@ class AppFixtures extends Fixture
     {
         // Produits populaires (magazines hebdomadaires français)
         $popularProducts = [
-            'Paris Match', 'L\'Express', 'Le Point', 'Elle',
-            'Femme Actuelle', 'L\'Équipe Magazine'
+            'Paris Match',
+            'L\'Express',
+            'Le Point',
+            'Elle',
+            'Femme Actuelle',
+            'L\'Équipe Magazine'
         ];
 
         // Produits moyens (mensuels et spécialisés)
         $mediumProducts = [
-            'Geo', 'National Geographic', 'Marie Claire', 'Capital',
-            'Challenges', 'Science et Vie'
+            'Geo',
+            'National Geographic',
+            'Marie Claire',
+            'Capital',
+            'Challenges',
+            'Science et Vie'
         ];
 
         if (in_array($productName, $popularProducts)) {
@@ -567,14 +568,22 @@ class AppFixtures extends Fixture
     {
         // Produits populaires nécessitent plus d'exemplaires dans les racks
         $popularProducts = [
-            'Paris Match', 'L\'Express', 'Le Point', 'Elle',
-            'Femme Actuelle', 'L\'Équipe Magazine'
+            'Paris Match',
+            'L\'Express',
+            'Le Point',
+            'Elle',
+            'Femme Actuelle',
+            'L\'Équipe Magazine'
         ];
 
         // Produits moyens
         $mediumProducts = [
-            'Geo', 'National Geographic', 'Marie Claire', 'Capital',
-            'Challenges', 'Science et Vie'
+            'Geo',
+            'National Geographic',
+            'Marie Claire',
+            'Capital',
+            'Challenges',
+            'Science et Vie'
         ];
 
         if (in_array($productName, $popularProducts)) {
