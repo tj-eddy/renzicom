@@ -1,164 +1,168 @@
 {{ form_start(form, {'attr': {'class': 'form form-horizontal'}}) }}
 <div class="form-body">
-    <div class="row">
-        {# Distribution #}
-        <div class="col-md-4">
-            <label for="{{ form.distribution.vars.id }}">{{ form_label(form.distribution) }}</label>
-        </div>
-        <div class="col-md-8">
-            <div class="form-group">
-                <div class="position-relative">
-                    {{ form_widget(form.distribution, {
+	<div
+		class="row">
+		{# Distribution #}
+		<div class="col-md-4">
+			<label for="{{ form.distribution.vars.id }}">{{ form_label(form.distribution) }}</label>
+		</div>
+		<div class="col-md-8">
+			<div class="form-group">
+				<div class="position-relative">
+					{{ form_widget(form.distribution, {
                         'attr': {
                             'class': 'form-select select2-distribution',
                             'data-placeholder': 'intervention.form.distribution.placeholder'|trans
                         }
                     }) }}
-                </div>
-                {{ form_errors(form.distribution) }}
-            </div>
-        </div>
+				</div>
+				{{ form_errors(form.distribution) }}
+			</div>
+		</div>
 
-        {# Rack #}
-        <div class="col-md-4">
-            <label for="{{ form.rack.vars.id }}">{{ form_label(form.rack) }}</label>
-        </div>
-        <div class="col-md-8">
-            <div class="form-group">
-                <div class="position-relative">
-                    {{ form_widget(form.rack, {
+		{# Rack #}
+		<div class="col-md-4">
+			<label for="{{ form.rack.vars.id }}">{{ form_label(form.rack) }}</label>
+		</div>
+		<div class="col-md-8">
+			<div class="form-group">
+				<div class="position-relative">
+					{{ form_widget(form.rack, {
                         'attr': {
                             'class': 'form-select select2-rack',
                             'data-placeholder': 'intervention.form.rack.placeholder'|trans
                         }
                     }) }}
-                </div>
-                {{ form_errors(form.rack) }}
-            </div>
-        </div>
+				</div>
+				{{ form_errors(form.rack) }}
+			</div>
+		</div>
 
-        {# Quantité ajoutée #}
-        <div class="col-md-4">
-            <label for="{{ form.quantityAdded.vars.id }}">{{ form_label(form.quantityAdded) }}</label>
-        </div>
-        <div class="col-md-8">
-            <div class="form-group has-icon-left">
-                <div class="position-relative">
-                    {{ form_widget(form.quantityAdded, {'attr': {'class': 'form-control', 'placeholder': 'intervention.form.quantity_added.placeholder'|trans}}) }}
-                    <div class="form-control-icon">
-                        <i class="bi bi-box-seam"></i>
-                    </div>
-                </div>
-                <small class="text-muted">
-                    <i class="bi bi-info-circle"></i> Nombre de magazines ajoutés dans le rack
-                </small>
-                {{ form_errors(form.quantityAdded) }}
-            </div>
-        </div>
+		{# Quantité ajoutée #}
+		<div class="col-md-4">
+			<label for="{{ form.quantityAdded.vars.id }}">{{ form_label(form.quantityAdded) }}</label>
+		</div>
+		<div class="col-md-8">
+			<div class="form-group has-icon-left">
+				<div class="position-relative">
+					{{ form_widget(form.quantityAdded, {'attr': {'class': 'form-control', 'placeholder': 'intervention.form.quantity_added.placeholder'|trans}}) }}
+					<div class="form-control-icon">
+						<i class="bi bi-box-seam"></i>
+					</div>
+				</div>
+				<small class="text-muted">
+					<i class="bi bi-info-circle"></i>
+					Nombre de magazines ajoutés dans le rack
+				</small>
+				{{ form_errors(form.quantityAdded) }}
+			</div>
+		</div>
 
-        {# Séparateur visuel #}
-        <div class="col-12">
-            <hr class="my-4">
-            <h5 class="text-muted mb-3">
-                <i class="bi bi-camera"></i> Photos de l'intervention
-            </h5>
-        </div>
+		{# Séparateur visuel #}
+		<div class="col-12">
+			<hr class="my-4">
+			<h5 class="text-muted mb-3">
+				<i class="bi bi-camera"></i>
+				Photos de l'intervention
+			</h5>
+		</div>
 
-        {# Photo avant #}
-        <div class="col-md-4">
-            <label for="{{ form.photoBefore.vars.id }}">{{ form_label(form.photoBefore) }}</label>
-        </div>
-        <div class="col-md-8">
-            <div class="form-group">
-                {# Prévisualisation de la photo existante #}
-                {% if intervention is defined and intervention.photoBefore %}
-                    <div class="mb-3">
-                        <img src="{{ asset('uploads/interventions/' ~ intervention.photoBefore) }}"
-                             alt="Photo avant"
-                             class="img-thumbnail"
-                             style="max-width: 200px;">
-                        <p class="text-muted small mt-1">
-                            <i class="bi bi-info-circle"></i> Photo actuelle - Uploadez une nouvelle photo pour la remplacer
-                        </p>
-                    </div>
-                {% endif %}
+		{# Photo avant #}
+		<div class="col-md-4">
+			<label for="{{ form.photoBefore.vars.id }}">{{ form_label(form.photoBefore) }}</label>
+		</div>
+		<div class="col-md-8">
+			<div
+				class="form-group">
+				{# Prévisualisation de la photo existante #}
+				{% if intervention is defined and intervention.photoBefore %}
+					<div class="mb-3">
+						<img src="{{ asset('uploads/interventions/' ~ intervention.photoBefore) }}" alt="Photo avant" class="img-thumbnail" style="max-width: 200px;">
+						<p class="text-muted small mt-1">
+							<i class="bi bi-info-circle"></i>
+							Photo actuelle - Uploadez une nouvelle photo pour la remplacer
+						</p>
+					</div>
+				{% endif %}
 
-                <div class="position-relative">
-                    {{ form_widget(form.photoBefore, {'attr': {'class': 'form-control', 'accept': 'image/*'}}) }}
-                </div>
-                <small class="text-muted">
-                    <i class="bi bi-info-circle"></i> Photo du rack avant l'intervention
-                </small>
-                {{ form_errors(form.photoBefore) }}
-            </div>
-        </div>
+				<div class="position-relative">
+					{{ form_widget(form.photoBefore, {'attr': {'class': 'form-control', 'accept': 'image/*'}}) }}
+				</div>
+				<small class="text-muted">
+					<i class="bi bi-info-circle"></i>
+					Photo du rack avant l'intervention
+				</small>
+				{{ form_errors(form.photoBefore) }}
+			</div>
+		</div>
 
-        {# Photo après #}
-        <div class="col-md-4">
-            <label for="{{ form.photoAfter.vars.id }}">{{ form_label(form.photoAfter) }}</label>
-        </div>
-        <div class="col-md-8">
-            <div class="form-group">
-                {# Prévisualisation de la photo existante #}
-                {% if intervention is defined and intervention.photoAfter %}
-                    <div class="mb-3">
-                        <img src="{{ asset('uploads/interventions/' ~ intervention.photoAfter) }}"
-                             alt="Photo après"
-                             class="img-thumbnail"
-                             style="max-width: 200px;">
-                        <p class="text-muted small mt-1">
-                            <i class="bi bi-info-circle"></i> Photo actuelle - Uploadez une nouvelle photo pour la remplacer
-                        </p>
-                    </div>
-                {% endif %}
+		{# Photo après #}
+		<div class="col-md-4">
+			<label for="{{ form.photoAfter.vars.id }}">{{ form_label(form.photoAfter) }}</label>
+		</div>
+		<div class="col-md-8">
+			<div
+				class="form-group">
+				{# Prévisualisation de la photo existante #}
+				{% if intervention is defined and intervention.photoAfter %}
+					<div class="mb-3">
+						<img src="{{ asset('uploads/interventions/' ~ intervention.photoAfter) }}" alt="Photo après" class="img-thumbnail" style="max-width: 200px;">
+						<p class="text-muted small mt-1">
+							<i class="bi bi-info-circle"></i>
+							Photo actuelle - Uploadez une nouvelle photo pour la remplacer
+						</p>
+					</div>
+				{% endif %}
 
-                <div class="position-relative">
-                    {{ form_widget(form.photoAfter, {'attr': {'class': 'form-control', 'accept': 'image/*'}}) }}
-                </div>
-                <small class="text-muted">
-                    <i class="bi bi-info-circle"></i> Photo du rack après l'intervention
-                </small>
-                {{ form_errors(form.photoAfter) }}
-            </div>
-        </div>
+				<div class="position-relative">
+					{{ form_widget(form.photoAfter, {'attr': {'class': 'form-control', 'accept': 'image/*'}}) }}
+				</div>
+				<small class="text-muted">
+					<i class="bi bi-info-circle"></i>
+					Photo du rack après l'intervention
+				</small>
+				{{ form_errors(form.photoAfter) }}
+			</div>
+		</div>
 
-        {# Notes #}
-        <div class="col-md-4">
-            <label for="{{ form.notes.vars.id }}">{{ form_label(form.notes) }}</label>
-        </div>
-        <div class="col-md-8">
-            <div class="form-group has-icon-left">
-                <div class="position-relative">
-                    {{ form_widget(form.notes, {'attr': {'class': 'form-control', 'rows': '4', 'placeholder': 'intervention.form.notes.placeholder'|trans}}) }}
-                    <div class="form-control-icon">
-                        <i class="bi bi-journal-text"></i>
-                    </div>
-                </div>
-                <small class="text-muted">
-                    <i class="bi bi-info-circle"></i> Observations, remarques ou incidents constatés
-                </small>
-                {{ form_errors(form.notes) }}
-            </div>
-        </div>
+		{# Notes #}
+		<div class="col-md-4">
+			<label for="{{ form.notes.vars.id }}">{{ form_label(form.notes) }}</label>
+		</div>
+		<div class="col-md-8">
+			<div class="form-group has-icon-left">
+				<div class="position-relative">
+					{{ form_widget(form.notes, {'attr': {'class': 'form-control', 'rows': '4', 'placeholder': 'intervention.form.notes.placeholder'|trans}}) }}
+					<div class="form-control-icon">
+						<i class="bi bi-journal-text"></i>
+					</div>
+				</div>
+				<small class="text-muted">
+					<i class="bi bi-info-circle"></i>
+					Observations, remarques ou incidents constatés
+				</small>
+				{{ form_errors(form.notes) }}
+			</div>
+		</div>
 
-        {# Boutons #}
-        <div class="col-12 d-flex justify-content-end mt-3">
-            <a href="{{ path('app_intervention_index') }}" class="btn btn-light-secondary me-1 mb-1">
-                <i class="bi bi-x-circle"></i> {{ 'form.button.cancel'|trans }}
-            </a>
-            <button type="submit" class="btn btn-dark me-1 mb-1">
-                <i class="bi bi-check-circle"></i>
-                {{ button_label|default('create')|lower == 'update' ? 'form.button.update'|trans : 'form.button.create'|trans }}
-            </button>
-        </div>
-    </div>
+		{# Boutons #}
+		<div class="col-12 d-flex justify-content-end mt-3">
+			<a href="{{ path('app_intervention_index') }}" class="btn btn-light-secondary me-1 mb-1">
+				<i class="bi bi-x-circle"></i>
+				{{ 'form.button.cancel'|trans }}
+			</a>
+			<button type="submit" class="btn btn-dark me-1 mb-1">
+				<i class="bi bi-check-circle"></i>
+				{{ button_label|default('create')|lower == 'update' ? 'form.button.update'|trans : 'form.button.create'|trans }}
+			</button>
+		</div>
+	</div>
 </div>
 {{ form_end(form) }}
-
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
-    $(document).ready(function() {
-        // Initialiser Select2 sur tous les selects
-        initSelect2('.select2-distribution');
-        initSelect2('.select2-rack');
-    });
+	$(document).ready(function () { // Initialiser Select2 sur tous les selects
+initSelect2('.select2-distribution');
+initSelect2('.select2-rack');
+});
 </script>
