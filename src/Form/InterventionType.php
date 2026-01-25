@@ -20,8 +20,7 @@ class InterventionType extends AbstractType
 {
     public function __construct(
         private TranslatorInterface $translator
-    ) {
-    }
+    ) {}
 
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
@@ -100,7 +99,7 @@ class InterventionType extends AbstractType
                     'accept' => 'image/*',
                 ],
                 'constraints' => [
-                    new File(maxSize: '5M', mimeTypes: [
+                    new File(maxSize: '10M', mimeTypes: [
                         'image/jpeg',
                         'image/png',
                         'image/jpg',
@@ -116,7 +115,7 @@ class InterventionType extends AbstractType
                     'accept' => 'image/*',
                 ],
                 'constraints' => [
-                    new File(maxSize: '5M', mimeTypes: [
+                    new File(maxSize: '10M', mimeTypes: [
                         'image/jpeg',
                         'image/png',
                         'image/jpg',

@@ -16,44 +16,19 @@ class AppFixtures extends Fixture
     public function load(ObjectManager $manager): void
     {
         // ========================================
-        // CRÉATION DES ENTREPÔTS
+        // CRÉATION DE L'ENTREPÔT
         // ========================================
 
         $warehouses = [];
 
-        $warehouseData = [
-            [
-                'name' => 'Entrepôt Paris Nord',
-                'address' => '123 Avenue de la République, 93200 Saint-Denis',
-            ],
-            [
-                'name' => 'Entrepôt Lyon Centre',
-                'address' => '45 Rue de la Part-Dieu, 69003 Lyon',
-            ],
-            [
-                'name' => 'Entrepôt Marseille Sud',
-                'address' => '78 Boulevard National, 13003 Marseille',
-            ],
-            [
-                'name' => 'Entrepôt Bordeaux',
-                'address' => '12 Quai des Chartrons, 33000 Bordeaux',
-            ],
-            [
-                'name' => 'Entrepôt Toulouse',
-                'address' => '56 Avenue de Muret, 31300 Toulouse',
-            ],
-        ];
+        $warehouse = new Warehouse();
+        $warehouse->setName('Entrepôt Central');
+        $warehouse->setAddress('123 Avenue de la République, 75001 Paris');
 
-        foreach ($warehouseData as $data) {
-            $warehouse = new Warehouse();
-            $warehouse->setName($data['name']);
-            $warehouse->setAddress($data['address']);
+        $manager->persist($warehouse);
+        $warehouses[] = $warehouse;
 
-            $manager->persist($warehouse);
-            $warehouses[] = $warehouse;
-        }
-
-        echo "✅ " . count($warehouses) . " entrepôts créés\n";
+        echo "✅ 1 entrepôt créé\n";
 
         // ========================================
         // CRÉATION DES PRODUITS (MAGAZINES)
@@ -62,7 +37,6 @@ class AppFixtures extends Fixture
         $products = [];
 
         $productData = [
-            // Magazines d'actualité
             [
                 'name' => 'Paris Match',
                 'image' => 'paris-match.jpg',
@@ -71,51 +45,12 @@ class AppFixtures extends Fixture
                 'variant' => ['type' => 'hebdomadaire', 'format' => 'A4'],
             ],
             [
-                'name' => 'L\'Express',
-                'image' => 'express.jpg',
-                'year_edition' => 2024,
-                'language' => 'FR',
-                'variant' => ['type' => 'hebdomadaire', 'format' => 'A4'],
-            ],
-            [
-                'name' => 'Le Point',
-                'image' => 'le-point.jpg',
-                'year_edition' => 2024,
-                'language' => 'FR',
-                'variant' => ['type' => 'hebdomadaire', 'format' => 'A4'],
-            ],
-            [
-                'name' => 'L\'Obs',
-                'image' => 'obs.jpg',
-                'year_edition' => 2024,
-                'language' => 'FR',
-                'variant' => ['type' => 'hebdomadaire', 'format' => 'A4'],
-            ],
-
-            // Magazines féminins
-            [
                 'name' => 'Elle',
                 'image' => 'elle.jpg',
                 'year_edition' => 2024,
                 'language' => 'FR',
                 'variant' => ['type' => 'hebdomadaire', 'format' => 'A4', 'catégorie' => 'féminin'],
             ],
-            [
-                'name' => 'Marie Claire',
-                'image' => 'marie-claire.jpg',
-                'year_edition' => 2024,
-                'language' => 'FR',
-                'variant' => ['type' => 'mensuel', 'format' => 'A4', 'catégorie' => 'féminin'],
-            ],
-            [
-                'name' => 'Femme Actuelle',
-                'image' => 'femme-actuelle.jpg',
-                'year_edition' => 2024,
-                'language' => 'FR',
-                'variant' => ['type' => 'hebdomadaire', 'format' => 'A4', 'catégorie' => 'féminin'],
-            ],
-
-            // Magazines lifestyle
             [
                 'name' => 'Geo',
                 'image' => 'geo.jpg',
@@ -124,38 +59,6 @@ class AppFixtures extends Fixture
                 'variant' => ['type' => 'mensuel', 'format' => 'A4', 'catégorie' => 'voyage'],
             ],
             [
-                'name' => 'National Geographic',
-                'image' => 'natgeo.jpg',
-                'year_edition' => 2024,
-                'language' => 'FR',
-                'variant' => ['type' => 'mensuel', 'format' => 'A4', 'catégorie' => 'découverte'],
-            ],
-            [
-                'name' => 'Cuisine et Vins de France',
-                'image' => 'cuisine-vins.jpg',
-                'year_edition' => 2024,
-                'language' => 'FR',
-                'variant' => ['type' => 'mensuel', 'format' => 'A4', 'catégorie' => 'gastronomie'],
-            ],
-
-            // Magazines économiques
-            [
-                'name' => 'Challenges',
-                'image' => 'challenges.jpg',
-                'year_edition' => 2024,
-                'language' => 'FR',
-                'variant' => ['type' => 'hebdomadaire', 'format' => 'A4', 'catégorie' => 'économie'],
-            ],
-            [
-                'name' => 'Capital',
-                'image' => 'capital.jpg',
-                'year_edition' => 2024,
-                'language' => 'FR',
-                'variant' => ['type' => 'mensuel', 'format' => 'A4', 'catégorie' => 'économie'],
-            ],
-
-            // Magazines sportifs
-            [
                 'name' => 'L\'Équipe Magazine',
                 'image' => 'equipe-mag.jpg',
                 'year_edition' => 2024,
@@ -163,58 +66,10 @@ class AppFixtures extends Fixture
                 'variant' => ['type' => 'hebdomadaire', 'format' => 'A4', 'catégorie' => 'sport'],
             ],
             [
-                'name' => 'France Football',
-                'image' => 'france-football.jpg',
-                'year_edition' => 2024,
-                'language' => 'FR',
-                'variant' => ['type' => 'hebdomadaire', 'format' => 'A4', 'catégorie' => 'sport'],
-            ],
-
-            // Magazines tech
-            [
-                'name' => 'Science et Vie',
-                'image' => 'science-vie.jpg',
-                'year_edition' => 2024,
-                'language' => 'FR',
-                'variant' => ['type' => 'mensuel', 'format' => 'A4', 'catégorie' => 'science'],
-            ],
-
-            // Magazines internationaux
-            [
                 'name' => 'Time Magazine',
                 'image' => 'time.jpg',
                 'year_edition' => 2024,
                 'language' => 'EN',
-                'variant' => ['type' => 'hebdomadaire', 'format' => 'A4', 'catégorie' => 'actualité'],
-            ],
-            [
-                'name' => 'The Economist',
-                'image' => 'economist.jpg',
-                'year_edition' => 2024,
-                'language' => 'EN',
-                'variant' => ['type' => 'hebdomadaire', 'format' => 'A4', 'catégorie' => 'économie'],
-            ],
-            [
-                'name' => 'Vogue',
-                'image' => 'vogue.jpg',
-                'year_edition' => 2024,
-                'language' => 'EN',
-                'variant' => ['type' => 'mensuel', 'format' => 'A4', 'catégorie' => 'mode'],
-            ],
-
-            // Magazines allemands
-            [
-                'name' => 'Der Spiegel',
-                'image' => 'spiegel.jpg',
-                'year_edition' => 2024,
-                'language' => 'DE',
-                'variant' => ['type' => 'hebdomadaire', 'format' => 'A4', 'catégorie' => 'actualité'],
-            ],
-            [
-                'name' => 'Stern',
-                'image' => 'stern.jpg',
-                'year_edition' => 2024,
-                'language' => 'DE',
                 'variant' => ['type' => 'hebdomadaire', 'format' => 'A4', 'catégorie' => 'actualité'],
             ],
         ];
@@ -248,39 +103,21 @@ class AppFixtures extends Fixture
         $stocks = [];
         $totalStockQuantity = 0;
 
-        // Créer des stocks pour chaque combinaison entrepôt/produit
-        foreach ($warehouses as $warehouse) {
-            // Chaque entrepôt a environ 60-80% des produits en stock
-            $productsToStock = $this->getRandomElements($products, rand(12, 16));
+        // Créer un stock pour chaque produit dans l'entrepôt unique
+        foreach ($products as $product) {
+            $stock = new Stock();
+            $stock->setWarehouse($warehouse);
+            $stock->setProduct($product);
 
-            foreach ($productsToStock as $product) {
-                $stock = new Stock();
-                $stock->setWarehouse($warehouse);
-                $stock->setProduct($product);
+            // Quantités variées selon le type de produit
+            $quantity = $this->getStockQuantity($product->getName());
+            $stock->setQuantity($quantity);
+            $totalStockQuantity += $quantity;
 
-                // Quantités variées selon le type de produit
-                $quantity = $this->getStockQuantity($product->getName());
-                $stock->setQuantity($quantity);
-                $totalStockQuantity += $quantity;
+            $stock->setNote('Stock initial');
 
-                // Notes aléatoires pour certains stocks
-                if (rand(0, 100) < 30) { // 30% de chance d'avoir une note
-                    $notes = [
-                        'Stock minimum atteint',
-                        'Réapprovisionnement prévu',
-                        'Produit en promotion',
-                        'Nouvelle édition disponible',
-                        'Stock optimal',
-                        'Attention: date limite proche',
-                        'Bestseller',
-                        'Stock de sécurité',
-                    ];
-                    $stock->setNote($notes[array_rand($notes)]);
-                }
-
-                $manager->persist($stock);
-                $stocks[] = $stock;
-            }
+            $manager->persist($stock);
+            $stocks[] = $stock;
         }
 
         echo "✅ " . count($stocks) . " stocks créés\n";
@@ -293,7 +130,6 @@ class AppFixtures extends Fixture
         $hotels = [];
 
         $hotelData = [
-            // Paris
             [
                 'name' => 'Hôtel Le Meurice',
                 'address' => '228 Rue de Rivoli, 75001 Paris',
@@ -307,84 +143,6 @@ class AppFixtures extends Fixture
                 'contact_name' => 'Jean Dubois',
                 'contact_email' => 'jean.dubois@plaza-athenee.com',
                 'contact_phone' => '+33 1 53 67 66 65',
-            ],
-            [
-                'name' => 'Hôtel Le Bristol',
-                'address' => '112 Rue du Faubourg Saint-Honoré, 75008 Paris',
-                'contact_name' => 'Marie Leclerc',
-                'contact_email' => 'marie.leclerc@lebristol.com',
-                'contact_phone' => '+33 1 53 43 43 00',
-            ],
-            [
-                'name' => 'Pullman Paris Tour Eiffel',
-                'address' => '18 Avenue de Suffren, 75015 Paris',
-                'contact_name' => 'Pierre Moreau',
-                'contact_email' => 'pierre.moreau@pullman.com',
-                'contact_phone' => '+33 1 44 38 56 00',
-            ],
-
-            // Lyon
-            [
-                'name' => 'Sofitel Lyon Bellecour',
-                'address' => '20 Quai Gailleton, 69002 Lyon',
-                'contact_name' => 'Isabelle Rousseau',
-                'contact_email' => 'isabelle.rousseau@sofitel.com',
-                'contact_phone' => '+33 4 72 41 20 20',
-            ],
-            [
-                'name' => 'InterContinental Lyon',
-                'address' => '20 Rue de la Bourse, 69002 Lyon',
-                'contact_name' => 'Laurent Bernard',
-                'contact_email' => 'laurent.bernard@intercontinental.com',
-                'contact_phone' => '+33 4 72 77 93 00',
-            ],
-
-            // Marseille
-            [
-                'name' => 'InterContinental Marseille',
-                'address' => '2 Boulevard Charles Livon, 13007 Marseille',
-                'contact_name' => 'Nathalie Garcia',
-                'contact_email' => 'nathalie.garcia@intercontinental.com',
-                'contact_phone' => '+33 4 13 42 42 42',
-            ],
-            [
-                'name' => 'NH Collection Marseille',
-                'address' => '37 Boulevard des Dames, 13002 Marseille',
-                'contact_name' => 'Marc Fabre',
-                'contact_email' => 'marc.fabre@nh-hotels.com',
-                'contact_phone' => '+33 4 91 14 91 91',
-            ],
-
-            // Bordeaux
-            [
-                'name' => 'InterContinental Bordeaux',
-                'address' => '5 Place de la Comédie, 33000 Bordeaux',
-                'contact_name' => 'Catherine Blanc',
-                'contact_email' => 'catherine.blanc@intercontinental.com',
-                'contact_phone' => '+33 5 57 30 44 44',
-            ],
-            [
-                'name' => 'Radisson Blu Bordeaux',
-                'address' => '4 Rue de la Devise, 33000 Bordeaux',
-                'contact_name' => 'Thomas Girard',
-                'contact_email' => 'thomas.girard@radisson.com',
-                'contact_phone' => '+33 5 56 48 83 83',
-            ],
-
-            // Toulouse
-            [
-                'name' => 'Pullman Toulouse Centre',
-                'address' => '84 Allées Jean Jaurès, 31000 Toulouse',
-                'contact_name' => 'Sandrine Petit',
-                'contact_email' => 'sandrine.petit@pullman.com',
-                'contact_phone' => '+33 5 61 10 23 10',
-            ],
-            [
-                'name' => 'Novotel Toulouse Centre',
-                'address' => '5 Place du Capitole, 31000 Toulouse',
-                'contact_name' => 'François Roux',
-                'contact_email' => 'francois.roux@novotel.com',
-                'contact_phone' => '+33 5 61 21 74 74',
             ],
         ];
 
@@ -408,29 +166,14 @@ class AppFixtures extends Fixture
 
         $displays = [];
 
-        $displayLocations = [
-            'Hall d\'entrée',
-            'Réception',
-            'Lobby',
-            'Salle petit-déjeuner',
-            'Bar',
-            'Salon',
-            'Étage 1',
-            'Étage 2',
-            'Étage 3',
-            'Espace affaires',
-            'Salle de fitness',
-            'Spa',
-        ];
+        // Créer 2 présentoirs par hôtel
+        foreach ($hotels as $hotel) {
+            $locations = ['Hall d\'entrée', 'Réception'];
 
-        // Créer 2-4 présentoirs par hôtel
-        foreach ($hotels as $index => $hotel) {
-            $numDisplays = rand(2, 4);
-
-            for ($i = 0; $i < $numDisplays; $i++) {
+            for ($i = 0; $i < 2; $i++) {
                 $display = new Display();
-                $display->setName('Présentoir ' . chr(65 + $i)); // A, B, C, D
-                $display->setLocation($displayLocations[array_rand($displayLocations)]);
+                $display->setName('Présentoir ' . chr(65 + $i)); // A, B
+                $display->setLocation($locations[$i]);
                 $display->setHotel($hotel);
 
                 $manager->persist($display);
@@ -448,18 +191,16 @@ class AppFixtures extends Fixture
         $totalRackCapacity = 0;
         $totalCurrentQuantity = 0;
 
-        // Créer 4-8 racks par présentoir
+        // Créer 4 racks par présentoir
         foreach ($displays as $display) {
-            $numRacks = rand(4, 8);
-
-            for ($position = 1; $position <= $numRacks; $position++) {
+            for ($position = 1; $position <= 4; $position++) {
                 $rack = new Rack();
                 $rack->setName('Rack ' . $position);
                 $rack->setPosition($position);
                 $rack->setDisplay($display);
 
-                // 80% des racks ont un produit assigné
-                if (rand(0, 100) < 80 && count($products) > 0) {
+                // Assigner un produit à chaque rack
+                if (count($products) > 0) {
                     $product = $products[array_rand($products)];
                     $rack->setProduct($product);
 
@@ -479,7 +220,6 @@ class AppFixtures extends Fixture
                     $rack->setRequiredQuantity(0);
                     $rack->setCurrentQuantity(0);
                 }
-
 
                 $manager->persist($rack);
                 $racks[] = $rack;
@@ -506,25 +246,6 @@ class AppFixtures extends Fixture
     }
 
     /**
-     * Obtenir des éléments aléatoires d'un tableau
-     */
-    private function getRandomElements(array $array, int $count): array
-    {
-        $keys = array_rand($array, min($count, count($array)));
-
-        if (!is_array($keys)) {
-            $keys = [$keys];
-        }
-
-        $result = [];
-        foreach ($keys as $key) {
-            $result[] = $array[$key];
-        }
-
-        return $result;
-    }
-
-    /**
      * Déterminer la quantité de stock selon le produit
      */
     private function getStockQuantity(string $productName): int
@@ -532,21 +253,13 @@ class AppFixtures extends Fixture
         // Produits populaires (magazines hebdomadaires français)
         $popularProducts = [
             'Paris Match',
-            'L\'Express',
-            'Le Point',
             'Elle',
-            'Femme Actuelle',
             'L\'Équipe Magazine'
         ];
 
         // Produits moyens (mensuels et spécialisés)
         $mediumProducts = [
             'Geo',
-            'National Geographic',
-            'Marie Claire',
-            'Capital',
-            'Challenges',
-            'Science et Vie'
         ];
 
         if (in_array($productName, $popularProducts)) {
@@ -569,21 +282,13 @@ class AppFixtures extends Fixture
         // Produits populaires nécessitent plus d'exemplaires dans les racks
         $popularProducts = [
             'Paris Match',
-            'L\'Express',
-            'Le Point',
             'Elle',
-            'Femme Actuelle',
             'L\'Équipe Magazine'
         ];
 
         // Produits moyens
         $mediumProducts = [
             'Geo',
-            'National Geographic',
-            'Marie Claire',
-            'Capital',
-            'Challenges',
-            'Science et Vie'
         ];
 
         if (in_array($productName, $popularProducts)) {

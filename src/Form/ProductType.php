@@ -61,11 +61,11 @@ class ProductType extends AbstractType
                     'accept' => 'image/*'
                 ],
                 'constraints' => [
-                    new File(maxSize: '2M', mimeTypes: [
+                    new File(maxSize: '10M', mimeTypes: [
                         'image/jpeg',
                         'image/jpg',
                         'image/png',
-                    ], mimeTypesMessage: 'Veuillez télécharger une image valide (JPG, PNG)')
+                    ], mimeTypesMessage: 'validation.product.image.invalid')
                 ],
             ])
             ->add('stocks', CollectionType::class, [
