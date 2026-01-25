@@ -7,6 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- Stock deduction and restoration methods in StockManager
+- jQuery dependency for enhanced frontend functionality
+
+### Changed
+- Updated product in rack according to capacity
+- Configuration fixtures and image upload size limits
+- Removed unused methods from Services (code cleanup)
+- Removed `deductionForDistribution` method
+
 ## [1.0.0] - 2026-01-24
 
 ### Added
