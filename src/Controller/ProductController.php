@@ -3,26 +3,20 @@
 namespace App\Controller;
 
 use App\Entity\Product;
+use App\Entity\Stock;
 use App\Form\ProductType;
 use App\Repository\ProductRepository;
-use App\Service\ImageUploader;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Attribute\Route;
-use Symfony\Contracts\Translation\TranslatorInterface;
+use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\String\Slugger\SluggerInterface;
 
 #[Route('/product')]
 class ProductController extends AbstractController
 {
-    public function __construct(
-        private readonly EntityManagerInterface $entityManager,
-        private readonly TranslatorInterface $translator,
-        private readonly ImageUploader $imageUploader,
-    ) {
-    }
-
     #[Route('/', name: 'app_product_index', methods: ['GET'])]
     public function index(ProductRepository $productRepository): Response
     {
@@ -32,45 +26,46 @@ class ProductController extends AbstractController
     }
 
     #[Route('/new', name: 'app_product_new', methods: ['GET', 'POST'])]
-    public function new(Request $request): Response
-    {
+    public function new(
+        Request $request,
+        EntityManagerInterface $entityManager,
+        SluggerInterface $slugger
+    ): Response {
         $product = new Product();
         $form = $this->createForm(ProductType::class, $product);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            // Gestion de l'upload de l'image
-            $imageFile = $form->get('imageFile')->getData();
+            // Gestion de l'upload d'image
+            $imageFile = $form->get('image')->getData();
             if ($imageFile) {
+                $originalFilename = pathinfo($imageFile->getClientOriginalName(), PATHINFO_FILENAME);
+                $safeFilename = $slugger->slug($originalFilename);
+                $newFilename = $safeFilename.'-'.uniqid().'.'.$imageFile->guessExtension();
+
                 try {
-                    $imageName = $this->imageUploader->uploadProductImage($imageFile);
-                    $product->setImage($imageName);
-                } catch (\Exception $e) {
-                    $this->addFlash('error', $this->translator->trans('messages.error.image_upload'));
+                    $imageFile->move(
+                        $this->getParameter('product_images_directory'),
+                        $newFilename
+                    );
+                    $product->setImage($newFilename);
+                } catch (FileException $e) {
+                    $this->addFlash('error', 'Erreur lors de l\'upload de l\'image: ' . $e->getMessage());
                 }
             }
 
-            // Gestion du champ variant (JSON)
-            $variantData = $form->get('variant')->getData();
-            if ($variantData) {
-                try {
-                    $variantArray = json_decode($variantData, true);
-                    if (JSON_ERROR_NONE === json_last_error()) {
-                        $product->setVariant($variantArray);
-                    } else {
-                        $product->setVariant([]);
-                    }
-                } catch (\Exception $e) {
-                    $product->setVariant([]);
-                }
+            // Traiter les stocks
+            foreach ($product->getStocks() as $stock) {
+                $stock->setProduct($product);
+                $entityManager->persist($stock);
             }
 
-            $this->entityManager->persist($product);
-            $this->entityManager->flush();
+            $entityManager->persist($product);
+            $entityManager->flush();
 
-            $this->addFlash('success', $this->translator->trans('product.created'));
+            $this->addFlash('success', 'Le produit a été créé avec succès avec ses stocks initiaux.');
 
-            return $this->redirectToRoute('app_product_index');
+            return $this->redirectToRoute('app_product_index', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->render('product/new.html.twig', [
@@ -79,56 +74,64 @@ class ProductController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}/edit', name: 'app_product_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, Product $product): Response
+    #[Route('/{id}', name: 'app_product_show', methods: ['GET'])]
+    public function show(Product $product): Response
     {
+        return $this->render('product/show.html.twig', [
+            'product' => $product,
+        ]);
+    }
+
+    #[Route('/{id}/edit', name: 'app_product_edit', methods: ['GET', 'POST'])]
+    public function edit(
+        Request $request,
+        Product $product,
+        EntityManagerInterface $entityManager,
+        SluggerInterface $slugger
+    ): Response {
         $form = $this->createForm(ProductType::class, $product);
-
-        // Pré-remplir le champ variant avec le JSON existant
-        if ($product->getVariant()) {
-            $form->get('variant')->setData(json_encode($product->getVariant(), JSON_PRETTY_PRINT));
-        }
-
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $imageFile = $form->get('imageFile')->getData();
+            // Gestion de l'upload d'image
+            $imageFile = $form->get('image')->getData();
             if ($imageFile) {
                 // Supprimer l'ancienne image si elle existe
                 if ($product->getImage()) {
-                    try {
-                        $this->imageUploader->removeProductImage($product->getImage());
-                    } catch (\Exception $e) {
-                        // Log l'erreur mais continue
+                    $oldImagePath = $this->getParameter('product_images_directory') . '/' . $product->getImage();
+                    if (file_exists($oldImagePath)) {
+                        unlink($oldImagePath);
                     }
                 }
 
+                $originalFilename = pathinfo($imageFile->getClientOriginalName(), PATHINFO_FILENAME);
+                $safeFilename = $slugger->slug($originalFilename);
+                $newFilename = $safeFilename.'-'.uniqid().'.'.$imageFile->guessExtension();
+
                 try {
-                    $imageName = $this->imageUploader->uploadProductImage($imageFile);
-                    $product->setImage($imageName);
-                } catch (\Exception $e) {
-                    $this->addFlash('error', $this->translator->trans('messages.error.image_upload'));
+                    $imageFile->move(
+                        $this->getParameter('product_images_directory'),
+                        $newFilename
+                    );
+                    $product->setImage($newFilename);
+                } catch (FileException $e) {
+                    $this->addFlash('error', 'Erreur lors de l\'upload de l\'image: ' . $e->getMessage());
                 }
             }
 
-            $variantData = $form->get('variant')->getData();
-            if ($variantData) {
-                try {
-                    $variantArray = json_decode($variantData, true);
-                    if (JSON_ERROR_NONE === json_last_error()) {
-                        $product->setVariant($variantArray);
-                    }
-                } catch (\Exception $e) {
+            // Traiter les nouveaux stocks
+            foreach ($product->getStocks() as $stock) {
+                if (!$stock->getId()) {
+                    $stock->setProduct($product);
                 }
-            } else {
-                $product->setVariant(null);
+                $entityManager->persist($stock);
             }
 
-            $this->entityManager->flush();
+            $entityManager->flush();
 
-            $this->addFlash('success', $this->translator->trans('product.updated'));
+            $this->addFlash('success', 'Le produit a été mis à jour avec succès.');
 
-            return $this->redirectToRoute('app_product_index');
+            return $this->redirectToRoute('app_product_index', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->render('product/edit.html.twig', [
@@ -138,24 +141,23 @@ class ProductController extends AbstractController
     }
 
     #[Route('/{id}', name: 'app_product_delete', methods: ['POST'])]
-    public function delete(Request $request, Product $product): Response
+    public function delete(Request $request, Product $product, EntityManagerInterface $entityManager): Response
     {
-        if ($this->isCsrfTokenValid('delete' . $product->getId(), $request->request->get('_token'))) {
+        if ($this->isCsrfTokenValid('delete'.$product->getId(), $request->request->get('_token'))) {
+            // Supprimer l'image si elle existe
             if ($product->getImage()) {
-                try {
-                    $this->imageUploader->removeProductImage($product->getImage());
-                } catch (\Exception $e) {
+                $imagePath = $this->getParameter('product_images_directory') . '/' . $product->getImage();
+                if (file_exists($imagePath)) {
+                    unlink($imagePath);
                 }
             }
 
-            $this->entityManager->remove($product);
-            $this->entityManager->flush();
+            $entityManager->remove($product);
+            $entityManager->flush();
 
-            $this->addFlash('success', $this->translator->trans('product.deleted'));
-        } else {
-            $this->addFlash('error', $this->translator->trans('exception.invalid_token'));
+            $this->addFlash('success', 'Le produit a été supprimé avec succès.');
         }
 
-        return $this->redirectToRoute('app_product_index');
+        return $this->redirectToRoute('app_product_index', [], Response::HTTP_SEE_OTHER);
     }
 }

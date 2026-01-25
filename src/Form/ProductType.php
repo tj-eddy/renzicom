@@ -3,14 +3,16 @@
 namespace App\Form;
 
 use App\Entity\Product;
+use App\Entity\Stock;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
-use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\Validator\Constraints\Image;
+use Symfony\Component\Validator\Constraints\File;
 
 class ProductType extends AbstractType
 {
@@ -18,55 +20,63 @@ class ProductType extends AbstractType
     {
         $builder
             ->add('name', TextType::class, [
-                'label' => 'product.form.name.label',
-                'required' => true,
+                'label' => 'Nom du produit',
                 'attr' => [
-                    'placeholder' => 'product.form.name.placeholder',
+                    'placeholder' => 'Ex: Watchtower 2025',
+                    'class' => 'form-control'
                 ],
-            ])
-            ->add('imageFile', FileType::class, [
-                'label' => 'product.form.image.label',
-                'required' => false,
-                'mapped' => false,
-                'constraints' => [
-                    new Image([
-                        'maxSize' => '2M',
-                        'mimeTypes' => [
-                            'image/jpeg',
-                            'image/png',
-                            'image/webp',
-                        ],
-                        'mimeTypesMessage' => 'validation.product.image.invalid_type',
-                        'maxSizeMessage' => 'validation.product.image.too_large',
-                    ]),
-                ],
+                'required' => true
             ])
             ->add('yearEdition', IntegerType::class, [
-                'label' => 'product.form.year_edition.label',
-                'required' => false,
+                'label' => 'Année d\'édition',
                 'attr' => [
-                    'placeholder' => 'product.form.year_edition.placeholder',
-                    'min' => 1900,
-                    'max' => 2100,
+                    'placeholder' => date('Y'),
+                    'class' => 'form-control',
+                    'min' => 2000,
+                    'max' => 2100
                 ],
+                'required' => false
             ])
-            ->add('language', TextType::class, [
-                'label' => 'product.form.language.label',
-                'required' => false,
-                'attr' => [
-                    'placeholder' => 'product.form.language.placeholder',
-                    'maxlength' => 10,
+            ->add('language', ChoiceType::class, [
+                'label' => 'Langue',
+                'choices' => [
+                    'Français' => 'fr',
+                    'English' => 'en',
+                    'Malagasy' => 'mg',
+                    'Español' => 'es',
+                    'Deutsch' => 'de',
+                    'Italiano' => 'it',
+                    'Português' => 'pt',
                 ],
+                'attr' => ['class' => 'form-select'],
+                'placeholder' => 'Sélectionner une langue',
+                'required' => false
             ])
-            ->add('variant', TextareaType::class, [
-                'label' => 'product.form.variant.label',
-                'required' => false,
+            ->add('image', FileType::class, [
+                'label' => 'Image du produit',
                 'mapped' => false,
+                'required' => false,
                 'attr' => [
-                    'placeholder' => 'product.form.variant.placeholder',
-                    'rows' => 4,
+                    'class' => 'form-control',
+                    'accept' => 'image/*'
                 ],
-                'help' => 'product.form.variant.help',
+                'constraints' => [
+                    new File(maxSize: '2M', mimeTypes: [
+                        'image/jpeg',
+                        'image/jpg',
+                        'image/png',
+                    ], mimeTypesMessage: 'Veuillez télécharger une image valide (JPG, PNG)')
+                ],
+            ])
+            ->add('stocks', CollectionType::class, [
+                'entry_type' => StockEmbeddedType::class,
+                'allow_add' => true,
+                'allow_delete' => true,
+                'by_reference' => false,
+                'label' => false,
+                'entry_options' => [
+                    'label' => false,
+                ],
             ])
         ;
     }

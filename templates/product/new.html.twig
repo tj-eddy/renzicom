@@ -1,41 +1,228 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}
-	{{ 'product.actions.new'|trans }}
-{% endblock %}
+{% block title %}{{ 'product.actions.new'|trans }}{% endblock %}
 
 {% block page_title %}
-	<div class="page-title">
-		<div class="row">
-			<div class="col-12 col-md-6 order-md-1 order-last">
-				<h3>{{ 'product.actions.new'|trans }}</h3>
-			</div>
-			<div class="col-12 col-md-6 order-md-2 order-first">
-				<nav aria-label="breadcrumb" class="breadcrumb-header float-start float-lg-end">
-					<ol class="breadcrumb">
-						<li class="breadcrumb-item">
-							<a href="{{ path('app_dashboard') }}">{{ 'breadcrumb.home'|trans }}</a>
-						</li>
-						<li class="breadcrumb-item">
-							<a href="{{ path('app_product_index') }}">{{ 'product.title'|trans }}</a>
-						</li>
-						<li class="breadcrumb-item active" aria-current="page">{{ 'product.actions.new'|trans }}</li>
-					</ol>
-				</nav>
-			</div>
-		</div>
-	</div>
+    <div class="page-title">
+        <div class="row">
+            <div class="col-12 col-md-6 order-md-1 order-last">
+                <h3>{{ 'product.actions.new'|trans }}</h3>
+            </div>
+            <div class="col-12 col-md-6 order-md-2 order-first">
+                <nav aria-label="breadcrumb" class="breadcrumb-header float-start float-lg-end">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item">
+                            <a href="{{ path('app_dashboard') }}">{{ 'breadcrumb.home'|trans }}</a>
+                        </li>
+                        <li class="breadcrumb-item">
+                            <a href="{{ path('app_product_index') }}">{{ 'product.title'|trans }}</a>
+                        </li>
+                        <li class="breadcrumb-item active" aria-current="page">{{ 'product.actions.new'|trans }}</li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+    </div>
 {% endblock %}
 
 {% block body %}
-	<div class="card">
-		<div class="card-header">
-			<h4 class="card-title">{{ 'product.actions.new'|trans }}</h4>
-		</div>
-		<div class="card-content">
-			<div class="card-body">
-				{{ include('product/_form.html.twig', {'button_label': 'create'}) }}
-			</div>
-		</div>
-	</div>
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="card-title">
+                        <i class="bi bi-box-seam me-2"></i>
+                        {{ 'product.new.title'|trans }}
+                    </h4>
+                </div>
+                <div class="card-body">
+                    {{ form_start(form) }}
+
+                    {# Section 1: Informations du produit #}
+                    <div class="mb-4">
+                        <h5 class="mb-3">
+                            <i class="bi bi-info-circle me-2"></i>
+                            Informations du produit
+                        </h5>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group mb-3">
+                                    {{ form_label(form.name, null, {'label_attr': {'class': 'form-label'}}) }}
+                                    {{ form_widget(form.name, {'attr': {'class': 'form-control', 'placeholder': 'Ex: Watchtower 2025'}}) }}
+                                    {{ form_errors(form.name) }}
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group mb-3">
+                                    {{ form_label(form.yearEdition, null, {'label_attr': {'class': 'form-label'}}) }}
+                                    {{ form_widget(form.yearEdition, {'attr': {'class': 'form-control', 'placeholder': '2025'}}) }}
+                                    {{ form_errors(form.yearEdition) }}
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group mb-3">
+                                    {{ form_label(form.language, null, {'label_attr': {'class': 'form-label'}}) }}
+                                    {{ form_widget(form.language, {'attr': {'class': 'form-select'}}) }}
+                                    {{ form_errors(form.language) }}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group mb-3">
+                                    {{ form_label(form.image, null, {'label_attr': {'class': 'form-label'}}) }}
+                                    {{ form_widget(form.image, {'attr': {'class': 'form-control'}}) }}
+                                    {{ form_errors(form.image) }}
+                                    <small class="text-muted">Format accepté: JPG, PNG (max 2MB)</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <hr class="my-4">
+
+                    {# Section 2: Stock initial par entrepôt #}
+                    <div class="mb-4">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h5 class="mb-0">
+                                <i class="bi bi-warehouse me-2"></i>
+                                Stock initial par entrepôt
+                            </h5>
+                            <button type="button" class="btn btn-sm btn-dark" id="add-stock-btn">
+                                <i class="bi bi-plus-circle me-1"></i>
+                                Ajouter un entrepôt
+                            </button>
+                        </div>
+
+                        <div id="stocks-collection" data-prototype="{{ form_widget(form.stocks.vars.prototype)|e('html_attr') }}" data-index="{{ form.stocks|length }}">
+                            {% for stockForm in form.stocks %}
+                                <div class="stock-item card mb-3" data-index="{{ loop.index0 }}">
+                                    <div class="card-body">
+                                        <div class="row align-items-end">
+                                            <div class="col-md-5">
+                                                <div class="form-group mb-0">
+                                                    {{ form_label(stockForm.warehouse, 'Entrepôt', {'label_attr': {'class': 'form-label'}}) }}
+                                                    {{ form_widget(stockForm.warehouse, {'attr': {'class': 'form-select warehouse-select'}}) }}
+                                                    {{ form_errors(stockForm.warehouse) }}
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <div class="form-group mb-0">
+                                                    {{ form_label(stockForm.quantity, 'Quantité', {'label_attr': {'class': 'form-label'}}) }}
+                                                    {{ form_widget(stockForm.quantity, {'attr': {'class': 'form-control', 'min': '0', 'placeholder': '0'}}) }}
+                                                    {{ form_errors(stockForm.quantity) }}
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <div class="form-group mb-0">
+                                                    {{ form_label(stockForm.note, 'Note (optionnel)', {'label_attr': {'class': 'form-label'}}) }}
+                                                    {{ form_widget(stockForm.note, {'attr': {'class': 'form-control', 'placeholder': 'Remarque...'}}) }}
+                                                    {{ form_errors(stockForm.note) }}
+                                                </div>
+                                            </div>
+                                            <div class="col-md-1">
+                                                <button type="button" class="btn btn-danger btn-sm remove-stock-btn w-100" title="Supprimer">
+                                                    <i class="bi bi-trash"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+
+                        {# Message si aucun stock #}
+                        <div id="no-stocks-message" class="alert alert-info" style="display: none;">
+                            <i class="bi bi-info-circle me-2"></i>
+                            Aucun stock initial défini. Cliquez sur "Ajouter un entrepôt" pour commencer.
+                        </div>
+                    </div>
+
+                    <hr class="my-4">
+
+                    {# Section 3: Actions #}
+                    <div class="d-flex justify-content-between">
+                        <a href="{{ path('app_product_index') }}" class="btn btn-light">
+                            <i class="bi bi-arrow-left me-1"></i>
+                            {{ 'actions.back'|trans }}
+                        </a>
+                        <button type="submit" class="btn btn-dark">
+                            <i class="bi bi-check-circle me-1"></i>
+                            {{ 'actions.create'|trans }}
+                        </button>
+                    </div>
+
+                    {{ form_end(form) }}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        $(document).ready(function() {
+            // Initialiser Select2 pour les selects d'entrepôt
+            initSelect2('.warehouse-select');
+
+            const $collectionHolder = $('#stocks-collection');
+            const $addStockBtn = $('#add-stock-btn');
+            const $noStocksMessage = $('#no-stocks-message');
+
+            // Vérifier et afficher le message si aucun stock
+            function checkStocksEmpty() {
+                if ($collectionHolder.find('.stock-item').length === 0) {
+                    $noStocksMessage.show();
+                } else {
+                    $noStocksMessage.hide();
+                }
+            }
+
+            checkStocksEmpty();
+
+            // Ajouter un nouveau stock
+            $addStockBtn.on('click', function() {
+                const prototype = $collectionHolder.data('prototype');
+                const index = $collectionHolder.data('index');
+
+                let newForm = prototype.replace(/__name__/g, index);
+
+                const $newStockItem = $(`
+                    <div class="stock-item card mb-3" data-index="${index}">
+                        <div class="card-body">
+                            <div class="row align-items-end">
+                                <div class="col-md-5">
+                                    <div class="form-group mb-0">
+                                        ${newForm}
+                                    </div>
+                                </div>
+                                <div class="col-md-1">
+                                    <button type="button" class="btn btn-danger btn-sm remove-stock-btn w-100" title="Supprimer">
+                                        <i class="bi bi-trash"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `);
+
+                $collectionHolder.append($newStockItem);
+                $collectionHolder.data('index', index + 1);
+
+                // Réinitialiser Select2 pour le nouveau select
+                initSelect2($newStockItem.find('select'));
+
+                checkStocksEmpty();
+            });
+
+            // Supprimer un stock
+            $collectionHolder.on('click', '.remove-stock-btn', function() {
+                $(this).closest('.stock-item').fadeOut(300, function() {
+                    $(this).remove();
+                    checkStocksEmpty();
+                });
+            });
+        });
+    </script>
 {% endblock %}

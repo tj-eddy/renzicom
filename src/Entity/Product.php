@@ -5,72 +5,67 @@ namespace App\Entity;
 use App\Repository\ProductRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\HttpFoundation\File\File;
-use Symfony\Component\Validator\Constraints as Assert;
 
-/**
- * Représente un produit/magazine (Paris Match, Elle, Geo, etc.).
- */
 #[ORM\Entity(repositoryClass: ProductRepository::class)]
-#[ORM\Table(name: 'product')]
+#[ORM\HasLifecycleCallbacks]
 class Product
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column(type: 'integer')]
+    #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(type: 'string', length: 255)]
+    #[ORM\Column(length: 255)]
     private ?string $name = null;
 
-    #[ORM\Column(type: 'string', length: 500, nullable: true)]
+    #[ORM\Column(length: 500, nullable: true)]
     private ?string $image = null;
 
-    #[ORM\Column(type: 'integer', nullable: true)]
+    #[ORM\Column(nullable: true)]
     private ?int $yearEdition = null;
 
-    #[ORM\Column(type: 'string', length: 10, nullable: true)]
+    #[ORM\Column(length: 10, nullable: true)]
     private ?string $language = null;
 
-    #[ORM\Column(type: 'json', nullable: true)]
+    #[ORM\Column(type: Types::JSON, nullable: true)]
     private ?array $variant = null;
 
-    #[ORM\Column(type: 'datetime_immutable')]
-    private ?\DateTimeImmutable $createdAt = null;
+    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    private ?\DateTimeInterface $createdAt = null;
 
     /**
      * @var Collection<int, Stock>
      */
-    #[ORM\OneToMany(mappedBy: 'product', targetEntity: Stock::class, cascade: ['persist'], orphanRemoval: true)]
+    #[ORM\OneToMany(targetEntity: Stock::class, mappedBy: 'product', orphanRemoval: true, cascade: ['persist', 'remove'])]
     private Collection $stocks;
-
-    /**
-     * @var Collection<int, Rack>
-     */
-    #[ORM\OneToMany(mappedBy: 'product', targetEntity: Rack::class)]
-    private Collection $racks;
 
     /**
      * @var Collection<int, Distribution>
      */
-    #[ORM\OneToMany(mappedBy: 'product', targetEntity: Distribution::class)]
+    #[ORM\OneToMany(targetEntity: Distribution::class, mappedBy: 'product', orphanRemoval: true)]
     private Collection $distributions;
 
-    #[Assert\Image(
-        maxSize: '2M',
-        mimeTypes: ['image/jpeg', 'image/png', 'image/webp'],
-        mimeTypesMessage: 'validation.product.image.invalid_type'
-    )]
-    private ?File $imageFile = null;
+    /**
+     * @var Collection<int, Rack>
+     */
+    #[ORM\OneToMany(targetEntity: Rack::class, mappedBy: 'product')]
+    private Collection $racks;
 
     public function __construct()
     {
         $this->stocks = new ArrayCollection();
-        $this->racks = new ArrayCollection();
         $this->distributions = new ArrayCollection();
-        $this->createdAt = new \DateTimeImmutable();
-        $this->variant = [];
+        $this->racks = new ArrayCollection();
+    }
+
+    #[ORM\PrePersist]
+    public function setCreatedAtValue(): void
+    {
+        if ($this->createdAt === null) {
+            $this->createdAt = new \DateTime();
+        }
     }
 
     public function getId(): ?int
@@ -86,7 +81,6 @@ class Product
     public function setName(string $name): static
     {
         $this->name = $name;
-
         return $this;
     }
 
@@ -98,7 +92,6 @@ class Product
     public function setImage(?string $image): static
     {
         $this->image = $image;
-
         return $this;
     }
 
@@ -110,7 +103,6 @@ class Product
     public function setYearEdition(?int $yearEdition): static
     {
         $this->yearEdition = $yearEdition;
-
         return $this;
     }
 
@@ -122,7 +114,6 @@ class Product
     public function setLanguage(?string $language): static
     {
         $this->language = $language;
-
         return $this;
     }
 
@@ -134,19 +125,17 @@ class Product
     public function setVariant(?array $variant): static
     {
         $this->variant = $variant;
-
         return $this;
     }
 
-    public function getCreatedAt(): ?\DateTimeImmutable
+    public function getCreatedAt(): ?\DateTimeInterface
     {
         return $this->createdAt;
     }
 
-    public function setCreatedAt(\DateTimeImmutable $createdAt): static
+    public function setCreatedAt(\DateTimeInterface $createdAt): static
     {
         $this->createdAt = $createdAt;
-
         return $this;
     }
 
@@ -164,7 +153,6 @@ class Product
             $this->stocks->add($stock);
             $stock->setProduct($this);
         }
-
         return $this;
     }
 
@@ -175,36 +163,6 @@ class Product
                 $stock->setProduct(null);
             }
         }
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, Rack>
-     */
-    public function getRacks(): Collection
-    {
-        return $this->racks;
-    }
-
-    public function addRack(Rack $rack): static
-    {
-        if (!$this->racks->contains($rack)) {
-            $this->racks->add($rack);
-            $rack->setProduct($this);
-        }
-
-        return $this;
-    }
-
-    public function removeRack(Rack $rack): static
-    {
-        if ($this->racks->removeElement($rack)) {
-            if ($rack->getProduct() === $this) {
-                $rack->setProduct(null);
-            }
-        }
-
         return $this;
     }
 
@@ -222,7 +180,6 @@ class Product
             $this->distributions->add($distribution);
             $distribution->setProduct($this);
         }
-
         return $this;
     }
 
@@ -233,19 +190,50 @@ class Product
                 $distribution->setProduct(null);
             }
         }
-
         return $this;
     }
 
-    public function getImageFile(): ?File
+    /**
+     * @return Collection<int, Rack>
+     */
+    public function getRacks(): Collection
     {
-        return $this->imageFile;
+        return $this->racks;
     }
 
-    public function setImageFile(?File $imageFile): static
+    public function addRack(Rack $rack): static
     {
-        $this->imageFile = $imageFile;
-
+        if (!$this->racks->contains($rack)) {
+            $this->racks->add($rack);
+            $rack->setProduct($this);
+        }
         return $this;
+    }
+
+    public function removeRack(Rack $rack): static
+    {
+        if ($this->racks->removeElement($rack)) {
+            if ($rack->getProduct() === $this) {
+                $rack->setProduct(null);
+            }
+        }
+        return $this;
+    }
+
+    /**
+     * Calculer le stock total dans tous les entrepôts
+     */
+    public function getTotalStock(): int
+    {
+        $total = 0;
+        foreach ($this->stocks as $stock) {
+            $total += $stock->getQuantity();
+        }
+        return $total;
+    }
+
+    public function __toString(): string
+    {
+        return $this->name ?? '';
     }
 }

@@ -116,15 +116,16 @@
 										<span>{{ 'nav.stock.management'|trans }}</span>
 									</a>
 									<ul class="submenu {% if app.request.get('_route') starts with 'app_product' or app.request.get('_route') starts with 'app_warehouse' or app.request.get('_route') starts with 'app_stock' %}active{% endif %}">
-										<li class="submenu-item {% if app.request.get('_route') starts with 'app_product' %}active{% endif %}">
+                                        <li class="submenu-item {% if app.request.get('_route') starts with 'app_warehouse' %}active{% endif %}">
+                                            <a href="{{ path('app_warehouse_index') }}">{{ 'nav.stock.warehouses'|trans }}</a>
+                                        </li>
+                                        <li class="submenu-item {% if app.request.get('_route') starts with 'app_product' %}active{% endif %}">
 											<a href="{{ path('app_product_index') }}">{{ 'nav.stock.products'|trans }}</a>
 										</li>
-										<li class="submenu-item {% if app.request.get('_route') starts with 'app_warehouse' %}active{% endif %}">
-											<a href="{{ path('app_warehouse_index') }}">{{ 'nav.stock.warehouses'|trans }}</a>
-										</li>
-										<li class="submenu-item {% if app.request.get('_route') starts with 'app_stock' %}active{% endif %}">
-											<a href="{{ path('app_stock_index') }}">{{ 'nav.stock.stocks'|trans }}</a>
-										</li>
+
+{#										<li class="submenu-item {% if app.request.get('_route') starts with 'app_stock' %}active{% endif %}">#}
+{#											<a href="{{ path('app_stock_index') }}">{{ 'nav.stock.stocks'|trans }}</a>#}
+{#										</li>#}
 									</ul>
 								</li>
 							{% endif %}
@@ -321,7 +322,7 @@
 			<script>
 				function initDataTable(tableId, options = {}) {
 let table = document.querySelector(tableId);
-if (! table) 
+if (! table)
 return null;
 
 
