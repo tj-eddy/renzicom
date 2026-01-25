@@ -3,15 +3,16 @@
 namespace App\Controller;
 
 use App\Entity\Distribution;
-use App\Form\DistributionType;
-use App\Repository\DistributionRepository;
 use App\Service\StockManager;
+use App\Form\DistributionType;
+use App\Repository\WarehouseRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use App\Repository\DistributionRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Contracts\Translation\TranslatorInterface;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 #[Route('/distribution')]
 class DistributionController extends AbstractController
@@ -20,8 +21,7 @@ class DistributionController extends AbstractController
         private EntityManagerInterface $entityManager,
         private TranslatorInterface $translator,
         private StockManager $stockManager,
-    ) {
-    }
+    ) {}
 
     #[Route('/', name: 'app_distribution_index', methods: ['GET'])]
     public function index(DistributionRepository $distributionRepository): Response
