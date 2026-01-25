@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Intervention;
 use App\Form\InterventionType;
 use App\Service\ImageUploader;
+use App\Service\StockManager;
 use App\Repository\RackRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Repository\InterventionRepository;
@@ -47,6 +48,7 @@ class InterventionController extends AbstractController
         Request $request,
         EntityManagerInterface $entityManager,
         ImageUploader $imageUploader,
+        StockManager $stockManager,
     ): Response {
         $intervention = new Intervention();
         $form = $this->createForm(InterventionType::class, $intervention);
@@ -107,6 +109,19 @@ class InterventionController extends AbstractController
             $distribution->setQuantity(max(0, $distribution->getQuantity() - $quantityAdded));
 
             $entityManager->persist($intervention);
+
+            // 3. Déduction du stock de l'entrepôt
+            try {
+                $stockManager->deductWarehouseStock($distribution->getProduct(), $quantityAdded);
+            } catch (\Exception $e) {
+                $this->addFlash('danger', $e->getMessage());
+                // On ne flush pas si l'entrepôt n'a pas assez de stock
+                return $this->render('intervention/new.html.twig', [
+                    'intervention' => $intervention,
+                    'form' => $form,
+                ]);
+            }
+
             $entityManager->flush();
 
             $this->addFlash('success', $this->translator->trans('intervention.messages.created'));
@@ -142,6 +157,7 @@ class InterventionController extends AbstractController
         Intervention $intervention,
         EntityManagerInterface $entityManager,
         ImageUploader $imageUploader,
+        StockManager $stockManager,
     ): Response {
         // Vérifier si l'utilisateur a le droit de modifier cette intervention
         if (
@@ -237,6 +253,21 @@ class InterventionController extends AbstractController
                 $rack->setProduct($distribution->getProduct());
             }
 
+            // Ajustement du stock de l'entrepôt
+            try {
+                if ($diff > 0) {
+                    $stockManager->deductWarehouseStock($distribution->getProduct(), $diff);
+                } elseif ($diff < 0) {
+                    $stockManager->restoreWarehouseStock($distribution->getProduct(), abs($diff));
+                }
+            } catch (\Exception $e) {
+                $this->addFlash('danger', $e->getMessage());
+                return $this->render('intervention/edit.html.twig', [
+                    'intervention' => $intervention,
+                    'form' => $form,
+                ]);
+            }
+
             $entityManager->flush();
 
             $this->addFlash('success', $this->translator->trans('intervention.messages.updated'));
@@ -256,6 +287,7 @@ class InterventionController extends AbstractController
         Intervention $intervention,
         EntityManagerInterface $entityManager,
         ImageUploader $imageUploader,
+        StockManager $stockManager,
     ): Response {
         if ($this->isCsrfTokenValid('delete' . $intervention->getId(), $request->getPayload()->getString('_token'))) {
             $rack = $intervention->getRack();
@@ -275,6 +307,9 @@ class InterventionController extends AbstractController
             if ($intervention->getPhotoAfter()) {
                 $imageUploader->removeInterventionImage($intervention->getPhotoAfter());
             }
+
+            // 3. Restaurer le stock de l'entrepôt
+            $stockManager->restoreWarehouseStock($distribution->getProduct(), $quantityAdded);
 
             $entityManager->remove($intervention);
             $entityManager->flush();

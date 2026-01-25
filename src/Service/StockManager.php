@@ -15,9 +15,7 @@ class StockManager
     public function __construct(
         private readonly EntityManagerInterface $entityManager,
         private readonly StockRepository        $stockRepository,
-    )
-    {
-    }
+    ) {}
 
     /**
      * Déduit le stock de l'entrepôt lors de la création d'une distribution
@@ -48,7 +46,11 @@ class StockManager
         }
 
         if ($remainingQuantity > 0) {
-            throw new \Exception(sprintf('Stock insuffisant pour le produit "%s". Demandé: %d, Disponible: %d', $product->getName(), $quantity, $quantity - $remainingQuantity));
+            $productRepo = $this->entityManager->getRepository(Product::class);
+            $product = $productRepo->find($idProduct);
+            $productName = $product ? $product->getName() : 'Inconnu';
+            $originalQuantity = $distribution['quantity'];
+            throw new \Exception(sprintf('Stock insuffisant pour le produit "%s". Demandé: %d, Disponible: %d', $productName, $originalQuantity, $originalQuantity - $remainingQuantity));
         }
 
         $this->entityManager->flush();
@@ -187,32 +189,85 @@ class StockManager
     }
 
     /**
-     * Vérifie si le stock est suffisant pour une distribution.
+     * Déduit le stock d'un entrepôt.
+     * Si aucun entrepôt n'est fourni, cherche le premier avec du stock.
      */
-    public function hasEnoughStock(Product $product, int $quantity): bool
+    public function deductWarehouseStock(Product $product, int $quantity, ?Warehouse $warehouse = null): void
     {
-        $totalStock = $this->stockRepository->createQueryBuilder('s')
-            ->select('SUM(s.quantity)')
-            ->where('s.product = :product')
-            ->setParameter('product', $product)
-            ->getQuery()
-            ->getSingleScalarResult();
+        if ($quantity <= 0) {
+            return;
+        }
 
-        return $totalStock >= $quantity;
+        $stock = null;
+
+        if ($warehouse) {
+            $stock = $this->stockRepository->findOneBy([
+                'product' => $product,
+                'warehouse' => $warehouse,
+            ]);
+        } else {
+            // Chercher le premier entrepôt avec du stock
+            $stocks = $this->stockRepository->findBy(['product' => $product]);
+            foreach ($stocks as $s) {
+                if ($s->getQuantity() > 0) {
+                    $stock = $s;
+                    break;
+                }
+            }
+        }
+
+        if (!$stock || $stock->getQuantity() < $quantity) {
+            $available = $stock ? $stock->getQuantity() : 0;
+            throw new \Exception(sprintf(
+                'Stock insuffisant en entrepôt pour le produit "%s". Disponible: %d, Demandé: %d',
+                $product->getName(),
+                $available,
+                $quantity
+            ));
+        }
+
+        $stock->setQuantity($stock->getQuantity() - $quantity);
+        $this->entityManager->flush();
     }
 
     /**
-     * Obtient le stock total disponible pour un produit.
+     * Restaure le stock d'un entrepôt.
      */
-    public function getTotalStockForProduct(Product $product): int
+    public function restoreWarehouseStock(Product $product, int $quantity, ?Warehouse $warehouse = null): void
     {
-        $totalStock = $this->stockRepository->createQueryBuilder('s')
-            ->select('SUM(s.quantity)')
-            ->where('s.product = :product')
-            ->setParameter('product', $product)
-            ->getQuery()
-            ->getSingleScalarResult();
+        if ($quantity <= 0) {
+            return;
+        }
 
-        return (int)($totalStock ?? 0);
+        if (!$warehouse) {
+            // Par défaut, on restaure dans le premier entrepôt trouvé ou le premier de la liste
+            $stock = $this->stockRepository->findOneBy(['product' => $product]);
+            if (!$stock) {
+                $warehouse = $this->entityManager->getRepository(Warehouse::class)->findOneBy([]);
+                if (!$warehouse) {
+                    return; // Pas d'entrepôt du tout
+                }
+                $stock = new Stock();
+                $stock->setProduct($product);
+                $stock->setWarehouse($warehouse);
+                $stock->setQuantity(0);
+                $this->entityManager->persist($stock);
+            }
+        } else {
+            $stock = $this->stockRepository->findOneBy([
+                'product' => $product,
+                'warehouse' => $warehouse,
+            ]);
+            if (!$stock) {
+                $stock = new Stock();
+                $stock->setProduct($product);
+                $stock->setWarehouse($warehouse);
+                $stock->setQuantity(0);
+                $this->entityManager->persist($stock);
+            }
+        }
+
+        $stock->setQuantity($stock->getQuantity() + $quantity);
+        $this->entityManager->flush();
     }
 }
