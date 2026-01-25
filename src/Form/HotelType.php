@@ -4,9 +4,9 @@ namespace App\Form;
 
 use App\Entity\Hotel;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\TelType;
-use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -17,39 +17,53 @@ class HotelType extends AbstractType
     {
         $builder
             ->add('name', TextType::class, [
-                'label' => 'hotel.form.name.label',
-                'required' => true,
+                'label' => 'Nom de l\'hôtel',
                 'attr' => [
-                    'placeholder' => 'hotel.form.name.placeholder',
+                    'placeholder' => 'Ex: Hôtel Carlton',
+                    'class' => 'form-control'
                 ],
+                'required' => true
             ])
-            ->add('address', TextareaType::class, [
-                'label' => 'hotel.form.address.label',
-                'required' => false,
+            ->add('address', TextType::class, [
+                'label' => 'Adresse',
                 'attr' => [
-                    'placeholder' => 'hotel.form.address.placeholder',
-                    'rows' => 3,
+                    'placeholder' => 'Adresse complète',
+                    'class' => 'form-control'
                 ],
+                'required' => false
             ])
             ->add('contactName', TextType::class, [
-                'label' => 'hotel.form.contact_name.label',
-                'required' => false,
+                'label' => 'Nom du contact',
                 'attr' => [
-                    'placeholder' => 'hotel.form.contact_name.placeholder',
+                    'placeholder' => 'Nom du responsable',
+                    'class' => 'form-control'
                 ],
+                'required' => false
             ])
             ->add('contactEmail', EmailType::class, [
-                'label' => 'hotel.form.contact_email.label',
-                'required' => false,
+                'label' => 'Email du contact',
                 'attr' => [
-                    'placeholder' => 'hotel.form.contact_email.placeholder',
+                    'placeholder' => 'email@exemple.com',
+                    'class' => 'form-control'
                 ],
+                'required' => false
             ])
             ->add('contactPhone', TelType::class, [
-                'label' => 'hotel.form.contact_phone.label',
-                'required' => false,
+                'label' => 'Téléphone du contact',
                 'attr' => [
-                    'placeholder' => 'hotel.form.contact_phone.placeholder',
+                    'placeholder' => '+261 34 00 000 00',
+                    'class' => 'form-control'
+                ],
+                'required' => false
+            ])
+            ->add('displays', CollectionType::class, [
+                'entry_type' => DisplayEmbeddedType::class,
+                'allow_add' => true,
+                'allow_delete' => true,
+                'by_reference' => false,
+                'label' => false,
+                'entry_options' => [
+                    'label' => false,
                 ],
             ])
         ;

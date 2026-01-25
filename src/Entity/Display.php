@@ -1,64 +1,58 @@
 <?php
+// src/Entity/Display.php
 
 namespace App\Entity;
 
 use App\Repository\DisplayRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * Représente un présentoir dans un hôtel (ex: Présentoir Lobby, Présentoir Étage 2).
- */
 #[ORM\Entity(repositoryClass: DisplayRepository::class)]
-#[ORM\Table(name: 'display')]
+#[ORM\HasLifecycleCallbacks]
 class Display
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column(type: 'integer')]
+    #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\ManyToOne(targetEntity: Hotel::class, inversedBy: 'displays')]
-    #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
-    private ?Hotel $hotel = null;
-
-    #[ORM\Column(type: 'string', length: 255)]
+    #[ORM\Column(length: 255)]
     private ?string $name = null;
 
-    #[ORM\Column(type: 'string', length: 500, nullable: true)]
+    #[ORM\Column(length: 500, nullable: true)]
     private ?string $location = null;
 
-    #[ORM\Column(type: 'datetime_immutable')]
-    private ?\DateTimeImmutable $createdAt = null;
+    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    private ?\DateTimeInterface $createdAt = null;
+
+    #[ORM\ManyToOne(inversedBy: 'displays')]
+    #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
+    private ?Hotel $hotel = null;
 
     /**
      * @var Collection<int, Rack>
      */
-    #[ORM\OneToMany(mappedBy: 'display', targetEntity: Rack::class, cascade: ['persist'], orphanRemoval: true)]
+    #[ORM\OneToMany(targetEntity: Rack::class, mappedBy: 'display', orphanRemoval: true, cascade: ['persist', 'remove'])]
     private Collection $racks;
 
     public function __construct()
     {
         $this->racks = new ArrayCollection();
-        $this->createdAt = new \DateTimeImmutable();
+    }
+
+    #[ORM\PrePersist]
+    public function setCreatedAtValue(): void
+    {
+        if ($this->createdAt === null) {
+            $this->createdAt = new \DateTime();
+        }
     }
 
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    public function getHotel(): ?Hotel
-    {
-        return $this->hotel;
-    }
-
-    public function setHotel(?Hotel $hotel): static
-    {
-        $this->hotel = $hotel;
-
-        return $this;
     }
 
     public function getName(): ?string
@@ -69,7 +63,6 @@ class Display
     public function setName(string $name): static
     {
         $this->name = $name;
-
         return $this;
     }
 
@@ -81,19 +74,28 @@ class Display
     public function setLocation(?string $location): static
     {
         $this->location = $location;
-
         return $this;
     }
 
-    public function getCreatedAt(): ?\DateTimeImmutable
+    public function getCreatedAt(): ?\DateTimeInterface
     {
         return $this->createdAt;
     }
 
-    public function setCreatedAt(\DateTimeImmutable $createdAt): static
+    public function setCreatedAt(?\DateTimeInterface $createdAt): static
     {
         $this->createdAt = $createdAt;
+        return $this;
+    }
 
+    public function getHotel(): ?Hotel
+    {
+        return $this->hotel;
+    }
+
+    public function setHotel(?Hotel $hotel): static
+    {
+        $this->hotel = $hotel;
         return $this;
     }
 
@@ -111,7 +113,6 @@ class Display
             $this->racks->add($rack);
             $rack->setDisplay($this);
         }
-
         return $this;
     }
 
@@ -122,7 +123,11 @@ class Display
                 $rack->setDisplay(null);
             }
         }
-
         return $this;
+    }
+
+    public function __toString(): string
+    {
+        return $this->name ?? '';
     }
 }

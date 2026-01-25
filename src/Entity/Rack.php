@@ -1,62 +1,121 @@
 <?php
-
 namespace App\Entity;
 
 use App\Repository\RackRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * Représente un espace/rack dans un présentoir (ex: Rack 1, Rack A).
- */
 #[ORM\Entity(repositoryClass: RackRepository::class)]
-#[ORM\Table(name: 'rack')]
+#[ORM\HasLifecycleCallbacks]
 class Rack
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column(type: 'integer')]
+    #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\ManyToOne(targetEntity: Display::class, inversedBy: 'racks')]
+    #[ORM\Column(length: 100)]
+    private ?string $name = null;
+
+    #[ORM\Column]
+    private ?int $position = 0;
+
+    #[ORM\Column]
+    private ?int $requiredQuantity = 0;
+
+    #[ORM\Column]
+    private ?int $currentQuantity = 0;
+
+    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    private ?\DateTimeInterface $createdAt = null;
+
+    #[ORM\ManyToOne(inversedBy: 'racks')]
     #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
     private ?Display $display = null;
 
-    #[ORM\ManyToOne(targetEntity: Product::class, inversedBy: 'racks')]
-    #[ORM\JoinColumn(nullable: true, onDelete: 'SET NULL')]
+    #[ORM\ManyToOne(inversedBy: 'racks')]
+    #[ORM\JoinColumn(onDelete: 'SET NULL')]
     private ?Product $product = null;
-
-    #[ORM\Column(type: 'string', length: 100)]
-    private ?string $name = null;
-
-    #[ORM\Column(type: 'integer', options: ['default' => 0])]
-    private int $position = 0;
-
-    #[ORM\Column(type: 'integer', options: ['default' => 0])]
-    private int $requiredQuantity = 0;
-
-    #[ORM\Column(type: 'integer', options: ['default' => 0])]
-    private int $currentQuantity = 0;
-
-    #[ORM\Column(type: 'datetime_immutable')]
-    private ?\DateTimeImmutable $createdAt = null;
 
     /**
      * @var Collection<int, Intervention>
      */
-    #[ORM\OneToMany(mappedBy: 'rack', targetEntity: Intervention::class)]
+    #[ORM\OneToMany(targetEntity: Intervention::class, mappedBy: 'rack', orphanRemoval: true)]
     private Collection $interventions;
 
     public function __construct()
     {
         $this->interventions = new ArrayCollection();
-        $this->createdAt = new \DateTimeImmutable();
+    }
+
+    #[ORM\PrePersist]
+    public function setCreatedAtValue(): void
+    {
+        if ($this->createdAt === null) {
+            $this->createdAt = new \DateTime();
+        }
     }
 
     public function getId(): ?int
     {
         return $this->id;
+    }
+
+    public function getName(): ?string
+    {
+        return $this->name;
+    }
+
+    public function setName(string $name): static
+    {
+        $this->name = $name;
+        return $this;
+    }
+
+    public function getPosition(): ?int
+    {
+        return $this->position;
+    }
+
+    public function setPosition(int $position): static
+    {
+        $this->position = $position;
+        return $this;
+    }
+
+    public function getRequiredQuantity(): ?int
+    {
+        return $this->requiredQuantity;
+    }
+
+    public function setRequiredQuantity(int $requiredQuantity): static
+    {
+        $this->requiredQuantity = $requiredQuantity;
+        return $this;
+    }
+
+    public function getCurrentQuantity(): ?int
+    {
+        return $this->currentQuantity;
+    }
+
+    public function setCurrentQuantity(int $currentQuantity): static
+    {
+        $this->currentQuantity = $currentQuantity;
+        return $this;
+    }
+
+    public function getCreatedAt(): ?\DateTimeInterface
+    {
+        return $this->createdAt;
+    }
+
+    public function setCreatedAt(?\DateTimeInterface $createdAt): static
+    {
+        $this->createdAt = $createdAt;
+        return $this;
     }
 
     public function getDisplay(): ?Display
@@ -67,7 +126,6 @@ class Rack
     public function setDisplay(?Display $display): static
     {
         $this->display = $display;
-
         return $this;
     }
 
@@ -79,67 +137,6 @@ class Rack
     public function setProduct(?Product $product): static
     {
         $this->product = $product;
-
-        return $this;
-    }
-
-    public function getName(): ?string
-    {
-        return $this->name;
-    }
-
-    public function setName(string $name): static
-    {
-        $this->name = $name;
-
-        return $this;
-    }
-
-    public function getPosition(): int
-    {
-        return $this->position;
-    }
-
-    public function setPosition(int $position): static
-    {
-        $this->position = $position;
-
-        return $this;
-    }
-
-    public function getRequiredQuantity(): int
-    {
-        return $this->requiredQuantity;
-    }
-
-    public function setRequiredQuantity(int $requiredQuantity): static
-    {
-        $this->requiredQuantity = $requiredQuantity;
-
-        return $this;
-    }
-
-    public function getCurrentQuantity(): int
-    {
-        return $this->currentQuantity;
-    }
-
-    public function setCurrentQuantity(int $currentQuantity): static
-    {
-        $this->currentQuantity = $currentQuantity;
-
-        return $this;
-    }
-
-    public function getCreatedAt(): ?\DateTimeImmutable
-    {
-        return $this->createdAt;
-    }
-
-    public function setCreatedAt(\DateTimeImmutable $createdAt): static
-    {
-        $this->createdAt = $createdAt;
-
         return $this;
     }
 
@@ -157,7 +154,6 @@ class Rack
             $this->interventions->add($intervention);
             $intervention->setRack($this);
         }
-
         return $this;
     }
 
@@ -168,27 +164,30 @@ class Rack
                 $intervention->setRack(null);
             }
         }
-
         return $this;
     }
 
     /**
-     * Calcule le taux de remplissage du rack en pourcentage.
+     * Vérifier si le rack a besoin d'un remplissage
      */
-    public function getFillRate(): float
+    public function needsRefill(): bool
     {
-        if (0 === $this->requiredQuantity) {
-            return 0.0;
-        }
-
-        return ($this->currentQuantity / $this->requiredQuantity) * 100;
+        return $this->currentQuantity < $this->requiredQuantity;
     }
 
     /**
-     * Vérifie si le rack nécessite un réapprovisionnement.
+     * Calculer le pourcentage de remplissage
      */
-    public function needsRefill(int $threshold = 50): bool
+    public function getFillPercentage(): int
     {
-        return $this->getFillRate() < $threshold;
+        if ($this->requiredQuantity === 0) {
+            return 0;
+        }
+        return (int) (($this->currentQuantity / $this->requiredQuantity) * 100);
+    }
+
+    public function __toString(): string
+    {
+        return $this->name ?? '';
     }
 }

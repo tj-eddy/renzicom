@@ -130,23 +130,13 @@
 								</li>
 							{% endif %}
 							{# Sous-menu Réseau de Distribution #}
-							<li class="sidebar-item has-sub {% if app.request.get('_route') starts with 'app_hotel' or app.request.get('_route') starts with 'app_display' or app.request.get('_route') starts with 'app_rack' %}active{% endif %}">
-								<a href="#" class='sidebar-link'>
-									<i class="bi bi-building"></i>
-									<span>{{ 'nav.distribution.network'|trans }}</span>
-								</a>
-								<ul class="submenu {% if app.request.get('_route') starts with 'app_hotel' or app.request.get('_route') starts with 'app_display' or app.request.get('_route') starts with 'app_rack' %}active{% endif %}">
-									<li class="submenu-item {% if app.request.get('_route') starts with 'app_hotel' %}active{% endif %}">
-										<a href="{{ path('app_hotel_index') }}">{{ 'nav.distribution.hotels'|trans }}</a>
-									</li>
-									<li class="submenu-item {% if app.request.get('_route') starts with 'app_display' %}active{% endif %}">
-										<a href="{{ path('app_display_index') }}">{{ 'nav.distribution.displays'|trans }}</a>
-									</li>
-									<li class="submenu-item {% if app.request.get('_route') starts with 'app_rack' %}active{% endif %}">
-										<a href="{{ path('app_rack_index') }}">{{ 'nav.distribution.racks'|trans }}</a>
-									</li>
-								</ul>
-							</li>
+
+                            <li class="sidebar-item {% if app.request.get('_route') starts with 'app_hotel' %}active{% endif %}">
+                                <a href="{{ path('app_hotel_index') }}" class='sidebar-link'>
+                                    <i class="bi bi-people-fill"></i>
+                                    <span>{{ 'nav.distribution.network'|trans }}</span>
+                                </a>
+                            </li>
 
 							{# === OPÉRATIONS === #}
 

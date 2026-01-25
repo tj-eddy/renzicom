@@ -15,9 +15,9 @@
                             <a href="{{ path('app_dashboard') }}">{{ 'breadcrumb.home'|trans }}</a>
                         </li>
                         <li class="breadcrumb-item">
-                            <a href="{{ path('app_hotel_index') }}">{{ 'hotel.list.title'|trans }}</a>
+                            <a href="{{ path('app_hotel_index') }}">{{ 'hotel.title'|trans }}</a>
                         </li>
-                        <li class="breadcrumb-item active" aria-current="page">{{ 'breadcrumb.new'|trans }}</li>
+                        <li class="breadcrumb-item active" aria-current="page">{{ 'hotel.actions.new'|trans }}</li>
                     </ol>
                 </nav>
             </div>
@@ -26,14 +26,372 @@
 {% endblock %}
 
 {% block body %}
-    <div class="card">
-        <div class="card-header">
-            <h4 class="card-title">{{ 'hotel.actions.new'|trans }}</h4>
-        </div>
-        <div class="card-content">
-            <div class="card-body">
-                {{ include('hotel/_form.html.twig', {'button_label': 'Create'}) }}
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="card-title">
+                        <i class="bi bi-building me-2"></i>
+                        Créer un nouvel hôtel avec ses présentoirs
+                    </h4>
+                </div>
+                <div class="card-body">
+                    {{ form_start(form) }}
+
+                    {# Section 1: Informations de l'hôtel #}
+                    <div class="mb-4">
+                        <h5 class="mb-3">
+                            <i class="bi bi-info-circle me-2"></i>
+                            Informations de l'hôtel
+                        </h5>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group mb-3">
+                                    {{ form_label(form.name, null, {'label_attr': {'class': 'form-label'}}) }}
+                                    {{ form_widget(form.name, {'attr': {'class': 'form-control', 'placeholder': 'Ex: Hôtel Carlton'}}) }}
+                                    {{ form_errors(form.name) }}
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group mb-3">
+                                    {{ form_label(form.address, null, {'label_attr': {'class': 'form-label'}}) }}
+                                    {{ form_widget(form.address, {'attr': {'class': 'form-control', 'placeholder': 'Adresse complète'}}) }}
+                                    {{ form_errors(form.address) }}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="form-group mb-3">
+                                    {{ form_label(form.contactName, null, {'label_attr': {'class': 'form-label'}}) }}
+                                    {{ form_widget(form.contactName, {'attr': {'class': 'form-control', 'placeholder': 'Nom du contact'}}) }}
+                                    {{ form_errors(form.contactName) }}
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group mb-3">
+                                    {{ form_label(form.contactEmail, null, {'label_attr': {'class': 'form-label'}}) }}
+                                    {{ form_widget(form.contactEmail, {'attr': {'class': 'form-control', 'placeholder': 'email@exemple.com'}}) }}
+                                    {{ form_errors(form.contactEmail) }}
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group mb-3">
+                                    {{ form_label(form.contactPhone, null, {'label_attr': {'class': 'form-label'}}) }}
+                                    {{ form_widget(form.contactPhone, {'attr': {'class': 'form-control', 'placeholder': '+261 34 00 000 00'}}) }}
+                                    {{ form_errors(form.contactPhone) }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <hr class="my-4">
+
+                    {# Section 2: Présentoirs et Racks #}
+                    <div class="mb-4">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h5 class="mb-0">
+                                <i class="bi bi-tv me-2"></i>
+                                Présentoirs et racks
+                            </h5>
+                            <button type="button" class="btn btn-sm btn-dark" id="add-display-btn">
+                                <i class="bi bi-plus-circle me-1"></i>
+                                Ajouter un présentoir
+                            </button>
+                        </div>
+
+                        {% set displayPrototype = form_row(form.displays.vars.prototype.name) ~ form_row(form.displays.vars.prototype.location) %}
+
+                        <div id="displays-collection"
+                             data-prototype="{{ displayPrototype|e('html_attr') }}"
+                             data-index="{{ form.displays|length }}">
+
+                            {% for displayForm in form.displays %}
+                                <div class="display-item card mb-3" data-display-index="{{ loop.index0 }}">
+                                    <div class="card-body">
+                                        {# Info du présentoir #}
+                                        <div class="row mb-3">
+                                            <div class="col-md-5">
+                                                <div class="form-group mb-0">
+                                                    {{ form_label(displayForm.name, 'Nom du présentoir', {'label_attr': {'class': 'form-label'}}) }}
+                                                    {{ form_widget(displayForm.name, {'attr': {'class': 'form-control', 'placeholder': 'Ex: Présentoir Hall'}}) }}
+                                                    {{ form_errors(displayForm.name) }}
+                                                </div>
+                                            </div>
+                                            <div class="col-md-5">
+                                                <div class="form-group mb-0">
+                                                    {{ form_label(displayForm.location, 'Emplacement', {'label_attr': {'class': 'form-label'}}) }}
+                                                    {{ form_widget(displayForm.location, {'attr': {'class': 'form-control', 'placeholder': 'Ex: Hall principal'}}) }}
+                                                    {{ form_errors(displayForm.location) }}
+                                                </div>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <label class="form-label">&nbsp;</label>
+                                                <button type="button" class="btn btn-danger btn-sm w-100 remove-display-btn" title="Supprimer ce présentoir">
+                                                    <i class="bi bi-trash"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+
+                                        <hr class="my-3">
+
+                                        {# Racks de ce présentoir #}
+                                        <div class="racks-section">
+                                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                                <h6 class="mb-0 text-muted">
+                                                    <i class="bi bi-layers me-2"></i>
+                                                    Racks
+                                                </h6>
+                                                <button type="button" class="btn btn-sm btn-outline-dark add-rack-btn" data-display-index="{{ loop.index0 }}">
+                                                    <i class="bi bi-plus me-1"></i>
+                                                    Ajouter un rack
+                                                </button>
+                                            </div>
+
+                                            <div class="racks-collection" data-display-index="{{ loop.index0 }}" data-rack-index="{{ displayForm.racks|length }}">
+                                                {% for rackForm in displayForm.racks %}
+                                                    <div class="rack-item card card-body mb-2 bg-light">
+                                                        <div class="row align-items-end">
+                                                            <div class="col-md-3">
+                                                                {{ form_label(rackForm.name, 'Nom', {'label_attr': {'class': 'form-label'}}) }}
+                                                                {{ form_widget(rackForm.name, {'attr': {'class': 'form-control', 'placeholder': 'Rack A'}}) }}
+                                                            </div>
+                                                            <div class="col-md-2">
+                                                                {{ form_label(rackForm.position, 'Position', {'label_attr': {'class': 'form-label'}}) }}
+                                                                {{ form_widget(rackForm.position, {'attr': {'class': 'form-control'}}) }}
+                                                            </div>
+                                                            <div class="col-md-3">
+                                                                {{ form_label(rackForm.product, 'Produit', {'label_attr': {'class': 'form-label'}}) }}
+                                                                {{ form_widget(rackForm.product, {'attr': {'class': 'form-select product-select'}}) }}
+                                                            </div>
+                                                            <div class="col-md-2">
+                                                                {{ form_label(rackForm.requiredQuantity, 'Qté requise', {'label_attr': {'class': 'form-label'}}) }}
+                                                                {{ form_widget(rackForm.requiredQuantity, {'attr': {'class': 'form-control'}}) }}
+                                                            </div>
+                                                            <div class="col-md-2">
+                                                                <button type="button" class="btn btn-danger btn-sm w-100 remove-rack-btn">
+                                                                    <i class="bi bi-trash"></i>
+                                                                </button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                {% endfor %}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+
+                        {# Message si aucun présentoir #}
+                        <div id="no-displays-message" class="alert alert-info" style="display: none;">
+                            <i class="bi bi-info-circle me-2"></i>
+                            Aucun présentoir défini. Cliquez sur "Ajouter un présentoir" pour commencer.
+                        </div>
+                    </div>
+
+                    <hr class="my-4">
+
+                    {# Section 3: Actions #}
+                    <div class="d-flex justify-content-between">
+                        <a href="{{ path('app_hotel_index') }}" class="btn btn-light">
+                            <i class="bi bi-arrow-left me-1"></i>
+                            {{ 'actions.back'|trans }}
+                        </a>
+                        <button type="submit" class="btn btn-dark">
+                            <i class="bi bi-check-circle me-1"></i>
+                            {{ 'actions.create'|trans }}
+                        </button>
+                    </div>
+
+                    {{ form_end(form) }}
+                </div>
             </div>
         </div>
     </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        $(document).ready(function() {
+            // Initialiser Select2 pour les produits
+            initSelect2('.product-select');
+
+            var $displaysCollection = $('#displays-collection');
+            var $addDisplayBtn = $('#add-display-btn');
+            var $noDisplaysMessage = $('#no-displays-message');
+            var displayIndex = $displaysCollection.data('index');
+
+            // Récupérer les options de produits pour les nouveaux racks
+            var productOptions = '';
+            {% for product in products %}
+            productOptions += '<option value="{{ product.id }}">{{ product.name }}</option>';
+            {% endfor %}
+
+            // Vérifier si aucun présentoir
+            function checkDisplaysEmpty() {
+                if ($displaysCollection.find('.display-item').length === 0) {
+                    $noDisplaysMessage.show();
+                } else {
+                    $noDisplaysMessage.hide();
+                }
+            }
+
+            checkDisplaysEmpty();
+
+            // Ajouter un présentoir
+            $addDisplayBtn.on('click', function(e) {
+                e.preventDefault();
+
+                var prototype = $displaysCollection.data('prototype');
+                var newDisplayHtml = prototype.replace(/__name__/g, displayIndex);
+
+                var $tempDiv = $('<div>').html(newDisplayHtml);
+
+                // Extraire les champs name et location
+                var $nameField = $tempDiv.find('input, select, textarea').first();
+                var $locationField = $tempDiv.find('input, select, textarea').eq(1);
+
+                var $newDisplay = $('<div class="display-item card mb-3">').attr('data-display-index', displayIndex);
+                var $cardBody = $('<div class="card-body">');
+
+                // Ligne des champs du présentoir
+                var $row = $('<div class="row mb-3">');
+
+                // Colonne Nom
+                var $colName = $('<div class="col-md-5">');
+                var $formGroupName = $('<div class="form-group mb-0">');
+                $formGroupName.append('<label class="form-label">Nom du présentoir</label>');
+                $nameField.addClass('form-control').attr('placeholder', 'Ex: Présentoir Hall');
+                $formGroupName.append($nameField);
+                $colName.append($formGroupName);
+
+                // Colonne Emplacement
+                var $colLocation = $('<div class="col-md-5">');
+                var $formGroupLocation = $('<div class="form-group mb-0">');
+                $formGroupLocation.append('<label class="form-label">Emplacement</label>');
+                $locationField.addClass('form-control').attr('placeholder', 'Ex: Hall principal');
+                $formGroupLocation.append($locationField);
+                $colLocation.append($formGroupLocation);
+
+                // Colonne Supprimer
+                var $colDelete = $('<div class="col-md-2">');
+                $colDelete.append('<label class="form-label">&nbsp;</label>');
+                var $btnDelete = $('<button type="button" class="btn btn-danger btn-sm w-100 remove-display-btn" title="Supprimer ce présentoir">');
+                $btnDelete.html('<i class="bi bi-trash"></i>');
+                $colDelete.append($btnDelete);
+
+                $row.append($colName).append($colLocation).append($colDelete);
+                $cardBody.append($row);
+
+                // Séparateur
+                $cardBody.append('<hr class="my-3">');
+
+                // Section Racks
+                var $racksSection = $('<div class="racks-section">');
+                var $racksHeader = $('<div class="d-flex justify-content-between align-items-center mb-2">');
+                $racksHeader.append('<h6 class="mb-0 text-muted"><i class="bi bi-layers me-2"></i>Racks</h6>');
+                var $addRackBtn = $('<button type="button" class="btn btn-sm btn-outline-dark add-rack-btn">');
+                $addRackBtn.attr('data-display-index', displayIndex);
+                $addRackBtn.html('<i class="bi bi-plus me-1"></i> Ajouter un rack');
+                $racksHeader.append($addRackBtn);
+                $racksSection.append($racksHeader);
+
+                var $racksCollection = $('<div class="racks-collection">');
+                $racksCollection.attr('data-display-index', displayIndex);
+                $racksCollection.attr('data-rack-index', 0);
+                $racksSection.append($racksCollection);
+
+                $cardBody.append($racksSection);
+                $newDisplay.append($cardBody);
+
+                $displaysCollection.append($newDisplay);
+                displayIndex++;
+                $displaysCollection.data('index', displayIndex);
+
+                checkDisplaysEmpty();
+            });
+
+            // Supprimer un présentoir
+            $displaysCollection.on('click', '.remove-display-btn', function(e) {
+                e.preventDefault();
+                $(this).closest('.display-item').fadeOut(300, function() {
+                    $(this).remove();
+                    checkDisplaysEmpty();
+                });
+            });
+
+            // Ajouter un rack à un présentoir
+            $displaysCollection.on('click', '.add-rack-btn', function(e) {
+                e.preventDefault();
+
+                var displayIdx = $(this).data('display-index');
+                var $racksCollection = $(this).closest('.display-item').find('.racks-collection');
+                var rackIndex = $racksCollection.data('rack-index') || 0;
+
+                // Créer le HTML du rack manuellement
+                var nameFieldName = 'hotel[displays][' + displayIdx + '][racks][' + rackIndex + '][name]';
+                var nameFieldId = 'hotel_displays_' + displayIdx + '_racks_' + rackIndex + '_name';
+
+                var positionFieldName = 'hotel[displays][' + displayIdx + '][racks][' + rackIndex + '][position]';
+                var positionFieldId = 'hotel_displays_' + displayIdx + '_racks_' + rackIndex + '_position';
+
+                var productFieldName = 'hotel[displays][' + displayIdx + '][racks][' + rackIndex + '][product]';
+                var productFieldId = 'hotel_displays_' + displayIdx + '_racks_' + rackIndex + '_product';
+
+                var quantityFieldName = 'hotel[displays][' + displayIdx + '][racks][' + rackIndex + '][requiredQuantity]';
+                var quantityFieldId = 'hotel_displays_' + displayIdx + '_racks_' + rackIndex + '_requiredQuantity';
+
+                var $newRack = $('<div class="rack-item card card-body mb-2 bg-light">');
+                var $row = $('<div class="row align-items-end">');
+
+                // Colonne Nom
+                var $colName = $('<div class="col-md-3">');
+                $colName.html('<label class="form-label form-label-sm" for="' + nameFieldId + '">Nom</label>' +
+                    '<input type="text" id="' + nameFieldId + '" name="' + nameFieldName + '" class="form-control form-control-sm" placeholder="Rack A" required>');
+
+                // Colonne Position
+                var $colPosition = $('<div class="col-md-2">');
+                $colPosition.html('<label class="form-label form-label-sm" for="' + positionFieldId + '">Position</label>' +
+                    '<input type="number" id="' + positionFieldId + '" name="' + positionFieldName + '" class="form-control form-control-sm" value="0" min="0">');
+
+                // Colonne Produit
+                var $colProduct = $('<div class="col-md-3">');
+                $colProduct.html('<label class="form-label form-label-sm" for="' + productFieldId + '">Produit</label>' +
+                    '<select id="' + productFieldId + '" name="' + productFieldName + '" class="form-select form-select-sm product-select">' +
+                    '<option value="">Sélectionner un produit</option>' +
+                    productOptions +
+                    '</select>');
+
+                // Colonne Quantité
+                var $colQuantity = $('<div class="col-md-2">');
+                $colQuantity.html('<label class="form-label form-label-sm" for="' + quantityFieldId + '">Qté requise</label>' +
+                    '<input type="number" id="' + quantityFieldId + '" name="' + quantityFieldName + '" class="form-control form-control-sm" value="0" min="0">');
+
+                // Colonne Supprimer
+                var $colDelete = $('<div class="col-md-2">');
+                var $btnDelete = $('<button type="button" class="btn btn-sm btn-danger w-100 remove-rack-btn">');
+                $btnDelete.html('<i class="bi bi-trash"></i>');
+                $colDelete.append($btnDelete);
+
+                $row.append($colName).append($colPosition).append($colProduct).append($colQuantity).append($colDelete);
+                $newRack.append($row);
+
+                $racksCollection.append($newRack);
+                $racksCollection.data('rack-index', rackIndex + 1);
+
+                // Initialiser Select2
+                initSelect2($newRack.find('.product-select'));
+            });
+
+            // Supprimer un rack
+            $displaysCollection.on('click', '.remove-rack-btn', function(e) {
+                e.preventDefault();
+                $(this).closest('.rack-item').fadeOut(200, function() {
+                    $(this).remove();
+                });
+            });
+        });
+    </script>
 {% endblock %}
