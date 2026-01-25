@@ -36,14 +36,6 @@ class ImageUploader
     /**
      * @throws \Exception
      */
-    public function uploadProductImage(UploadedFile $file): string
-    {
-        return $this->uploadFile($file, $this->productImagesDirectory);
-    }
-
-    /**
-     * @throws \Exception
-     */
     public function uploadInterventionImage(UploadedFile $file): string
     {
         return $this->uploadFile($file, $this->interventionImagesDirectory);
@@ -67,11 +59,6 @@ class ImageUploader
     public function removeAvatar(string $filename): void
     {
         $this->removeFile($filename, $this->avatarImagesDirectory);
-    }
-
-    public function removeProductImage(string $filename): void
-    {
-        $this->removeFile($filename, $this->productImagesDirectory);
     }
 
     public function removeInterventionImage(string $filename): void
