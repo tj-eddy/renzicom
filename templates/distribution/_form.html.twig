@@ -10,7 +10,8 @@
 {{ form_start(form, {'attr': {'class': 'form form-horizontal'}}) }}
 <div class="form-body">
     <div class="row">
-        {# Livreur #}
+        {# Livreur - Seulement visible pour les admins #}
+        {% if form.user is defined %}
         <div class="col-md-4">
             <label for="{{ form.user.vars.id }}">{{ form_label(form.user) }}</label>
         </div>
@@ -27,6 +28,7 @@
                 {{ form_errors(form.user) }}
             </div>
         </div>
+        {% endif %}
 
         {# Produit #}
         <div class="col-md-4">
@@ -144,7 +146,9 @@
 <script>
     $(document).ready(function() {
         // Initialiser Select2 sur tous les selects
+        {% if form.user is defined %}
         initSelect2('.select2-user');
+        {% endif %}
         initSelect2('.select2-warehouse');
         initSelect2('.select2-product');
     });

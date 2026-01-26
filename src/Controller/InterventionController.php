@@ -59,7 +59,12 @@ class InterventionController extends AbstractController
         }
 
         $intervention = new Intervention();
-        $form = $this->createForm(InterventionType::class, $intervention);
+        $isAdmin = $this->permissionChecker->canCreateProductOrWarehouse(); // Si peut créer produits = admin
+
+        $form = $this->createForm(InterventionType::class, $intervention, [
+            'is_admin' => $isAdmin,
+            'current_user' => $this->getUser(),
+        ]);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -186,7 +191,12 @@ class InterventionController extends AbstractController
         $oldRack = $intervention->getRack();
         $oldDistribution = $intervention->getDistribution();
 
-        $form = $this->createForm(InterventionType::class, $intervention);
+        $isAdmin = $this->permissionChecker->canCreateProductOrWarehouse(); // Si peut créer produits = admin
+
+        $form = $this->createForm(InterventionType::class, $intervention, [
+            'is_admin' => $isAdmin,
+            'current_user' => $this->getUser(),
+        ]);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {

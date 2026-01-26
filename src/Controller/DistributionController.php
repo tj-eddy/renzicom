@@ -43,7 +43,17 @@ class DistributionController extends AbstractController
         }
 
         $distribution = new Distribution();
-        $form = $this->createForm(DistributionType::class, $distribution);
+        $isAdmin = $this->permissionChecker->canCreateProductOrWarehouse(); // Si peut créer produits = admin
+
+        // Si c'est un livreur, définir automatiquement l'utilisateur connecté
+        if (!$isAdmin) {
+            $distribution->setUser($this->getUser());
+        }
+
+        $form = $this->createForm(DistributionType::class, $distribution, [
+            'is_admin' => $isAdmin,
+            'current_user' => $this->getUser(),
+        ]);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             try {
@@ -78,7 +88,12 @@ class DistributionController extends AbstractController
             return $this->redirectToRoute('app_distribution_index');
         }
 
-        $form = $this->createForm(DistributionType::class, $distribution);
+        $isAdmin = $this->permissionChecker->canCreateProductOrWarehouse(); // Si peut créer produits = admin
+
+        $form = $this->createForm(DistributionType::class, $distribution, [
+            'is_admin' => $isAdmin,
+            'current_user' => $this->getUser(),
+        ]);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {

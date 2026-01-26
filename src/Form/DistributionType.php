@@ -21,6 +21,9 @@ class DistributionType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
+        $isAdmin = $options['is_admin'];
+        $currentUser = $options['current_user'];
+
         $builder
             ->add('warehouse', EntityType::class, [
                 'class' => Warehouse::class,
@@ -33,8 +36,11 @@ class DistributionType extends AbstractType
                     'class' => 'form-select',
                     'data-warehouse-select' => 'true',
                 ],
-            ])
-            ->add('user', EntityType::class, [
+            ]);
+
+        // Seuls les admins peuvent choisir l'utilisateur
+        if ($isAdmin) {
+            $builder->add('user', EntityType::class, [
                 'class' => User::class,
                 'choice_label' => function (User $user) {
                     return $user->getName().' ('.$user->getEmail().')';
@@ -52,7 +58,10 @@ class DistributionType extends AbstractType
                         ->setParameter('roleDriver', '%ROLE_DRIVER%')
                         ->orderBy('u.name', 'ASC');
                 },
-            ])
+            ]);
+        }
+
+        $builder
             ->add('status', ChoiceType::class, [
                 'label' => 'distribution.form.status.label',
                 'required' => true,
@@ -137,6 +146,11 @@ class DistributionType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => Distribution::class,
+            'is_admin' => false,
+            'current_user' => null,
         ]);
+
+        $resolver->setAllowedTypes('is_admin', 'bool');
+        $resolver->setAllowedTypes('current_user', ['null', User::class]);
     }
 }

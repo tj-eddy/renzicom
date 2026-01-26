@@ -5,6 +5,7 @@ namespace App\Form;
 use App\Entity\Distribution;
 use App\Entity\Intervention;
 use App\Entity\Rack;
+use App\Entity\User;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
@@ -24,6 +25,9 @@ class InterventionType extends AbstractType
 
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
+        $isAdmin = $options['is_admin'];
+        $currentUser = $options['current_user'];
+
         $builder
             ->add('distribution', EntityType::class, [
                 'class' => Distribution::class,
@@ -41,11 +45,18 @@ class InterventionType extends AbstractType
                 'attr' => [
                     'class' => 'form-select',
                 ],
-                'query_builder' => function ($repository) {
-                    return $repository->createQueryBuilder('d')
+                'query_builder' => function ($repository) use ($isAdmin, $currentUser) {
+                    $qb = $repository->createQueryBuilder('d')
                         ->where('d.status IN (:statuses)')
-                        ->setParameter('statuses', ['preparing', 'in_progress'])
-                        ->orderBy('d.createdAt', 'DESC');
+                        ->setParameter('statuses', ['preparing', 'in_progress']);
+
+                    // Si ce n'est pas un admin, filtrer par utilisateur connecté
+                    if (!$isAdmin && $currentUser) {
+                        $qb->andWhere('d.user = :user')
+                           ->setParameter('user', $currentUser);
+                    }
+
+                    return $qb->orderBy('d.createdAt', 'DESC');
                 },
             ])
             ->add('rack', EntityType::class, [
@@ -138,6 +149,11 @@ class InterventionType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => Intervention::class,
+            'is_admin' => false,
+            'current_user' => null,
         ]);
+
+        $resolver->setAllowedTypes('is_admin', 'bool');
+        $resolver->setAllowedTypes('current_user', ['null', User::class]);
     }
 }
