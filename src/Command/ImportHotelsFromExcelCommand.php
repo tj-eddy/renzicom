@@ -68,6 +68,10 @@ class ImportHotelsFromExcelCommand extends Command
                 // Pour MySQL
                 $connection->executeStatement('SET FOREIGN_KEY_CHECKS = 0');
                 
+                // Supprimer les données dépendantes d'abord
+                $interventionCount = $this->entityManager->createQuery('DELETE FROM App\Entity\Intervention')->execute();
+                $io->text("  ✓ $interventionCount interventions supprimées");
+
                 // Supprimer les données dans l'ordre (des enfants vers les parents)
                 $rackCount = $this->entityManager->createQuery('DELETE FROM App\Entity\Rack')->execute();
                 $io->text("  ✓ $rackCount racks supprimés");
