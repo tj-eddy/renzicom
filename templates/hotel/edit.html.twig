@@ -152,24 +152,32 @@
                                                 {% for rackForm in displayForm.racks %}
                                                     <div class="rack-item card card-body mb-2 bg-light">
                                                         <div class="row align-items-end">
-                                                            <div class="col-md-3">
+                                                            <div class="col-md-2">
                                                                 {{ form_label(rackForm.name, 'Nom', {'label_attr': {'class': 'form-label'}}) }}
-                                                                {{ form_widget(rackForm.name, {'attr': {'class': 'form-control', 'placeholder': 'Rack A'}}) }}
+                                                                {{ form_widget(rackForm.name, {'attr': {'class': 'form-control form-control-sm', 'placeholder': 'Rack A'}}) }}
+                                                            </div>
+                                                            <div class="col-md-1">
+                                                                {{ form_label(rackForm.position, 'Pos.', {'label_attr': {'class': 'form-label'}}) }}
+                                                                {{ form_widget(rackForm.position, {'attr': {'class': 'form-control form-control-sm'}}) }}
                                                             </div>
                                                             <div class="col-md-2">
-                                                                {{ form_label(rackForm.position, 'Position', {'label_attr': {'class': 'form-label'}}) }}
-                                                                {{ form_widget(rackForm.position, {'attr': {'class': 'form-control'}}) }}
-                                                            </div>
-                                                            <div class="col-md-3">
                                                                 {{ form_label(rackForm.product, 'Produit', {'label_attr': {'class': 'form-label'}}) }}
-                                                                {{ form_widget(rackForm.product, {'attr': {'class': 'form-select product-select'}}) }}
+                                                                {{ form_widget(rackForm.product, {'attr': {'class': 'form-select form-select-sm product-select'}}) }}
                                                             </div>
                                                             <div class="col-md-2">
                                                                 {{ form_label(rackForm.requiredQuantity, 'Qté requise', {'label_attr': {'class': 'form-label'}}) }}
-                                                                {{ form_widget(rackForm.requiredQuantity, {'attr': {'class': 'form-control'}}) }}
+                                                                {{ form_widget(rackForm.requiredQuantity, {'attr': {'class': 'form-control form-control-sm required-qty'}}) }}
                                                             </div>
                                                             <div class="col-md-2">
-                                                                <button type="button" class="btn btn-danger btn remove-rack-btn">
+                                                                {{ form_label(rackForm.currentQuantity, 'Qté actuelle', {'label_attr': {'class': 'form-label'}}) }}
+                                                                {{ form_widget(rackForm.currentQuantity, {'attr': {'class': 'form-control form-control-sm current-qty'}}) }}
+                                                            </div>
+                                                            <div class="col-md-2">
+                                                                <label class="form-label">Reste</label>
+                                                                <input type="text" class="form-control form-control-sm remaining-qty" readonly style="background-color: #e9ecef;">
+                                                            </div>
+                                                            <div class="col-md-1">
+                                                                <button type="button" class="btn btn-danger btn-sm remove-rack-btn">
                                                                     <i class="bi bi-trash"></i>
                                                                 </button>
                                                             </div>
@@ -340,42 +348,55 @@
                 var productFieldName = 'hotel[displays][' + displayIdx + '][racks][' + rackIndex + '][product]';
                 var productFieldId = 'hotel_displays_' + displayIdx + '_racks_' + rackIndex + '_product';
 
-                var quantityFieldName = 'hotel[displays][' + displayIdx + '][racks][' + rackIndex + '][requiredQuantity]';
-                var quantityFieldId = 'hotel_displays_' + displayIdx + '_racks_' + rackIndex + '_requiredQuantity';
+                var requiredQtyFieldName = 'hotel[displays][' + displayIdx + '][racks][' + rackIndex + '][requiredQuantity]';
+                var requiredQtyFieldId = 'hotel_displays_' + displayIdx + '_racks_' + rackIndex + '_requiredQuantity';
+
+                var currentQtyFieldName = 'hotel[displays][' + displayIdx + '][racks][' + rackIndex + '][currentQuantity]';
+                var currentQtyFieldId = 'hotel_displays_' + displayIdx + '_racks_' + rackIndex + '_currentQuantity';
 
                 var $newRack = $('<div class="rack-item card card-body mb-2 bg-light">');
                 var $row = $('<div class="row align-items-end">');
 
                 // Colonne Nom
-                var $colName = $('<div class="col-md-3">');
+                var $colName = $('<div class="col-md-2">');
                 $colName.html('<label class="form-label" for="' + nameFieldId + '">Nom</label>' +
-                    '<input type="text" id="' + nameFieldId + '" name="' + nameFieldName + '" class="form-control" placeholder="Rack A" required>');
+                    '<input type="text" id="' + nameFieldId + '" name="' + nameFieldName + '" class="form-control form-control-sm" placeholder="Rack A" required>');
 
                 // Colonne Position
-                var $colPosition = $('<div class="col-md-2">');
-                $colPosition.html('<label class="form-label" for="' + positionFieldId + '">Position</label>' +
-                    '<input type="number" id="' + positionFieldId + '" name="' + positionFieldName + '" class="form-control" value="0" min="0">');
+                var $colPosition = $('<div class="col-md-1">');
+                $colPosition.html('<label class="form-label" for="' + positionFieldId + '">Pos.</label>' +
+                    '<input type="number" id="' + positionFieldId + '" name="' + positionFieldName + '" class="form-control form-control-sm" value="0" min="0">');
 
                 // Colonne Produit
-                var $colProduct = $('<div class="col-md-3">');
+                var $colProduct = $('<div class="col-md-2">');
                 $colProduct.html('<label class="form-label" for="' + productFieldId + '">Produit</label>' +
-                    '<select id="' + productFieldId + '" name="' + productFieldName + '" class="form-select product-select">' +
+                    '<select id="' + productFieldId + '" name="' + productFieldName + '" class="form-select form-select-sm product-select">' +
                     '<option value="">Sélectionner un produit</option>' +
                     productOptions +
                     '</select>');
 
-                // Colonne Quantité
-                var $colQuantity = $('<div class="col-md-2">');
-                $colQuantity.html('<label class="form-label" for="' + quantityFieldId + '">Qté requise</label>' +
-                    '<input type="number" id="' + quantityFieldId + '" name="' + quantityFieldName + '" class="form-control" value="0" min="0">');
+                // Colonne Quantité Requise
+                var $colRequiredQty = $('<div class="col-md-2">');
+                $colRequiredQty.html('<label class="form-label" for="' + requiredQtyFieldId + '">Qté requise</label>' +
+                    '<input type="number" id="' + requiredQtyFieldId + '" name="' + requiredQtyFieldName + '" class="form-control form-control-sm required-qty" value="0" min="0">');
+
+                // Colonne Quantité Actuelle
+                var $colCurrentQty = $('<div class="col-md-2">');
+                $colCurrentQty.html('<label class="form-label" for="' + currentQtyFieldId + '">Qté actuelle</label>' +
+                    '<input type="number" id="' + currentQtyFieldId + '" name="' + currentQtyFieldName + '" class="form-control form-control-sm current-qty" value="0" min="0">');
+
+                // Colonne Reste (calculé)
+                var $colRemaining = $('<div class="col-md-2">');
+                $colRemaining.html('<label class="form-label">Reste</label>' +
+                    '<input type="text" class="form-control form-control-sm remaining-qty" readonly style="background-color: #e9ecef;" value="0">');
 
                 // Colonne Supprimer
-                var $colDelete = $('<div class="col-md-2">');
-                var $btnDelete = $('<button type="button" class="btn btn-danger btn remove-rack-btn">');
+                var $colDelete = $('<div class="col-md-1">');
+                var $btnDelete = $('<button type="button" class="btn btn-danger btn-sm remove-rack-btn">');
                 $btnDelete.html('<i class="bi bi-trash"></i>');
                 $colDelete.append($btnDelete);
 
-                $row.append($colName).append($colPosition).append($colProduct).append($colQuantity).append($colDelete);
+                $row.append($colName).append($colPosition).append($colProduct).append($colRequiredQty).append($colCurrentQty).append($colRemaining).append($colDelete);
                 $newRack.append($row);
 
                 $racksCollection.append($newRack);
@@ -391,6 +412,25 @@
                 $(this).closest('.rack-item').fadeOut(200, function() {
                     $(this).remove();
                 });
+            });
+
+            // Calculer automatiquement la quantité restante
+            function calculateRemaining($rackItem) {
+                var requiredQty = parseInt($rackItem.find('.required-qty').val()) || 0;
+                var currentQty = parseInt($rackItem.find('.current-qty').val()) || 0;
+                var remaining = requiredQty - currentQty;
+                $rackItem.find('.remaining-qty').val(remaining);
+            }
+
+            // Calculer au chargement de la page pour tous les racks existants
+            $('.rack-item').each(function() {
+                calculateRemaining($(this));
+            });
+
+            // Calculer lors des changements de quantité requise ou actuelle
+            $displaysCollection.on('input change', '.required-qty, .current-qty', function() {
+                var $rackItem = $(this).closest('.rack-item');
+                calculateRemaining($rackItem);
             });
         });
     </script>

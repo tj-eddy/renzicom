@@ -46,11 +46,21 @@ class RackEmbeddedType extends AbstractType
             ->add('requiredQuantity', IntegerType::class, [
                 'label' => 'Quantité requise',
                 'attr' => [
-                    'class' => 'form-control form-control-sm',
+                    'class' => 'form-control form-control-sm required-qty',
                     'min' => 0,
                     'placeholder' => '0'
                 ],
                 'required' => true,
+                'empty_data' => '0'
+            ])
+            ->add('currentQuantity', IntegerType::class, [
+                'label' => 'Quantité actuelle',
+                'attr' => [
+                    'class' => 'form-control form-control-sm current-qty',
+                    'min' => 0,
+                    'placeholder' => '0'
+                ],
+                'required' => false,
                 'empty_data' => '0'
             ])
         ;
