@@ -11,8 +11,10 @@ use PhpOffice\PhpSpreadsheet\IOFactory;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
+use Symfony\Component\Console\Question\ConfirmationQuestion;
 
 #[AsCommand(
     name: 'app:import:hotels-excel',
@@ -26,10 +28,67 @@ class ImportHotelsFromExcelCommand extends Command
         parent::__construct();
     }
 
+    protected function configure(): void
+    {
+        $this->addOption(
+            'clear',
+            'c',
+            InputOption::VALUE_NONE,
+            'Vider les tables hotel, display et rack avant l\'import'
+        );
+    }
+
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = new SymfonyStyle($input, $output);
         $io->title('Importation des données depuis le fichier Excel');
+
+        // Option pour vider les tables
+        if ($input->getOption('clear')) {
+            $io->warning('⚠️  Vous êtes sur le point de supprimer TOUTES les données des tables : Hotel, Display, Rack');
+            
+            $helper = $this->getHelper('question');
+            $question = new ConfirmationQuestion(
+                'Êtes-vous sûr de vouloir continuer ? (oui/non) [non]: ',
+                false
+            );
+
+            if (!$helper->ask($input, $output, $question)) {
+                $io->info('Opération annulée.');
+                return Command::SUCCESS;
+            }
+
+            $io->section('🗑️  Suppression des données existantes...');
+            
+            try {
+                // Désactiver temporairement les contraintes de clés étrangères
+                $connection = $this->entityManager->getConnection();
+                $platform = $connection->getDatabasePlatform();
+                
+                // Pour MySQL
+                $connection->executeStatement('SET FOREIGN_KEY_CHECKS = 0');
+                
+                // Supprimer les données dans l'ordre (des enfants vers les parents)
+                $rackCount = $this->entityManager->createQuery('DELETE FROM App\Entity\Rack')->execute();
+                $io->text("  ✓ $rackCount racks supprimés");
+                
+                $displayCount = $this->entityManager->createQuery('DELETE FROM App\Entity\Display')->execute();
+                $io->text("  ✓ $displayCount présentoirs supprimés");
+                
+                $hotelCount = $this->entityManager->createQuery('DELETE FROM App\Entity\Hotel')->execute();
+                $io->text("  ✓ $hotelCount hôtels supprimés");
+                
+                // Réactiver les contraintes
+                $connection->executeStatement('SET FOREIGN_KEY_CHECKS = 1');
+                
+                $io->success('Tables vidées avec succès !');
+                $io->newLine();
+                
+            } catch (\Exception $e) {
+                $io->error('Erreur lors de la suppression : ' . $e->getMessage());
+                return Command::FAILURE;
+            }
+        }
 
         $filePath = __DIR__ . '/../../public/RC_Réseau-A_D_Présentoirs_Suisse.xlsx';
 
