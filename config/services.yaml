@@ -32,3 +32,7 @@ services:
             $avatarImagesDirectory: '%avatar_images_directory%'
             $productImagesDirectory: '%product_images_directory%'
             $interventionImagesDirectory: '%intervention_images_directory%'
+
+    App\Command\ImportHotelsFromExcelCommand:
+        tags:
+            - { name: 'console.command', command: 'app:import:hotels-excel' }
