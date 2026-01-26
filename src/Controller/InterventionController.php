@@ -7,6 +7,7 @@ use App\Form\InterventionType;
 use App\Service\ImageUploader;
 use App\Service\StockManager;
 use App\Repository\RackRepository;
+use App\Security\PermissionChecker;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Repository\InterventionRepository;
 use Symfony\Component\HttpFoundation\Request;
@@ -20,6 +21,7 @@ class InterventionController extends AbstractController
 {
     public function __construct(
         private readonly TranslatorInterface $translator,
+        private readonly PermissionChecker $permissionChecker,
     ) {}
     #[Route('/', name: 'app_intervention_index', methods: ['GET'])]
     public function index(InterventionRepository $interventionRepository): Response
@@ -50,6 +52,12 @@ class InterventionController extends AbstractController
         ImageUploader $imageUploader,
         StockManager $stockManager,
     ): Response {
+        // Vérification de permission: seuls les admins et livreurs peuvent créer des interventions
+        if (!$this->permissionChecker->canCreateIntervention()) {
+            $this->addFlash('error', $this->translator->trans('access.denied.create_intervention'));
+            return $this->redirectToRoute('app_intervention_index', [], Response::HTTP_SEE_OTHER);
+        }
+
         $intervention = new Intervention();
         $form = $this->createForm(InterventionType::class, $intervention);
         $form->handleRequest($request);
@@ -159,6 +167,12 @@ class InterventionController extends AbstractController
         ImageUploader $imageUploader,
         StockManager $stockManager,
     ): Response {
+        // Vérification de permission: seuls les admins et livreurs peuvent modifier des interventions
+        if (!$this->permissionChecker->canCreateIntervention()) {
+            $this->addFlash('error', $this->translator->trans('access.denied.create_intervention'));
+            return $this->redirectToRoute('app_intervention_index', [], Response::HTTP_SEE_OTHER);
+        }
+
         // Vérifier si l'utilisateur a le droit de modifier cette intervention
         if (
             !$this->isGranted('ROLE_ADMIN')
@@ -289,6 +303,12 @@ class InterventionController extends AbstractController
         ImageUploader $imageUploader,
         StockManager $stockManager,
     ): Response {
+        // Vérification de permission: seuls les admins peuvent supprimer
+        if (!$this->permissionChecker->canDelete()) {
+            $this->addFlash('error', $this->translator->trans('access.denied.delete_any'));
+            return $this->redirectToRoute('app_intervention_index', [], Response::HTTP_SEE_OTHER);
+        }
+
         if ($this->isCsrfTokenValid('delete' . $intervention->getId(), $request->getPayload()->getString('_token'))) {
             $rack = $intervention->getRack();
             $distribution = $intervention->getDistribution();

@@ -7,6 +7,7 @@ use App\Service\StockManager;
 use App\Form\DistributionType;
 use App\Repository\DistributionRepository;
 use App\Repository\WarehouseRepository;
+use App\Security\PermissionChecker;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -21,6 +22,7 @@ class DistributionController extends AbstractController
         private EntityManagerInterface $entityManager,
         private TranslatorInterface $translator,
         private StockManager $stockManager,
+        private PermissionChecker $permissionChecker,
     ) {}
 
     #[Route('/', name: 'app_distribution_index', methods: ['GET'])]
@@ -34,6 +36,12 @@ class DistributionController extends AbstractController
     #[Route('/new', name: 'app_distribution_new', methods: ['GET', 'POST'])]
     public function new(Request $request): Response
     {
+        // Vérification de permission: seuls les admins et livreurs peuvent créer des distributions
+        if (!$this->permissionChecker->canCreateDistribution()) {
+            $this->addFlash('error', $this->translator->trans('access.denied.create_distribution'));
+            return $this->redirectToRoute('app_distribution_index');
+        }
+
         $distribution = new Distribution();
         $form = $this->createForm(DistributionType::class, $distribution);
         $form->handleRequest($request);
@@ -64,6 +72,11 @@ class DistributionController extends AbstractController
     #[Route('/{id}/edit', name: 'app_distribution_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Distribution $distribution): Response
     {
+        // Vérification de permission: seuls les admins et livreurs peuvent modifier des distributions
+        if (!$this->permissionChecker->canEditDistribution()) {
+            $this->addFlash('error', $this->translator->trans('access.denied.edit_distribution'));
+            return $this->redirectToRoute('app_distribution_index');
+        }
 
         $form = $this->createForm(DistributionType::class, $distribution);
         $form->handleRequest($request);
@@ -99,6 +112,12 @@ class DistributionController extends AbstractController
     #[Route('/{id}/complete', name: 'app_distribution_complete', methods: ['POST'])]
     public function complete(Request $request, Distribution $distribution): Response
     {
+        // Vérification de permission: seuls les admins et livreurs peuvent compléter des distributions
+        if (!$this->permissionChecker->canEditDistribution()) {
+            $this->addFlash('error', $this->translator->trans('access.denied.edit_distribution'));
+            return $this->redirectToRoute('app_distribution_index');
+        }
+
         // Vérification CSRF
         if (!$this->isCsrfTokenValid('complete' . $distribution->getId(), $request->request->get('_token'))) {
             $this->addFlash('danger', $this->translator->trans('exception.invalid_token'));
@@ -135,6 +154,12 @@ class DistributionController extends AbstractController
     #[Route('/{id}', name: 'app_distribution_delete', methods: ['POST'])]
     public function delete(Request $request, Distribution $distribution): Response
     {
+        // Vérification de permission: seuls les admins peuvent supprimer
+        if (!$this->permissionChecker->canDelete()) {
+            $this->addFlash('error', $this->translator->trans('access.denied.delete_any'));
+            return $this->redirectToRoute('app_distribution_index');
+        }
+
         if ($this->isCsrfTokenValid('delete' . $distribution->getId(), $request->request->get('_token'))) {
             try {
                 $this->entityManager->remove($distribution);

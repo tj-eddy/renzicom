@@ -6,6 +6,7 @@ use App\Entity\Product;
 use App\Entity\Stock;
 use App\Form\ProductType;
 use App\Repository\ProductRepository;
+use App\Security\PermissionChecker;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
@@ -13,6 +14,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\String\Slugger\SluggerInterface;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 #[Route('/product')]
 class ProductController extends AbstractController
@@ -29,8 +31,16 @@ class ProductController extends AbstractController
     public function new(
         Request $request,
         EntityManagerInterface $entityManager,
-        SluggerInterface $slugger
+        SluggerInterface $slugger,
+        PermissionChecker $permissionChecker,
+        TranslatorInterface $translator
     ): Response {
+        // Vérification de permission: seuls les admins peuvent créer des produits
+        if (!$permissionChecker->canCreateProductOrWarehouse()) {
+            $this->addFlash('error', $translator->trans('access.denied.create_product'));
+            return $this->redirectToRoute('app_product_index', [], Response::HTTP_SEE_OTHER);
+        }
+
         $product = new Product();
         $form = $this->createForm(ProductType::class, $product);
         $form->handleRequest($request);
@@ -87,8 +97,16 @@ class ProductController extends AbstractController
         Request $request,
         Product $product,
         EntityManagerInterface $entityManager,
-        SluggerInterface $slugger
+        SluggerInterface $slugger,
+        PermissionChecker $permissionChecker,
+        TranslatorInterface $translator
     ): Response {
+        // Vérification de permission: seuls les admins peuvent modifier des produits
+        if (!$permissionChecker->canCreateProductOrWarehouse()) {
+            $this->addFlash('error', $translator->trans('access.denied.create_product'));
+            return $this->redirectToRoute('app_product_index', [], Response::HTTP_SEE_OTHER);
+        }
+
         $form = $this->createForm(ProductType::class, $product);
         $form->handleRequest($request);
 
@@ -141,8 +159,19 @@ class ProductController extends AbstractController
     }
 
     #[Route('/{id}', name: 'app_product_delete', methods: ['POST'])]
-    public function delete(Request $request, Product $product, EntityManagerInterface $entityManager): Response
-    {
+    public function delete(
+        Request $request,
+        Product $product,
+        EntityManagerInterface $entityManager,
+        PermissionChecker $permissionChecker,
+        TranslatorInterface $translator
+    ): Response {
+        // Vérification de permission: seuls les admins peuvent supprimer
+        if (!$permissionChecker->canDelete()) {
+            $this->addFlash('error', $translator->trans('access.denied.delete_any'));
+            return $this->redirectToRoute('app_product_index', [], Response::HTTP_SEE_OTHER);
+        }
+
         if ($this->isCsrfTokenValid('delete' . $product->getId(), $request->request->get('_token'))) {
             // Supprimer l'image si elle existe
             if ($product->getImage()) {

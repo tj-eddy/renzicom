@@ -548,6 +548,18 @@ access:
         create: "Vous n'avez pas l'autorisation de créer cet élément."
         edit: "Vous n'avez pas l'autorisation de modifier cet élément."
         delete: "Vous n'avez pas l'autorisation de supprimer cet élément."
+        create_product: "Seuls les administrateurs peuvent créer des produits."
+        create_warehouse: "Seuls les administrateurs peuvent créer des entrepôts."
+        create_distribution: "Seuls les administrateurs et livreurs peuvent créer des distributions."
+        create_intervention: "Seuls les administrateurs et livreurs peuvent créer des interventions."
+        edit_distribution: "Seuls les administrateurs et livreurs peuvent modifier des distributions."
+        delete_any: "Seuls les administrateurs peuvent supprimer des éléments."
+        manage_users: "Seuls les administrateurs peuvent gérer les utilisateurs."
+        create_stock: "Seuls les administrateurs peuvent créer des stocks."
+        edit_stock: "Seuls les administrateurs peuvent modifier des stocks."
+        create_hotel: "Seuls les administrateurs peuvent créer des hôtels."
+        create_display: "Seuls les administrateurs peuvent créer des présentoirs."
+        create_rack: "Seuls les administrateurs peuvent créer des racks."
 
 role:
     admin: "Administrateur"

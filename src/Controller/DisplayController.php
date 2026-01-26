@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Display;
 use App\Form\DisplayType;
 use App\Repository\DisplayRepository;
+use App\Security\PermissionChecker;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -18,6 +19,7 @@ class DisplayController extends AbstractController
     public function __construct(
         private readonly EntityManagerInterface $entityManager,
         private readonly TranslatorInterface $translator,
+        private readonly PermissionChecker $permissionChecker,
     ) {
     }
 
@@ -32,6 +34,12 @@ class DisplayController extends AbstractController
     #[Route('/new', name: 'app_display_new', methods: ['GET', 'POST'])]
     public function new(Request $request): Response
     {
+        // Vérification de permission: seuls les admins peuvent créer des présentoirs
+        if (!$this->permissionChecker->canCreateProductOrWarehouse()) {
+            $this->addFlash('error', $this->translator->trans('access.denied.create_display'));
+            return $this->redirectToRoute('app_display_index');
+        }
+
         $display = new Display();
         $form = $this->createForm(DisplayType::class, $display);
         $form->handleRequest($request);
@@ -54,6 +62,12 @@ class DisplayController extends AbstractController
     #[Route('/{id}/edit', name: 'app_display_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Display $display): Response
     {
+        // Vérification de permission: seuls les admins peuvent modifier des présentoirs
+        if (!$this->permissionChecker->canCreateProductOrWarehouse()) {
+            $this->addFlash('error', $this->translator->trans('access.denied.create_display'));
+            return $this->redirectToRoute('app_display_index');
+        }
+
         $form = $this->createForm(DisplayType::class, $display);
         $form->handleRequest($request);
 
@@ -74,6 +88,12 @@ class DisplayController extends AbstractController
     #[Route('/{id}', name: 'app_display_delete', methods: ['POST'])]
     public function delete(Request $request, Display $display): Response
     {
+        // Vérification de permission: seuls les admins peuvent supprimer
+        if (!$this->permissionChecker->canDelete()) {
+            $this->addFlash('error', $this->translator->trans('access.denied.delete_any'));
+            return $this->redirectToRoute('app_display_index');
+        }
+
         if ($this->isCsrfTokenValid('delete' . $display->getId(), $request->request->get('_token'))) {
             $this->entityManager->remove($display);
             $this->entityManager->flush();

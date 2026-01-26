@@ -6,15 +6,23 @@ use App\Entity\Hotel;
 use App\Form\HotelType;
 use App\Repository\HotelRepository;
 use App\Repository\ProductRepository;
+use App\Security\PermissionChecker;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 #[Route('/hotel')]
 class HotelController extends AbstractController
 {
+    public function __construct(
+        private readonly PermissionChecker $permissionChecker,
+        private readonly TranslatorInterface $translator,
+    ) {
+    }
+
     #[Route('/', name: 'app_hotel_index', methods: ['GET'])]
     public function index(HotelRepository $hotelRepository): Response
     {
@@ -26,6 +34,12 @@ class HotelController extends AbstractController
     #[Route('/new', name: 'app_hotel_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager, ProductRepository $productRepository): Response
     {
+        // Vérification de permission: seuls les admins peuvent créer des hôtels
+        if (!$this->permissionChecker->canCreateProductOrWarehouse()) {
+            $this->addFlash('error', $this->translator->trans('access.denied.create_hotel'));
+            return $this->redirectToRoute('app_hotel_index', [], Response::HTTP_SEE_OTHER);
+        }
+
         $hotel = new Hotel();
         $form = $this->createForm(HotelType::class, $hotel);
         $form->handleRequest($request);
@@ -79,6 +93,12 @@ class HotelController extends AbstractController
     #[Route('/{id}/edit', name: 'app_hotel_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Hotel $hotel, EntityManagerInterface $entityManager, ProductRepository $productRepository): Response
     {
+        // Vérification de permission: seuls les admins peuvent modifier des hôtels
+        if (!$this->permissionChecker->canCreateProductOrWarehouse()) {
+            $this->addFlash('error', $this->translator->trans('access.denied.create_hotel'));
+            return $this->redirectToRoute('app_hotel_index', [], Response::HTTP_SEE_OTHER);
+        }
+
         $form = $this->createForm(HotelType::class, $hotel);
         $form->handleRequest($request);
 
@@ -120,6 +140,12 @@ class HotelController extends AbstractController
     #[Route('/{id}', name: 'app_hotel_delete', methods: ['POST'])]
     public function delete(Request $request, Hotel $hotel, EntityManagerInterface $entityManager): Response
     {
+        // Vérification de permission: seuls les admins peuvent supprimer
+        if (!$this->permissionChecker->canDelete()) {
+            $this->addFlash('error', $this->translator->trans('access.denied.delete_any'));
+            return $this->redirectToRoute('app_hotel_index', [], Response::HTTP_SEE_OTHER);
+        }
+
         if ($this->isCsrfTokenValid('delete'.$hotel->getId(), $request->request->get('_token'))) {
             $entityManager->remove($hotel);
             $entityManager->flush();

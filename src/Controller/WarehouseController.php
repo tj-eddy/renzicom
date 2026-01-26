@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Warehouse;
 use App\Form\WarehouseType;
 use App\Repository\WarehouseRepository;
+use App\Security\PermissionChecker;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -18,6 +19,7 @@ class WarehouseController extends AbstractController
     public function __construct(
         private readonly EntityManagerInterface $entityManager,
         private readonly TranslatorInterface $translator,
+        private readonly PermissionChecker $permissionChecker,
     ) {
     }
 
@@ -32,6 +34,12 @@ class WarehouseController extends AbstractController
     #[Route('/new', name: 'app_warehouse_new', methods: ['GET', 'POST'])]
     public function new(Request $request): Response
     {
+        // Vérification de permission: seuls les admins peuvent créer des entrepôts
+        if (!$this->permissionChecker->canCreateProductOrWarehouse()) {
+            $this->addFlash('error', $this->translator->trans('access.denied.create_warehouse'));
+            return $this->redirectToRoute('app_warehouse_index');
+        }
+
         $warehouse = new Warehouse();
         $form = $this->createForm(WarehouseType::class, $warehouse);
         $form->handleRequest($request);
@@ -54,6 +62,12 @@ class WarehouseController extends AbstractController
     #[Route('/{id}/edit', name: 'app_warehouse_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Warehouse $warehouse): Response
     {
+        // Vérification de permission: seuls les admins peuvent modifier des entrepôts
+        if (!$this->permissionChecker->canCreateProductOrWarehouse()) {
+            $this->addFlash('error', $this->translator->trans('access.denied.create_warehouse'));
+            return $this->redirectToRoute('app_warehouse_index');
+        }
+
         $form = $this->createForm(WarehouseType::class, $warehouse);
         $form->handleRequest($request);
 
@@ -74,6 +88,12 @@ class WarehouseController extends AbstractController
     #[Route('/{id}', name: 'app_warehouse_delete', methods: ['POST'])]
     public function delete(Request $request, Warehouse $warehouse): Response
     {
+        // Vérification de permission: seuls les admins peuvent supprimer
+        if (!$this->permissionChecker->canDelete()) {
+            $this->addFlash('error', $this->translator->trans('access.denied.delete_any'));
+            return $this->redirectToRoute('app_warehouse_index');
+        }
+
         if ($this->isCsrfTokenValid('delete' . $warehouse->getId(), $request->request->get('_token'))) {
             $this->entityManager->remove($warehouse);
             $this->entityManager->flush();

@@ -548,6 +548,18 @@ access:
         create: "You are not authorized to create this item."
         edit: "You are not authorized to edit this item."
         delete: "You are not authorized to delete this item."
+        create_product: "Only administrators can create products."
+        create_warehouse: "Only administrators can create warehouses."
+        create_distribution: "Only administrators and drivers can create distributions."
+        create_intervention: "Only administrators and drivers can create interventions."
+        edit_distribution: "Only administrators and drivers can edit distributions."
+        delete_any: "Only administrators can delete items."
+        manage_users: "Only administrators can manage users."
+        create_stock: "Only administrators can create stocks."
+        edit_stock: "Only administrators can edit stocks."
+        create_hotel: "Only administrators can create hotels."
+        create_display: "Only administrators can create display stands."
+        create_rack: "Only administrators can create racks."
 
 role:
     admin: "Administrator"

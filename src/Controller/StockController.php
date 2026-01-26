@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Stock;
 use App\Form\StockType;
 use App\Repository\StockRepository;
+use App\Security\PermissionChecker;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -18,6 +19,7 @@ class StockController extends AbstractController
     public function __construct(
         private EntityManagerInterface $entityManager,
         private TranslatorInterface $translator,
+        private PermissionChecker $permissionChecker,
     ) {
     }
 
@@ -32,6 +34,12 @@ class StockController extends AbstractController
     #[Route('/new', name: 'app_stock_new', methods: ['GET', 'POST'])]
     public function new(Request $request): Response
     {
+        // Vérification de permission: seuls les admins peuvent créer des stocks
+        if (!$this->permissionChecker->canCreateProductOrWarehouse()) {
+            $this->addFlash('error', $this->translator->trans('access.denied.create_stock'));
+            return $this->redirectToRoute('app_stock_index');
+        }
+
         $stock = new Stock();
         $form = $this->createForm(StockType::class, $stock);
         $form->handleRequest($request);
@@ -54,6 +62,12 @@ class StockController extends AbstractController
     #[Route('/{id}/edit', name: 'app_stock_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Stock $stock): Response
     {
+        // Vérification de permission: seuls les admins peuvent modifier des stocks
+        if (!$this->permissionChecker->canCreateProductOrWarehouse()) {
+            $this->addFlash('error', $this->translator->trans('access.denied.edit_stock'));
+            return $this->redirectToRoute('app_stock_index');
+        }
+
         $form = $this->createForm(StockType::class, $stock);
         $form->handleRequest($request);
 
@@ -74,6 +88,12 @@ class StockController extends AbstractController
     #[Route('/{id}', name: 'app_stock_delete', methods: ['POST'])]
     public function delete(Request $request, Stock $stock): Response
     {
+        // Vérification de permission: seuls les admins peuvent supprimer
+        if (!$this->permissionChecker->canDelete()) {
+            $this->addFlash('error', $this->translator->trans('access.denied.delete_any'));
+            return $this->redirectToRoute('app_stock_index');
+        }
+
         if ($this->isCsrfTokenValid('delete' . $stock->getId(), $request->request->get('_token'))) {
             $this->entityManager->remove($stock);
             $this->entityManager->flush();
