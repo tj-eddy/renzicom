@@ -26,6 +26,7 @@ nav:
         products: "Produits"
         warehouses: "Entrepôts"
         stocks: "Stocks"
+        movements: "Flux de stock"
     distribution:
         network: "Réseau de Distribution"
         hotels: "Hôtels"

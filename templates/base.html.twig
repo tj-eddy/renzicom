@@ -115,12 +115,15 @@
 										<i class="bi bi-stack"></i>
 										<span>{{ 'nav.stock.management'|trans }}</span>
 									</a>
-									<ul class="submenu {% if app.request.get('_route') starts with 'app_product' or app.request.get('_route') starts with 'app_warehouse' or app.request.get('_route') starts with 'app_stock' %}active{% endif %}">
+									<ul class="submenu {% if app.request.get('_route') starts with 'app_product' or app.request.get('_route') starts with 'app_warehouse' or app.request.get('_route') starts with 'app_stock' or app.request.get('_route') starts with 'app_stock_movement' %}active{% endif %}">
                                         <li class="submenu-item {% if app.request.get('_route') starts with 'app_warehouse' %}active{% endif %}">
                                             <a href="{{ path('app_warehouse_index') }}">{{ 'nav.stock.warehouses'|trans }}</a>
                                         </li>
                                         <li class="submenu-item {% if app.request.get('_route') starts with 'app_product' %}active{% endif %}">
 											<a href="{{ path('app_product_index') }}">{{ 'nav.stock.products'|trans }}</a>
+										</li>
+										<li class="submenu-item {% if app.request.get('_route') starts with 'app_stock_movement' %}active{% endif %}">
+											<a href="{{ path('app_stock_movement_index') }}">{{ 'nav.stock.movements'|trans }}</a>
 										</li>
 
 {#										<li class="submenu-item {% if app.request.get('_route') starts with 'app_stock' %}active{% endif %}">#}

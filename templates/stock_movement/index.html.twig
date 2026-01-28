@@ -1,0 +1,83 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Historique des mouvements de stock{% endblock %}
+
+{% block page_title %}
+    <div class="page-title">
+        <div class="row">
+            <div class="col-12 col-md-6 order-md-1 order-last">
+                <h3>Historique des mouvements</h3>
+            </div>
+            <div class="col-12 col-md-6 order-md-2 order-first">
+                <nav aria-label="breadcrumb" class="breadcrumb-header float-start float-lg-end">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="{{ path('app_dashboard') }}">Tableau de bord</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Flux de stock</li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block body %}
+    <section class="section">
+        <div class="card">
+            <div class="card-header">
+                <h4 class="card-title">Flux de stock récents</h4>
+            </div>
+            <div class="card-body">
+                <table class="table table-striped" id="movements-table">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Produit</th>
+                            <th>Entrepôt</th>
+                            <th>Quantité</th>
+                            <th>Type</th>
+                            <th>Utilisateur</th>
+                            <th>Commentaire</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% for movement in movements %}
+                        <tr>
+                            <td>{{ movement.createdAt|date('d/m/Y H:i:s') }}</td>
+                            <td>{{ movement.product.name }}</td>
+                            <td>{{ movement.warehouse.name }}</td>
+                            <td>
+                                <span class="badge {{ movement.quantity > 0 ? 'bg-success' : 'bg-danger' }}">
+                                    {{ movement.quantity > 0 ? '+' : '' }}{{ movement.quantity }}
+                                </span>
+                            </td>
+                            <td>
+                                {% set type_class = 'bg-secondary' %}
+                                {% if movement.type == 'INITIAL' %}{% set type_class = 'bg-info' %}
+                                {% elseif movement.type == 'IN' %}{% set type_class = 'bg-success' %}
+                                {% elseif movement.type == 'OUT' %}{% set type_class = 'bg-danger' %}
+                                {% elseif movement.type == 'ADJUSTMENT' %}{% set type_class = 'bg-warning' %}
+                                {% elseif movement.type == 'RETURN' %}{% set type_class = 'bg-primary' %}
+                                {% endif %}
+                                <span class="badge {{ type_class }}">{{ movement.type }}</span>
+                            </td>
+                            <td>{{ movement.user ? movement.user.name : 'Système' }}</td>
+                            <td>{{ movement.comment|default('-') }}</td>
+                        </tr>
+                    {% else %}
+                        <tr>
+                            <td colspan="7" class="text-center">Aucun mouvement enregistré</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        initDataTable('#movements-table');
+    </script>
+{% endblock %}

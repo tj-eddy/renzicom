@@ -123,18 +123,6 @@ class InterventionController extends AbstractController
 
             $entityManager->persist($intervention);
 
-            // 3. Déduction du stock de l'entrepôt
-            try {
-                $stockManager->deductWarehouseStock($distribution->getProduct(), $quantityAdded);
-            } catch (\Exception $e) {
-                $this->addFlash('danger', $e->getMessage());
-                // On ne flush pas si l'entrepôt n'a pas assez de stock
-                return $this->render('intervention/new.html.twig', [
-                    'intervention' => $intervention,
-                    'form' => $form,
-                ]);
-            }
-
             $entityManager->flush();
 
             $this->addFlash('success', $this->translator->trans('intervention.messages.created'));
@@ -277,21 +265,6 @@ class InterventionController extends AbstractController
                 $rack->setProduct($distribution->getProduct());
             }
 
-            // Ajustement du stock de l'entrepôt
-            try {
-                if ($diff > 0) {
-                    $stockManager->deductWarehouseStock($distribution->getProduct(), $diff);
-                } elseif ($diff < 0) {
-                    $stockManager->restoreWarehouseStock($distribution->getProduct(), abs($diff));
-                }
-            } catch (\Exception $e) {
-                $this->addFlash('danger', $e->getMessage());
-                return $this->render('intervention/edit.html.twig', [
-                    'intervention' => $intervention,
-                    'form' => $form,
-                ]);
-            }
-
             $entityManager->flush();
 
             $this->addFlash('success', $this->translator->trans('intervention.messages.updated'));
@@ -337,9 +310,6 @@ class InterventionController extends AbstractController
             if ($intervention->getPhotoAfter()) {
                 $imageUploader->removeInterventionImage($intervention->getPhotoAfter());
             }
-
-            // 3. Restaurer le stock de l'entrepôt
-            $stockManager->restoreWarehouseStock($distribution->getProduct(), $quantityAdded);
 
             $entityManager->remove($intervention);
             $entityManager->flush();

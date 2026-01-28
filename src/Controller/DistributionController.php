@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Distribution;
+use App\Entity\StockMovement;
 use App\Service\StockManager;
 use App\Form\DistributionType;
 use App\Repository\DistributionRepository;
@@ -57,18 +58,31 @@ class DistributionController extends AbstractController
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             try {
+                $this->entityManager->beginTransaction();
+
                 // Si le statut est "delivered", mettre à jour completedAt
                 if (Distribution::STATUS_DELIVERED === $distribution->getStatus()) {
                     $distribution->setCompletedAt(new \DateTimeImmutable());
                 }
 
+                // Déduire le stock de l'entrepôt pour la distribution
+                $this->stockManager->deductWarehouseStock(
+                    $distribution->getProduct(),
+                    $distribution->getQuantity(),
+                    null, // Choisir l'entrepôt automatiquement ou passer un entrepôt spécifique si ajouté au formulaire
+                    StockMovement::TYPE_OUT,
+                    'Distribution #' . $distribution->getId() . ' créée'
+                );
+
                 $this->entityManager->persist($distribution);
                 $this->entityManager->flush();
+                $this->entityManager->commit();
 
                 $this->addFlash('success', $this->translator->trans('distribution.created'));
 
                 return $this->redirectToRoute('app_distribution_index');
             } catch (\Exception $e) {
+                $this->entityManager->rollback();
                 $this->addFlash('danger', $e->getMessage());
             }
         }
@@ -88,6 +102,7 @@ class DistributionController extends AbstractController
             return $this->redirectToRoute('app_distribution_index');
         }
 
+        $oldQuantity = $distribution->getQuantity();
         $isAdmin = $this->permissionChecker->canCreateProductOrWarehouse(); // Si peut créer produits = admin
 
         $form = $this->createForm(DistributionType::class, $distribution, [
@@ -98,7 +113,16 @@ class DistributionController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             try {
+                $this->entityManager->beginTransaction();
 
+                $newQuantity = $distribution->getQuantity();
+                $diff = $newQuantity - $oldQuantity;
+
+                if ($diff > 0) {
+                    $this->stockManager->deductWarehouseStock($distribution->getProduct(), $diff, null, StockMovement::TYPE_OUT, 'Ajustement distribution #' . $distribution->getId());
+                } elseif ($diff < 0) {
+                    $this->stockManager->restoreWarehouseStock($distribution->getProduct(), abs($diff), null, StockMovement::TYPE_RETURN, 'Ajustement distribution #' . $distribution->getId());
+                }
 
                 // Si le statut passe à "delivered", gérer le retour du stock non distribué
                 if (Distribution::STATUS_DELIVERED === $distribution->getStatus()) {
@@ -106,11 +130,13 @@ class DistributionController extends AbstractController
                 }
 
                 $this->entityManager->flush();
+                $this->entityManager->commit();
 
                 $this->addFlash('success', $this->translator->trans('distribution.updated'));
 
                 return $this->redirectToRoute('app_distribution_index');
             } catch (\Exception $e) {
+                $this->entityManager->rollback();
                 $this->addFlash('danger', $e->getMessage());
             }
         }
@@ -148,15 +174,31 @@ class DistributionController extends AbstractController
         }
 
         try {
+            $this->entityManager->beginTransaction();
 
             // Marquer la distribution comme terminée
             $distribution->setStatus(Distribution::STATUS_DELIVERED);
             $distribution->setCompletedAt(new \DateTimeImmutable());
 
+            // Retourner le stock restant dans l'entrepôt
+            $remaining = $distribution->getQuantity();
+            if ($remaining > 0) {
+                $this->stockManager->restoreWarehouseStock(
+                    $distribution->getProduct(),
+                    $remaining,
+                    null,
+                    StockMovement::TYPE_RETURN,
+                    'Retour du stock invendu de la distribution #' . $distribution->getId()
+                );
+                $distribution->setQuantity(0);
+            }
+
             $this->entityManager->flush();
+            $this->entityManager->commit();
 
             $this->addFlash('success', $this->translator->trans('distribution.messages.completed'));
         } catch (\Exception $e) {
+            $this->entityManager->rollback();
             $this->addFlash('danger', '❌ Erreur: ' . $e->getMessage());
         }
 
@@ -177,11 +219,26 @@ class DistributionController extends AbstractController
 
         if ($this->isCsrfTokenValid('delete' . $distribution->getId(), $request->request->get('_token'))) {
             try {
+                $this->entityManager->beginTransaction();
+
+                // Restaurer TOUT le stock au moment de la suppression
+                if ($distribution->getQuantity() > 0) {
+                    $this->stockManager->restoreWarehouseStock(
+                        $distribution->getProduct(),
+                        $distribution->getQuantity(),
+                        null,
+                        StockMovement::TYPE_RETURN,
+                        'Annulation distribution #' . $distribution->getId()
+                    );
+                }
+
                 $this->entityManager->remove($distribution);
                 $this->entityManager->flush();
+                $this->entityManager->commit();
 
                 $this->addFlash('success', $this->translator->trans('distribution.deleted'));
             } catch (\Exception $e) {
+                $this->entityManager->rollback();
                 $this->addFlash('danger', $e->getMessage());
             }
         } else {

@@ -20,8 +20,8 @@ class StockController extends AbstractController
         private EntityManagerInterface $entityManager,
         private TranslatorInterface $translator,
         private PermissionChecker $permissionChecker,
-    ) {
-    }
+        private \App\Service\StockManager $stockManager,
+    ) {}
 
     #[Route('/', name: 'app_stock_index', methods: ['GET'])]
     public function index(StockRepository $stockRepository): Response
@@ -45,8 +45,7 @@ class StockController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $this->entityManager->persist($stock);
-            $this->entityManager->flush();
+            $this->stockManager->applyStockAdjustment($stock, $stock->getQuantity(), $stock->getNote());
 
             $this->addFlash('success', $this->translator->trans('stock.created'));
 
@@ -68,11 +67,13 @@ class StockController extends AbstractController
             return $this->redirectToRoute('app_stock_index');
         }
 
+        // Sauvegarder l'ancienne valeur pour le formulaire si nécessaire, 
+        // ou simplement laisser StockManager gérer le delta.
         $form = $this->createForm(StockType::class, $stock);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $this->entityManager->flush();
+            $this->stockManager->applyStockAdjustment($stock, $stock->getQuantity(), $stock->getNote());
 
             $this->addFlash('success', $this->translator->trans('stock.updated'));
 
