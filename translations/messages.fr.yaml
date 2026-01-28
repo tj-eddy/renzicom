@@ -628,3 +628,42 @@ language:
     german: "Deutsch"
     italian: "Italiano"
     portuguese: "Português"
+
+# JS STRINGS
+js:
+    distribution:
+        select_warehouse_first: "-- Sélectionnez d'abord un entrepôt --"
+        loading: "Chargement..."
+        select_product: "-- Sélectionnez un produit --"
+        no_products: "Aucun produit disponible"
+        no_products_notification: "Aucun produit disponible dans cet entrepôt"
+        products_count_notification: "%count% produit(s) disponible(s)"
+        load_error: "Erreur de chargement"
+        load_error_notification: "Erreur lors du chargement des produits"
+        select_product_notification: "Veuillez sélectionner un produit"
+        insufficient_stock_notification: "Stock insuffisant ! Disponible: %available%, Demandé: %requested%"
+        quantity_greater_than_zero: "La quantité doit être supérieure à 0"
+        available_stock_info: "Stock disponible:"
+        sufficient_stock_info: "Stock suffisant:"
+        insufficient_stock_info: "Stock insuffisant!"
+        units: "unité(s)"
+        available: "disponible(s)"
+        requested: "demandé(s)"
+    dashboard:
+        sales: "Ventes"
+        visitors:
+            male: "Hommes"
+            female: "Femmes"
+        months:
+            jan: "Jan"
+            feb: "Fév"
+            mar: "Mar"
+            apr: "Avr"
+            may: "Mai"
+            jun: "Juin"
+            jul: "Juil"
+            aug: "Août"
+            sep: "Sep"
+            oct: "Oct"
+            nov: "Nov"
+            dec: "Déc"

@@ -2,16 +2,16 @@
 
 $(function () {
     const $warehouseSelect = $('[data-warehouse-select]');
-    const $productSelect   = $('[data-product-select]');
-    const $quantityInput   = $('[data-quantity-input]');
+    const $productSelect = $('[data-product-select]');
+    const $quantityInput = $('[data-quantity-input]');
 
     if (!$warehouseSelect.length || !$productSelect.length || !$quantityInput.length) {
         return;
     }
 
     let selectedWarehouseId = null;
-    let selectedProductId   = null;
-    let availableStock      = {};
+    let selectedProductId = null;
+    let availableStock = {};
 
     // ========================================
     // ÉTAPE 1: Sélection de l'entrepôt
@@ -22,7 +22,7 @@ $(function () {
 
         if (!selectedWarehouseId) {
             $productSelect
-                .html('<option value="">-- Sélectionnez d\'abord un entrepôt --</option>')
+                .html('<option value="">' + trans('distribution.select_warehouse_first') + '</option>')
                 .prop('disabled', true);
 
             $quantityInput.val('').attr('max', '');
@@ -31,23 +31,23 @@ $(function () {
 
         // Loader
         $productSelect
-            .html('<option value="">Chargement...</option>')
+            .html('<option value="">' + trans('distribution.loading') + '</option>')
             .prop('disabled', true);
 
         $.ajax({
-            url: `/fr/warehouse/${selectedWarehouseId}/products`,
+            url: `/${window.app_locale}/warehouse/${selectedWarehouseId}/products`,
             method: 'GET',
             dataType: 'json'
         })
             .done(function (products) {
-                $productSelect.html('<option value="">-- Sélectionnez un produit --</option>');
+                $productSelect.html('<option value="">' + trans('distribution.select_product') + '</option>');
 
                 if (!products.length) {
                     $productSelect
-                        .html('<option value="">Aucun produit disponible</option>')
+                        .html('<option value="">' + trans('distribution.no_products') + '</option>')
                         .prop('disabled', true);
 
-                    showNotification('Aucun produit disponible dans cet entrepôt', 'warning');
+                    showNotification(trans('distribution.no_products_notification'), 'warning');
                     return;
                 }
 
@@ -64,14 +64,14 @@ $(function () {
                 });
 
                 $productSelect.prop('disabled', false);
-                showNotification(`${products.length} produit(s) disponible(s)`, 'success');
+                showNotification(trans('distribution.products_count_notification', { count: products.length }), 'success');
             })
             .fail(function () {
                 $productSelect
-                    .html('<option value="">Erreur de chargement</option>')
+                    .html('<option value="">' + trans('distribution.load_error') + '</option>')
                     .prop('disabled', true);
 
-                showNotification('Erreur lors du chargement des produits', 'danger');
+                showNotification(trans('distribution.load_error_notification'), 'danger');
             });
     });
 
@@ -88,7 +88,7 @@ $(function () {
             return;
         }
 
-        const $selectedOption   = $(this).find(':selected');
+        const $selectedOption = $(this).find(':selected');
         const availableQuantity = parseInt($selectedOption.data('quantity') || 0);
 
         $quantityInput
@@ -133,7 +133,7 @@ $(function () {
         $form.on('submit', function (e) {
             if (!selectedProductId) {
                 e.preventDefault();
-                showNotification('Veuillez sélectionner un produit', 'danger');
+                showNotification(trans('distribution.select_product_notification'), 'danger');
                 return false;
             }
 
@@ -143,7 +143,7 @@ $(function () {
             if (requestedQuantity > availableQuantity) {
                 e.preventDefault();
                 showNotification(
-                    `Stock insuffisant ! Disponible: ${availableQuantity}, Demandé: ${requestedQuantity}`,
+                    trans('distribution.insufficient_stock_notification', { available: availableQuantity, requested: requestedQuantity }),
                     'danger'
                 );
                 $quantityInput.focus();
@@ -152,7 +152,7 @@ $(function () {
 
             if (requestedQuantity <= 0) {
                 e.preventDefault();
-                showNotification('La quantité doit être supérieure à 0', 'danger');
+                showNotification(trans('distribution.quantity_greater_than_zero'), 'danger');
                 $quantityInput.focus();
                 return false;
             }
@@ -169,7 +169,7 @@ $(function () {
         const $info = $(`
             <div class="alert alert-info mt-2 stock-info">
                 <i class="bi bi-info-circle"></i>
-                <strong>Stock disponible:</strong> ${availableQuantity} unité(s)
+                <strong>${trans('distribution.available_stock_info')}</strong> ${availableQuantity} ${trans('distribution.units')}
             </div>
         `);
 
@@ -186,14 +186,14 @@ $(function () {
                 .attr('class', 'alert alert-success mt-2 stock-info')
                 .html(`
                     <i class="bi bi-check-circle"></i>
-                    <strong>Stock suffisant:</strong> ${available} disponible(s), ${requested} demandé(s)
+                    <strong>${trans('distribution.sufficient_stock_info')}</strong> ${available} ${trans('distribution.available')}, ${requested} ${trans('distribution.requested')}
                 `);
         } else {
             $stockInfo
                 .attr('class', 'alert alert-danger mt-2 stock-info')
                 .html(`
                     <i class="bi bi-exclamation-triangle"></i>
-                    <strong>Stock insuffisant!</strong> ${available} disponible(s), ${requested} demandé(s)
+                    <strong>${trans('distribution.insufficient_stock_info')}</strong> ${available} ${trans('distribution.available')}, ${requested} ${trans('distribution.requested')}
                 `);
         }
     }

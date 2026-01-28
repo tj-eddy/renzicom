@@ -311,6 +311,72 @@
 			<script src="{{ asset('assets/vendors/apexcharts/apexcharts.js') }}"></script>
 			<script src="{{ asset('assets/js/main.js') }}"></script>
 			<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+			<script>
+				window.app_locale = "{{ app.request.locale }}";
+				window.js_translations = {
+					distribution: {
+						select_warehouse_first: "{{ 'js.distribution.select_warehouse_first'|trans }}",
+						loading: "{{ 'js.distribution.loading'|trans }}",
+						select_product: "{{ 'js.distribution.select_product'|trans }}",
+						no_products: "{{ 'js.distribution.no_products'|trans }}",
+						no_products_notification: "{{ 'js.distribution.no_products_notification'|trans }}",
+						products_count_notification: "{{ 'js.distribution.products_count_notification'|trans }}",
+						load_error: "{{ 'js.distribution.load_error'|trans }}",
+						load_error_notification: "{{ 'js.distribution.load_error_notification'|trans }}",
+						select_product_notification: "{{ 'js.distribution.select_product_notification'|trans }}",
+						insufficient_stock_notification: "{{ 'js.distribution.insufficient_stock_notification'|trans }}",
+						quantity_greater_than_zero: "{{ 'js.distribution.quantity_greater_than_zero'|trans }}",
+						available_stock_info: "{{ 'js.distribution.available_stock_info'|trans }}",
+						sufficient_stock_info: "{{ 'js.distribution.sufficient_stock_info'|trans }}",
+						insufficient_stock_info: "{{ 'js.distribution.insufficient_stock_info'|trans }}",
+						units: "{{ 'js.distribution.units'|trans }}",
+						available: "{{ 'js.distribution.available'|trans }}",
+						requested: "{{ 'js.distribution.requested'|trans }}"
+					},
+					dashboard: {
+						sales: "{{ 'js.dashboard.sales'|trans }}",
+						visitors: {
+							male: "{{ 'js.dashboard.visitors.male'|trans }}",
+							female: "{{ 'js.dashboard.visitors.female'|trans }}"
+						},
+						months: [
+							"{{ 'js.dashboard.months.jan'|trans }}",
+							"{{ 'js.dashboard.months.feb'|trans }}",
+							"{{ 'js.dashboard.months.mar'|trans }}",
+							"{{ 'js.dashboard.months.apr'|trans }}",
+							"{{ 'js.dashboard.months.may'|trans }}",
+							"{{ 'js.dashboard.months.jun'|trans }}",
+							"{{ 'js.dashboard.months.jul'|trans }}",
+							"{{ 'js.dashboard.months.aug'|trans }}",
+							"{{ 'js.dashboard.months.sep'|trans }}",
+							"{{ 'js.dashboard.months.oct'|trans }}",
+							"{{ 'js.dashboard.months.nov'|trans }}",
+							"{{ 'js.dashboard.months.dec'|trans }}"
+						]
+					}
+				};
+
+				// Helper function to translate with replacements
+				window.trans = function(key, replacements = {}) {
+					const parts = key.split('.');
+					let translation = window.js_translations;
+					for (const part of parts) {
+						if (translation && translation[part]) {
+							translation = translation[part];
+						} else {
+							return key;
+						}
+					}
+					
+					if (typeof translation !== 'string') return key;
+
+					Object.keys(replacements).forEach(placeholder => {
+						translation = translation.replace('%' + placeholder + '%', replacements[placeholder]);
+					});
+
+					return translation;
+				};
+			</script>
 			<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 			<script>
 				function initDataTable(tableId, options = {}) {
