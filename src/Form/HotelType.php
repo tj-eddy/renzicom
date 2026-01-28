@@ -17,41 +17,41 @@ class HotelType extends AbstractType
     {
         $builder
             ->add('name', TextType::class, [
-                'label' => 'Nom de l\'hôtel',
+                'label' => 'hotel.form.name.label',
                 'attr' => [
-                    'placeholder' => 'Ex: Hôtel Carlton',
+                    'placeholder' => 'hotel.form.name.placeholder',
                     'class' => 'form-control'
                 ],
                 'required' => true
             ])
             ->add('address', TextType::class, [
-                'label' => 'Adresse',
+                'label' => 'hotel.form.address.label',
                 'attr' => [
-                    'placeholder' => 'Adresse complète',
+                    'placeholder' => 'hotel.form.address.placeholder',
                     'class' => 'form-control'
                 ],
                 'required' => false
             ])
             ->add('contactName', TextType::class, [
-                'label' => 'Nom du contact',
+                'label' => 'hotel.form.contact_name.label',
                 'attr' => [
-                    'placeholder' => 'Nom du responsable',
+                    'placeholder' => 'hotel.form.contact_name.placeholder',
                     'class' => 'form-control'
                 ],
                 'required' => false
             ])
             ->add('contactEmail', EmailType::class, [
-                'label' => 'Email du contact',
+                'label' => 'hotel.form.contact_email.label',
                 'attr' => [
-                    'placeholder' => 'email@exemple.com',
+                    'placeholder' => 'hotel.form.contact_email.placeholder',
                     'class' => 'form-control'
                 ],
                 'required' => false
             ])
             ->add('contactPhone', TelType::class, [
-                'label' => 'Téléphone du contact',
+                'label' => 'hotel.form.contact_phone.label',
                 'attr' => [
-                    'placeholder' => '+261 34 00 000 00',
+                    'placeholder' => 'hotel.form.contact_phone.placeholder',
                     'class' => 'form-control'
                 ],
                 'required' => false

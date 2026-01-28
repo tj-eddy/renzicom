@@ -17,15 +17,15 @@ class RackEmbeddedType extends AbstractType
     {
         $builder
             ->add('name', TextType::class, [
-                'label' => 'Nom du rack',
+                'label' => 'rack.form.name.label',
                 'attr' => [
                     'class' => 'form-control form-control-sm',
-                    'placeholder' => 'Ex: Rack A'
+                    'placeholder' => 'rack.form.name.placeholder'
                 ],
                 'required' => true
             ])
             ->add('position', IntegerType::class, [
-                'label' => 'Position',
+                'label' => 'rack.form.position.label',
                 'attr' => [
                     'class' => 'form-control form-control-sm',
                     'min' => 0
@@ -36,15 +36,15 @@ class RackEmbeddedType extends AbstractType
             ->add('product', EntityType::class, [
                 'class' => Product::class,
                 'choice_label' => 'name',
-                'label' => 'Produit',
-                'placeholder' => 'Sélectionner un produit',
+                'label' => 'rack.form.product.label',
+                'placeholder' => 'rack.form.product.placeholder',
                 'attr' => [
                     'class' => 'form-select form-select-sm product-select'
                 ],
                 'required' => false
             ])
             ->add('requiredQuantity', IntegerType::class, [
-                'label' => 'Quantité requise',
+                'label' => 'rack.form.required_quantity.label',
                 'attr' => [
                     'class' => 'form-control form-control-sm required-qty',
                     'min' => 0,
@@ -54,7 +54,7 @@ class RackEmbeddedType extends AbstractType
                 'empty_data' => '0'
             ])
             ->add('currentQuantity', IntegerType::class, [
-                'label' => 'Quantité actuelle',
+                'label' => 'rack.form.current_quantity.label',
                 'attr' => [
                     'class' => 'form-control form-control-sm current-qty',
                     'min' => 0,

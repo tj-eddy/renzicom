@@ -170,12 +170,14 @@ distribution:
         product:
             label: "Produit"
             placeholder: "Sélectionner un produit"
+            select_warehouse_first: "Sélectionnez d'abord un entrepôt"
         warehouse:
             label: "Entrepôt source"
             placeholder: "Sélectionner l'entrepôt"
         quantity:
             label: "Quantité à distribuer"
             placeholder: "Ex: 100"
+            help: "Quantité chargée dans la voiture pour la tournée"
         status:
             label: "Statut de la distribution"
             preparing: "En préparation"
@@ -184,6 +186,8 @@ distribution:
         destination:
             label: "Destination"
             placeholder: "Liste des hôtels (un par ligne)"
+            section: "Destination et itinéraire"
+            help: "Liste des hôtels à visiter pendant cette tournée (un par ligne)"
     created: "Distribution créée avec succès."
     updated: "Distribution mise à jour avec succès."
     deleted: "Distribution supprimée avec succès."
@@ -376,6 +380,7 @@ hotel:
 
 # WAREHOUSE
 warehouse:
+    not_found: "Entrepôt non trouvé"
     list:
         title: "Liste des Entrepôts"
         no_warehouses: "Aucun entrepôt trouvé"
@@ -540,6 +545,31 @@ intervention:
     deleted: "Intervention supprimée avec succès."
     messages:
         photo_upload_error: "Erreur lors de l'upload de la photo"
+        created: "Intervention créée avec succès."
+        updated: "Intervention mise à jour avec succès."
+        deleted: "Intervention supprimée avec succès."
+
+# STOCK MOVEMENT
+stock_movement:
+    list:
+        title: "Historique des mouvements de stock"
+    no_movements: "Aucun mouvement enregistré"
+    export:
+        title: "Historique des mouvements de stock"
+        export_date: "Date d'export"
+        date: "Date"
+        product: "Produit"
+        warehouse: "Entrepôt"
+        quantity: "Quantité"
+        type: "Type"
+        user: "Utilisateur"
+        comment: "Commentaire"
+        system: "Système"
+        total: "Total"
+        movements: "mouvements"
+    actions:
+        export_csv: "Exporter CSV"
+        export_pdf: "Exporter PDF"
 
 exception:
     invalid_token: "Token CSRF invalide"
@@ -578,6 +608,7 @@ form:
 messages:
     error:
         image_upload: "Erreur lors de l'upload de l'image."
+        general: "Une erreur s'est produite"
 
 datatable:
     search: "Rechercher..."
@@ -587,3 +618,13 @@ datatable:
 select2:
     no_results: "Aucun résultat trouvé"
     searching: "Recherche en cours..."
+
+# LANGUAGES
+language:
+    french: "Français"
+    english: "English"
+    malagasy: "Malagasy"
+    spanish: "Español"
+    german: "Deutsch"
+    italian: "Italiano"
+    portuguese: "Português"

@@ -69,7 +69,7 @@ class HotelController extends AbstractController
             $entityManager->persist($hotel);
             $entityManager->flush();
 
-            $this->addFlash('success', 'L\'hôtel a été créé avec succès avec ses présentoirs et racks.');
+            $this->addFlash('success', $this->translator->trans('hotel.created'));
 
             return $this->redirectToRoute('app_hotel_index', [], Response::HTTP_SEE_OTHER);
         }
@@ -125,7 +125,7 @@ class HotelController extends AbstractController
 
             $entityManager->flush();
 
-            $this->addFlash('success', 'L\'hôtel a été mis à jour avec succès.');
+            $this->addFlash('success', $this->translator->trans('hotel.updated'));
 
             return $this->redirectToRoute('app_hotel_index', [], Response::HTTP_SEE_OTHER);
         }
@@ -150,7 +150,9 @@ class HotelController extends AbstractController
             $entityManager->remove($hotel);
             $entityManager->flush();
 
-            $this->addFlash('success', 'L\'hôtel a été supprimé avec succès.');
+            $this->addFlash('success', $this->translator->trans('hotel.deleted'));
+        } else {
+            $this->addFlash('error', $this->translator->trans('exception.invalid_token'));
         }
 
         return $this->redirectToRoute('app_hotel_index', [], Response::HTTP_SEE_OTHER);

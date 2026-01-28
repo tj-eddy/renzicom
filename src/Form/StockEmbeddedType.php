@@ -19,15 +19,15 @@ class StockEmbeddedType extends AbstractType
             ->add('warehouse', EntityType::class, [
                 'class' => Warehouse::class,
                 'choice_label' => 'name',
-                'label' => 'Entrepôt',
-                'placeholder' => 'Sélectionner un entrepôt',
+                'label' => 'stock.form.warehouse.label',
+                'placeholder' => 'stock.form.warehouse.placeholder',
                 'attr' => [
                     'class' => 'form-select warehouse-select'
                 ],
                 'required' => true
             ])
             ->add('quantity', IntegerType::class, [
-                'label' => 'Quantité',
+                'label' => 'stock.form.quantity.label',
                 'attr' => [
                     'class' => 'form-control',
                     'min' => 0,
@@ -37,11 +37,11 @@ class StockEmbeddedType extends AbstractType
                 'required' => true
             ])
             ->add('note', TextareaType::class, [
-                'label' => 'Note',
+                'label' => 'stock.form.note.label',
                 'attr' => [
                     'class' => 'form-control',
                     'rows' => 2,
-                    'placeholder' => 'Remarque sur ce stock (optionnel)...'
+                    'placeholder' => 'stock.form.note.placeholder'
                 ],
                 'required' => false
             ])

@@ -115,7 +115,7 @@ class WarehouseController extends AbstractController
         $warehouse = $warehouseRepository->find($id);
 
         if (!$warehouse) {
-            return $this->json(['error' => 'Entrepôt non trouvé'], 404);
+            return $this->json(['error' => $this->translator->trans('warehouse.not_found')], 404);
         }
 
         $products = [];

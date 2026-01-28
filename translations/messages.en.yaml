@@ -170,12 +170,14 @@ distribution:
         product:
             label: "Product"
             placeholder: "Select a product"
+            select_warehouse_first: "Select a warehouse first"
         warehouse:
             label: "Source warehouse"
             placeholder: "Select warehouse"
         quantity:
             label: "Quantity to distribute"
             placeholder: "e.g. 100"
+            help: "Quantity loaded in the vehicle for the delivery route"
         status:
             label: "Distribution status"
             preparing: "Preparing"
@@ -184,6 +186,8 @@ distribution:
         destination:
             label: "Destination"
             placeholder: "List of hotels (one per line)"
+            section: "Destination and route"
+            help: "List of hotels to visit during this delivery route (one per line)"
     created: "Distribution created successfully."
     updated: "Distribution updated successfully."
     deleted: "Distribution deleted successfully."
@@ -376,6 +380,7 @@ hotel:
 
 # WAREHOUSE
 warehouse:
+    not_found: "Warehouse not found"
     list:
         title: "Warehouse List"
         no_warehouses: "No warehouses found"
@@ -540,6 +545,31 @@ intervention:
     deleted: "Intervention deleted successfully."
     messages:
         photo_upload_error: "Error during photo upload"
+        created: "Intervention created successfully."
+        updated: "Intervention updated successfully."
+        deleted: "Intervention deleted successfully."
+
+# STOCK MOVEMENT
+stock_movement:
+    list:
+        title: "Stock movement history"
+    no_movements: "No movements recorded"
+    export:
+        title: "Stock movement history"
+        export_date: "Export date"
+        date: "Date"
+        product: "Product"
+        warehouse: "Warehouse"
+        quantity: "Quantity"
+        type: "Type"
+        user: "User"
+        comment: "Comment"
+        system: "System"
+        total: "Total"
+        movements: "movements"
+    actions:
+        export_csv: "Export CSV"
+        export_pdf: "Export PDF"
 
 exception:
     invalid_token: "Invalid CSRF token"
@@ -578,6 +608,7 @@ form:
 messages:
     error:
         image_upload: "Error during image upload."
+        general: "An error occurred"
 
 datatable:
     search: "Search..."
@@ -587,3 +618,13 @@ datatable:
 select2:
     no_results: "No results found"
     searching: "Searching..."
+
+# LANGUAGES
+language:
+    french: "French"
+    english: "English"
+    malagasy: "Malagasy"
+    spanish: "Spanish"
+    german: "German"
+    italian: "Italian"
+    portuguese: "Portuguese"

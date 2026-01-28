@@ -15,18 +15,18 @@ class DisplayEmbeddedType extends AbstractType
     {
         $builder
             ->add('name', TextType::class, [
-                'label' => 'Nom du présentoir',
+                'label' => 'display.form.name.label',
                 'attr' => [
                     'class' => 'form-control',
-                    'placeholder' => 'Ex: Présentoir Hall'
+                    'placeholder' => 'display.form.name.placeholder'
                 ],
                 'required' => true
             ])
             ->add('location', TextType::class, [
-                'label' => 'Emplacement',
+                'label' => 'display.form.location.label',
                 'attr' => [
                     'class' => 'form-control',
-                    'placeholder' => 'Ex: Hall principal'
+                    'placeholder' => 'display.form.location.placeholder'
                 ],
                 'required' => false
             ])

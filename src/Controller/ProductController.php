@@ -20,6 +20,10 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 #[Route('/product')]
 class ProductController extends AbstractController
 {
+    public function __construct(
+        private readonly TranslatorInterface $translator
+    ) {}
+
     #[Route('/', name: 'app_product_index', methods: ['GET'])]
     public function index(ProductRepository $productRepository): Response
     {
@@ -76,12 +80,11 @@ class ProductController extends AbstractController
         Request $request,
         EntityManagerInterface $entityManager,
         SluggerInterface $slugger,
-        PermissionChecker $permissionChecker,
-        TranslatorInterface $translator
+        PermissionChecker $permissionChecker
     ): Response {
         // Vérification de permission: seuls les admins peuvent créer des produits
         if (!$permissionChecker->canCreateProductOrWarehouse()) {
-            $this->addFlash('error', $translator->trans('access.denied.create_product'));
+            $this->addFlash('error', $this->translator->trans('access.denied.create_product'));
             return $this->redirectToRoute('app_product_index', [], Response::HTTP_SEE_OTHER);
         }
 
@@ -104,7 +107,7 @@ class ProductController extends AbstractController
                     );
                     $product->setImage($newFilename);
                 } catch (FileException $e) {
-                    $this->addFlash('error', 'Erreur lors de l\'upload de l\'image: ' . $e->getMessage());
+                    $this->addFlash('error', $this->translator->trans('messages.error.image_upload'));
                 }
             }
 
@@ -117,7 +120,7 @@ class ProductController extends AbstractController
             $entityManager->persist($product);
             $entityManager->flush();
 
-            $this->addFlash('success', 'Le produit a été créé avec succès avec ses stocks initiaux.');
+            $this->addFlash('success', $this->translator->trans('product.created'));
 
             return $this->redirectToRoute('app_product_index', [], Response::HTTP_SEE_OTHER);
         }
@@ -142,12 +145,11 @@ class ProductController extends AbstractController
         Product $product,
         EntityManagerInterface $entityManager,
         SluggerInterface $slugger,
-        PermissionChecker $permissionChecker,
-        TranslatorInterface $translator
+        PermissionChecker $permissionChecker
     ): Response {
         // Vérification de permission: seuls les admins peuvent modifier des produits
         if (!$permissionChecker->canCreateProductOrWarehouse()) {
-            $this->addFlash('error', $translator->trans('access.denied.create_product'));
+            $this->addFlash('error', $this->translator->trans('access.denied.create_product'));
             return $this->redirectToRoute('app_product_index', [], Response::HTTP_SEE_OTHER);
         }
 
@@ -177,7 +179,7 @@ class ProductController extends AbstractController
                     );
                     $product->setImage($newFilename);
                 } catch (FileException $e) {
-                    $this->addFlash('error', 'Erreur lors de l\'upload de l\'image: ' . $e->getMessage());
+                    $this->addFlash('error', $this->translator->trans('messages.error.image_upload'));
                 }
             }
 
@@ -191,7 +193,7 @@ class ProductController extends AbstractController
 
             $entityManager->flush();
 
-            $this->addFlash('success', 'Le produit a été mis à jour avec succès.');
+            $this->addFlash('success', $this->translator->trans('product.updated'));
 
             return $this->redirectToRoute('app_product_index', [], Response::HTTP_SEE_OTHER);
         }
@@ -207,12 +209,11 @@ class ProductController extends AbstractController
         Request $request,
         Product $product,
         EntityManagerInterface $entityManager,
-        PermissionChecker $permissionChecker,
-        TranslatorInterface $translator
+        PermissionChecker $permissionChecker
     ): Response {
         // Vérification de permission: seuls les admins peuvent supprimer
         if (!$permissionChecker->canDelete()) {
-            $this->addFlash('error', $translator->trans('access.denied.delete_any'));
+            $this->addFlash('error', $this->translator->trans('access.denied.delete_any'));
             return $this->redirectToRoute('app_product_index', [], Response::HTTP_SEE_OTHER);
         }
 
@@ -228,7 +229,9 @@ class ProductController extends AbstractController
             $entityManager->remove($product);
             $entityManager->flush();
 
-            $this->addFlash('success', 'Le produit a été supprimé avec succès.');
+            $this->addFlash('success', $this->translator->trans('product.deleted'));
+        } else {
+            $this->addFlash('error', $this->translator->trans('exception.invalid_token'));
         }
 
         return $this->redirectToRoute('app_product_index', [], Response::HTTP_SEE_OTHER);

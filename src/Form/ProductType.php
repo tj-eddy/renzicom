@@ -20,15 +20,15 @@ class ProductType extends AbstractType
     {
         $builder
             ->add('name', TextType::class, [
-                'label' => 'Nom du produit',
+                'label' => 'product.form.name.label',
                 'attr' => [
-                    'placeholder' => 'Ex: Watchtower 2025',
+                    'placeholder' => 'product.form.name.placeholder',
                     'class' => 'form-control'
                 ],
                 'required' => true
             ])
             ->add('yearEdition', IntegerType::class, [
-                'label' => 'Année d\'édition',
+                'label' => 'product.form.year_edition.label',
                 'attr' => [
                     'placeholder' => date('Y'),
                     'class' => 'form-control',
@@ -38,22 +38,22 @@ class ProductType extends AbstractType
                 'required' => false
             ])
             ->add('language', ChoiceType::class, [
-                'label' => 'Langue',
+                'label' => 'product.form.language.label',
                 'choices' => [
-                    'Français' => 'fr',
-                    'English' => 'en',
-                    'Malagasy' => 'mg',
-                    'Español' => 'es',
-                    'Deutsch' => 'de',
-                    'Italiano' => 'it',
-                    'Português' => 'pt',
+                    'language.french' => 'fr',
+                    'language.english' => 'en',
+                    'language.malagasy' => 'mg',
+                    'language.spanish' => 'es',
+                    'language.german' => 'de',
+                    'language.italian' => 'it',
+                    'language.portuguese' => 'pt',
                 ],
                 'attr' => ['class' => 'form-select'],
-                'placeholder' => 'Sélectionner une langue',
+                'placeholder' => 'product.form.language.placeholder',
                 'required' => false
             ])
             ->add('image', FileType::class, [
-                'label' => 'Image du produit',
+                'label' => 'product.form.image.label',
                 'mapped' => false,
                 'required' => false,
                 'attr' => [

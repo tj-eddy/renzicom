@@ -9,10 +9,14 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 #[Route('/stock-movement')]
 class StockMovementController extends AbstractController
 {
+    public function __construct(
+        private readonly TranslatorInterface $translator
+    ) {}
     #[Route('/', name: 'app_stock_movement_index', methods: ['GET'])]
     public function index(StockMovementRepository $stockMovementRepository): Response
     {
@@ -26,20 +30,32 @@ class StockMovementController extends AbstractController
     {
         $movements = $stockMovementRepository->findBy([], ['createdAt' => 'DESC']);
 
-        $response = new StreamedResponse(function () use ($movements) {
+        $headers = [
+            $this->translator->trans('stock_movement.export.date'),
+            $this->translator->trans('stock_movement.export.product'),
+            $this->translator->trans('stock_movement.export.warehouse'),
+            $this->translator->trans('stock_movement.export.quantity'),
+            $this->translator->trans('stock_movement.export.type'),
+            $this->translator->trans('stock_movement.export.user'),
+            $this->translator->trans('stock_movement.export.comment'),
+        ];
+        $naLabel = $this->translator->trans('common.na');
+        $systemLabel = $this->translator->trans('stock_movement.export.system');
+
+        $response = new StreamedResponse(function () use ($movements, $headers, $naLabel, $systemLabel) {
             $handle = fopen('php://output', 'w+');
             fwrite($handle, "\xEF\xBB\xBF");
 
-            fputcsv($handle, ['Date', 'Produit', 'Entrepot', 'Quantite', 'Type', 'Utilisateur', 'Commentaire'], ';');
+            fputcsv($handle, $headers, ';');
 
             foreach ($movements as $movement) {
                 fputcsv($handle, [
                     $movement->getCreatedAt()?->format('d/m/Y H:i:s') ?? '',
-                    $movement->getProduct()?->getName() ?? 'N/A',
-                    $movement->getWarehouse()?->getName() ?? 'N/A',
+                    $movement->getProduct()?->getName() ?? $naLabel,
+                    $movement->getWarehouse()?->getName() ?? $naLabel,
                     $movement->getQuantity(),
                     $movement->getType(),
-                    $movement->getUser()?->getName() ?? 'Systeme',
+                    $movement->getUser()?->getName() ?? $systemLabel,
                     $movement->getComment() ?? '',
                 ], ';');
             }
@@ -56,6 +72,23 @@ class StockMovementController extends AbstractController
     public function exportPdf(StockMovementRepository $stockMovementRepository): Response
     {
         $movements = $stockMovementRepository->findBy([], ['createdAt' => 'DESC']);
+
+        $title = $this->translator->trans('stock_movement.export.title');
+        $exportDate = $this->translator->trans('stock_movement.export.export_date');
+        $totalLabel = $this->translator->trans('stock_movement.export.total');
+        $movementsLabel = $this->translator->trans('stock_movement.export.movements');
+        $naLabel = $this->translator->trans('common.na');
+        $systemLabel = $this->translator->trans('stock_movement.export.system');
+
+        $headers = [
+            $this->translator->trans('stock_movement.export.date'),
+            $this->translator->trans('stock_movement.export.product'),
+            $this->translator->trans('stock_movement.export.warehouse'),
+            $this->translator->trans('stock_movement.export.quantity'),
+            $this->translator->trans('stock_movement.export.type'),
+            $this->translator->trans('stock_movement.export.user'),
+            $this->translator->trans('stock_movement.export.comment'),
+        ];
 
         $html = '
         <!DOCTYPE html>
@@ -78,18 +111,18 @@ class StockMovementController extends AbstractController
             </style>
         </head>
         <body>
-            <h1>Historique des mouvements de stock</h1>
-            <p>Date d\'export: ' . date('d/m/Y H:i:s') . '</p>
+            <h1>' . htmlspecialchars($title) . '</h1>
+            <p>' . htmlspecialchars($exportDate) . ': ' . date('d/m/Y H:i:s') . '</p>
             <table>
                 <thead>
                     <tr>
-                        <th>Date</th>
-                        <th>Produit</th>
-                        <th>Entrepot</th>
-                        <th>Quantite</th>
-                        <th>Type</th>
-                        <th>Utilisateur</th>
-                        <th>Commentaire</th>
+                        <th>' . htmlspecialchars($headers[0]) . '</th>
+                        <th>' . htmlspecialchars($headers[1]) . '</th>
+                        <th>' . htmlspecialchars($headers[2]) . '</th>
+                        <th>' . htmlspecialchars($headers[3]) . '</th>
+                        <th>' . htmlspecialchars($headers[4]) . '</th>
+                        <th>' . htmlspecialchars($headers[5]) . '</th>
+                        <th>' . htmlspecialchars($headers[6]) . '</th>
                     </tr>
                 </thead>
                 <tbody>';
@@ -111,17 +144,17 @@ class StockMovementController extends AbstractController
 
             $html .= '<tr>
                 <td>' . ($movement->getCreatedAt()?->format('d/m/Y H:i') ?? '') . '</td>
-                <td>' . htmlspecialchars($movement->getProduct()?->getName() ?? 'N/A') . '</td>
-                <td>' . htmlspecialchars($movement->getWarehouse()?->getName() ?? 'N/A') . '</td>
+                <td>' . htmlspecialchars($movement->getProduct()?->getName() ?? $naLabel) . '</td>
+                <td>' . htmlspecialchars($movement->getWarehouse()?->getName() ?? $naLabel) . '</td>
                 <td><span class="' . $qtyClass . '">' . $qtyDisplay . '</span></td>
                 <td><span class="' . $typeClass . '">' . $type . '</span></td>
-                <td>' . htmlspecialchars($movement->getUser()?->getName() ?? 'Systeme') . '</td>
+                <td>' . htmlspecialchars($movement->getUser()?->getName() ?? $systemLabel) . '</td>
                 <td>' . htmlspecialchars($movement->getComment() ?? '-') . '</td>
             </tr>';
         }
 
         $html .= '</tbody></table>
-            <div class="footer">Total: ' . count($movements) . ' mouvements</div>
+            <div class="footer">' . htmlspecialchars($totalLabel) . ': ' . count($movements) . ' ' . htmlspecialchars($movementsLabel) . '</div>
         </body>
         </html>';
 

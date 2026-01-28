@@ -199,7 +199,7 @@ class DistributionController extends AbstractController
             $this->addFlash('success', $this->translator->trans('distribution.messages.completed'));
         } catch (\Exception $e) {
             $this->entityManager->rollback();
-            $this->addFlash('danger', '❌ Erreur: ' . $e->getMessage());
+            $this->addFlash('danger', $this->translator->trans('messages.error.general') . ': ' . $e->getMessage());
         }
 
         return $this->redirectToRoute('app_distribution_index');

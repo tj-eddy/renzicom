@@ -78,7 +78,7 @@
                     </div>
                 </div>
                 <small class="text-muted">
-                    <i class="bi bi-info-circle"></i> Quantité chargée dans la voiture pour la tournée
+                    <i class="bi bi-info-circle"></i> {{ 'distribution.form.quantity.help'|trans }}
                 </small>
                 {{ form_errors(form.quantity) }}
             </div>
@@ -105,7 +105,7 @@
         <div class="col-12">
             <hr class="my-4">
             <h5 class="text-muted mb-3">
-                <i class="bi bi-geo-alt"></i> Destination et itinéraire
+                <i class="bi bi-geo-alt"></i> {{ 'distribution.form.destination.section'|trans }}
             </h5>
         </div>
 
@@ -122,7 +122,7 @@
                     </div>
                 </div>
                 <small class="text-muted">
-                    <i class="bi bi-info-circle"></i> Liste des hôtels à visiter pendant cette tournée (un par ligne)
+                    <i class="bi bi-info-circle"></i> {{ 'distribution.form.destination.help'|trans }}
                 </small>
                 {{ form_errors(form.destination) }}
             </div>
