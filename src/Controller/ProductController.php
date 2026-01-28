@@ -12,6 +12,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 use Symfony\Component\String\Slugger\SluggerInterface;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -25,6 +26,49 @@ class ProductController extends AbstractController
         return $this->render('product/index.html.twig', [
             'products' => $productRepository->findAll(),
         ]);
+    }
+
+    #[Route('/export', name: 'app_product_export', methods: ['GET'])]
+    public function export(ProductRepository $productRepository): Response
+    {
+        $products = $productRepository->findAll();
+
+        $response = new StreamedResponse(function () use ($products) {
+            $handle = fopen('php://output', 'w+');
+            // Byte Order Mark for UTF-8 compatibility with Excel
+            fwrite($handle, "\xEF\xBB\xBF");
+
+            fputcsv($handle, ['ID', 'Nom', 'Entrepot', 'Stock', 'Date Creation'], ';');
+
+            foreach ($products as $product) {
+                $stocks = $product->getStocks();
+                if ($stocks->isEmpty()) {
+                    fputcsv($handle, [
+                        $product->getId(),
+                        $product->getName(),
+                        'N/A',
+                        0,
+                        $product->getCreatedAt() ? $product->getCreatedAt()->format('Y-m-d H:i:s') : ''
+                    ], ';');
+                } else {
+                    foreach ($stocks as $stock) {
+                        fputcsv($handle, [
+                            $product->getId(),
+                            $product->getName(),
+                            $stock->getWarehouse() ? $stock->getWarehouse()->getName() : 'N/A',
+                            $stock->getQuantity(),
+                            $product->getCreatedAt() ? $product->getCreatedAt()->format('Y-m-d H:i:s') : ''
+                        ], ';');
+                    }
+                }
+            }
+            fclose($handle);
+        });
+
+        $response->headers->set('Content-Type', 'text/csv');
+        $response->headers->set('Content-Disposition', 'attachment; filename="produits_export_' . date('Y-m-d_H-i-s') . '.csv"');
+
+        return $response;
     }
 
     #[Route('/new', name: 'app_product_new', methods: ['GET', 'POST'])]

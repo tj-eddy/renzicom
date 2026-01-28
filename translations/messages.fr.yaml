@@ -421,6 +421,7 @@ product:
         edit: "Modifier"
         delete: "Supprimer"
         show: "Détails du produit"
+        export: "Exporter CSV"
     form:
         name:
             label: "Nom du produit"
