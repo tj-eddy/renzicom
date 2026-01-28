@@ -16,79 +16,59 @@ class AppFixtures extends Fixture
     public function load(ObjectManager $manager): void
     {
         // ========================================
-        // CRÉATION DE L'ENTREPÔT
+        // CRÉATION DES ENTREPÔTS
         // ========================================
 
         $warehouses = [];
+        $warehouseNames = [
+            'Entrepôt Central',
+            'Dépôt Nord',
+            'Logistique Sud',
+            'Hub Est',
+            'Base Ouest',
+            'Stock de Paris',
+            'Dépôt Lyon',
+            'Magasin Marseille',
+            'Hub Bordeaux',
+            'Lille Logistique',
+            'Nantes Dépôt',
+            'Strasbourg Hub',
+            'Montpellier Stock',
+            'Toulouse Base',
+            'Nice Logistique',
+            'Rennes Hub',
+            'Reims Dépôt',
+            'Le Havre Stock',
+            'Saint-Étienne Base',
+            'Toulon Logistique'
+        ];
 
-        $warehouse = new Warehouse();
-        $warehouse->setName('Entrepôt Central');
-        $warehouse->setAddress('123 Avenue de la République, 75001 Paris');
+        for ($i = 0; $i < 20; $i++) {
+            $warehouse = new Warehouse();
+            $warehouse->setName($warehouseNames[$i] ?? 'Entrepôt #' . ($i + 1));
+            $warehouse->setAddress(($i + 100) . ' Rue de la Logistique, France');
+            $manager->persist($warehouse);
+            $warehouses[] = $warehouse;
+        }
 
-        $manager->persist($warehouse);
-        $warehouses[] = $warehouse;
-
-        echo "✅ 1 entrepôt créé\n";
+        echo "✅ 20 entrepôts créés\n";
 
         // ========================================
         // CRÉATION DES PRODUITS (MAGAZINES)
         // ========================================
 
         $products = [];
+        $magazines = ['Paris Match', 'Elle', 'Geo', 'L\'Équipe Magazine', 'Time Magazine', 'Vogue', 'National Geographic', 'Psychologies', 'Capital', 'Le Point'];
+        $languages = ['FR', 'EN', 'ES', 'DE', 'IT'];
 
-        $productData = [
-            [
-                'name' => 'Paris Match',
-                'image' => 'paris-match.jpg',
-                'year_edition' => 2024,
-                'language' => 'FR',
-                'variant' => ['type' => 'hebdomadaire', 'format' => 'A4'],
-            ],
-            [
-                'name' => 'Elle',
-                'image' => 'elle.jpg',
-                'year_edition' => 2024,
-                'language' => 'FR',
-                'variant' => ['type' => 'hebdomadaire', 'format' => 'A4', 'catégorie' => 'féminin'],
-            ],
-            [
-                'name' => 'Geo',
-                'image' => 'geo.jpg',
-                'year_edition' => 2024,
-                'language' => 'FR',
-                'variant' => ['type' => 'mensuel', 'format' => 'A4', 'catégorie' => 'voyage'],
-            ],
-            [
-                'name' => 'L\'Équipe Magazine',
-                'image' => 'equipe-mag.jpg',
-                'year_edition' => 2024,
-                'language' => 'FR',
-                'variant' => ['type' => 'hebdomadaire', 'format' => 'A4', 'catégorie' => 'sport'],
-            ],
-            [
-                'name' => 'Time Magazine',
-                'image' => 'time.jpg',
-                'year_edition' => 2024,
-                'language' => 'EN',
-                'variant' => ['type' => 'hebdomadaire', 'format' => 'A4', 'catégorie' => 'actualité'],
-            ],
-        ];
-
-        foreach ($productData as $data) {
+        for ($i = 1; $i <= 500; $i++) {
+            $baseName = $magazines[array_rand($magazines)];
             $product = new Product();
-            $product->setName($data['name']);
-
-            // Vérifier si l'image existe, sinon utiliser null
-            $imagePath = __DIR__ . '/../../public/uploads/products/' . $data['image'];
-            if (file_exists($imagePath)) {
-                $product->setImage($data['image']);
-            } else {
-                $product->setImage(null);
-            }
-
-            $product->setYearEdition($data['year_edition']);
-            $product->setLanguage($data['language']);
-            $product->setVariant($data['variant']);
+            $product->setName($baseName . ' #' . $i);
+            $product->setYearEdition(rand(2020, 2026));
+            $product->setLanguage($languages[array_rand($languages)]);
+            $product->setVariant(['type' => 'publication', 'id' => $i]);
+            $product->setImage(null);
 
             $manager->persist($product);
             $products[] = $product;
@@ -103,24 +83,30 @@ class AppFixtures extends Fixture
         $stocks = [];
         $totalStockQuantity = 0;
 
-        // Créer un stock pour chaque produit dans l'entrepôt unique
+        // Distribuer les produits dans les entrepôts
         foreach ($products as $product) {
-            $stock = new Stock();
-            $stock->setWarehouse($warehouse);
-            $stock->setProduct($product);
+            // Un produit peut être présent dans 1 à 3 entrepôts
+            $nbWarehouses = rand(1, 3);
+            $availableWarehouses = $warehouses;
+            shuffle($availableWarehouses);
 
-            // Quantités variées selon le type de produit
-            $quantity = $this->getStockQuantity($product->getName());
-            $stock->setQuantity($quantity);
-            $totalStockQuantity += $quantity;
+            for ($j = 0; $j < $nbWarehouses; $j++) {
+                $wh = $availableWarehouses[$j];
+                $stock = new Stock();
+                $stock->setWarehouse($wh);
+                $stock->setProduct($product);
 
-            $stock->setNote('Stock initial');
+                $quantity = rand(10, 500);
+                $stock->setQuantity($quantity);
+                $totalStockQuantity += $quantity;
 
-            $manager->persist($stock);
-            $stocks[] = $stock;
+                $stock->setNote('Stock initial généré');
+                $manager->persist($stock);
+                $stocks[] = $stock;
+            }
         }
 
-        echo "✅ " . count($stocks) . " stocks créés\n";
+        echo "✅ " . count($stocks) . " entrées de stock créées\n";
         echo "📦 Quantité totale en stock: " . number_format($totalStockQuantity, 0, ',', ' ') . " unités\n";
 
         // ========================================
